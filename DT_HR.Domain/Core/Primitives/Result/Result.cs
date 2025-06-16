@@ -1,6 +1,4 @@
-﻿using DT_HR.Domain.Core.Primitives;
-
-namespace Quote.Domain.Core.Primitives.Result;
+﻿namespace DT_HR.Domain.Core.Primitives.Result;
 
 
 /// <summary>

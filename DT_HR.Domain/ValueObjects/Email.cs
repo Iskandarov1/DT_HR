@@ -2,7 +2,7 @@
 using DT_HR.Domain.Core.Errors;
 using DT_HR.Domain.Core.Localizations;
 using DT_HR.Domain.Core.Primitives;
-using Quote.Domain.Core.Primitives.Result;
+using DT_HR.Domain.Core.Primitives.Result;
 
 namespace DT_HR.Domain.ValueObjects
 {

@@ -1,6 +1,4 @@
-﻿using DT_HR.Domain.Core.Primitives;
-
-namespace Quote.Domain.Core.Primitives.Result;
+﻿namespace DT_HR.Domain.Core.Primitives.Result;
 
 
 /// <summary>
@@ -25,7 +23,7 @@ public static class ResultExtensions
 			return result;
 		}
 
-		return result.IsSuccess && predicate(result.Value) ? result : Domain.Core.Primitives.Result.Result.Failure<T>(error);
+		return result.IsSuccess && predicate(result.Value) ? result : DT_HR.Domain.Core.Primitives.Result.Result.Failure<T>(error);
 	}
 
 	/// <summary>
@@ -39,7 +37,7 @@ public static class ResultExtensions
 	/// The success result with the mapped value if the current result is a success result, otherwise a failure result.
 	/// </returns>
 	public static Result<TOut> Map<TIn, TOut>(this Result<TIn> result, Func<TIn, TOut> func) =>
-		result.IsSuccess ? func(result.Value) : Domain.Core.Primitives.Result.Result.Failure<TOut>(result.Error);
+		result.IsSuccess ? func(result.Value) : DT_HR.Domain.Core.Primitives.Result.Result.Failure<TOut>(result.Error);
 
 	/// <summary>
 	/// Binds to the result of the function and returns it.
@@ -50,8 +48,8 @@ public static class ResultExtensions
 	/// <returns>
 	/// The success result with the bound value if the current result is a success result, otherwise a failure result.
 	/// </returns>
-	public static async Task<Domain.Core.Primitives.Result.Result> Bind<TIn>(this Result<TIn> result, Func<TIn, Task<Domain.Core.Primitives.Result.Result>> func) =>
-		result.IsSuccess ? await func(result.Value) : Domain.Core.Primitives.Result.Result.Failure(result.Error);
+	public static async Task<DT_HR.Domain.Core.Primitives.Result.Result> Bind<TIn>(this Result<TIn> result, Func<TIn, Task<DT_HR.Domain.Core.Primitives.Result.Result>> func) =>
+		result.IsSuccess ? await func(result.Value) : DT_HR.Domain.Core.Primitives.Result.Result.Failure(result.Error);
 
 	/// <summary>
 	/// Binds to the result of the function and returns it.
@@ -64,7 +62,7 @@ public static class ResultExtensions
 	/// The success result with the bound value if the current result is a success result, otherwise a failure result.
 	/// </returns>
 	public static async Task<Result<TOut>> Bind<TIn, TOut>(this Result<TIn> result, Func<TIn, Task<Result<TOut>>> func) =>
-		result.IsSuccess ? await func(result.Value) : Domain.Core.Primitives.Result.Result.Failure<TOut>(result.Error);
+		result.IsSuccess ? await func(result.Value) : DT_HR.Domain.Core.Primitives.Result.Result.Failure<TOut>(result.Error);
 
 	/// <summary>
 	/// Matches the success status of the result to the corresponding functions.
@@ -76,9 +74,9 @@ public static class ResultExtensions
 	/// <returns>
 	/// The result of the on-success function if the result is a success result, otherwise the result of the failure result.
 	/// </returns>
-	public static async Task<T> Match<T>(this Task<Domain.Core.Primitives.Result.Result> resultTask, Func<T> onSuccess, Func<Error, T> onFailure)
+	public static async Task<T> Match<T>(this Task<DT_HR.Domain.Core.Primitives.Result.Result> resultTask, Func<T> onSuccess, Func<Error, T> onFailure)
 	{
-		Domain.Core.Primitives.Result.Result result = await resultTask;
+		DT_HR.Domain.Core.Primitives.Result.Result result = await resultTask;
 
 		return result.IsSuccess ? onSuccess() : onFailure(result.Error);
 	}
