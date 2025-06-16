@@ -10,6 +10,6 @@ internal sealed class UserRepository(IDbContext dbContext) : GenericRepository<U
     public Task<Maybe<User>> GetByTelegramUserIdAsync(long telegramUserId, CancellationToken cancellationToken) =>
         FirstOrDefaultAsync(u => u.TelegramUserId == telegramUserId && u.IsActive, cancellationToken);
 
-    public Task<Maybe<User>> GetByPhoneNumberAsync(int phoneNumber, CancellationToken cancellationToken) =>
+    public Task<Maybe<User>> GetByPhoneNumberAsync(string phoneNumber, CancellationToken cancellationToken) =>
         FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber && u.IsActive, cancellationToken);
 }

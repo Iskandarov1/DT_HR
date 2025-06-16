@@ -16,4 +16,8 @@
       <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="9.0.6" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\DT_HR.Contract\DT_HR.Contract.csproj" />
+    </ItemGroup>
+
 </Project>
