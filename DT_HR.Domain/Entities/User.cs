@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using DT_HR.Domain.Core.Primitives;
 
 namespace DT_HR.Domain.Entities;
@@ -17,20 +18,26 @@ public class User : AggregateRoot
     {
         this.TelegramUserId = telegramUserId;
         this.PhoneNumber = phoneNumber;
-        this.FistName = firstName;
+        this.FirstName = firstName;
         this.LastName = lastName;
         this.Email = email;
+        this.WorkStartTime = new TimeOnly(10, 0);
+        this.WorkEndTime = new TimeOnly(19, 0);
         IsActive = true;
     }
     
-    public long TelegramUserId { get; private set; }
-    public long PhoneNumber { get; private set; }
-    public string FistName { get; private set; }
-    public string LastName { get; private set; }
-    public bool IsActive { get; private set; }
-    public string Email { get; set; }
+    [Column("telegramUser_id")] public long TelegramUserId { get; private set; }
+    [Column("phone_number")] public long PhoneNumber { get; private set; }
+    [Column("first_name")] public string FirstName { get; private set; }
+    [Column("last_name")] public string LastName { get; private set; }
+    [Column("email")] public string Email { get; set; }
+    
+    [Column("work_start_time")] public TimeOnly WorkStartTime { get;  set; }
 
+    [Column("work_end_time")] public TimeOnly WorkEndTime { get;  set; }
+    [Column("is_active")] public bool IsActive { get; private set; }
     public void Deactivate() => IsActive = false;
-    
-    
+    public void Activate() => IsActive = true;
+
+
 }
