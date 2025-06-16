@@ -52,6 +52,12 @@ public static class DomainErrors
         public static Error NotFound => new("category.not_found", "The category with the specified identifier was not found.");
         public static Error AlreadyExists => new("category.already_exists", "A category with this name already exists.");
     }
+    
+    public static class Location
+    {
+        public static Error InvalidLatitude => new("location.not_found", "The location with the specified Latitude is not valid.");
+        public static Error InvalidLongitude => new("location.not_found", "A location with this Longitude is not valid.");
+    }
     public static class User
     {
         public static Error NotFound => new Error("User.NotFound", "The user with the specified identifier was not found.");
@@ -61,6 +67,9 @@ public static class DomainErrors
             "The current user does not have the permissions to perform that operation.");
         
         public static Error DuplicateEmail => new Error("User.DuplicateEmail", "The specified email is already in use.");
+        public static Error DuplicateTelegramId => new Error("User.DuplicateTelegramId", "The specified telegramId is already in use.");
+        public static Error DuplicatePhoneNumber => new Error("User.DuplicatePhoneNumber", "The specified PhoneNumber is already in use.");
+        public static Error NotActive => new Error("User.NotActive", "The user with the specified identifier is not active.");
 
         public static Error CannotChangePassword => new Error(
             "User.CannotChangePassword",

@@ -10,24 +10,22 @@ public class User : AggregateRoot
     
     public User( 
     long telegramUserId,
-    long phoneNumber ,
+    string phoneNumber ,
     string firstName,
-    string lastName,
-    string email
+    string lastName
     )
     {
         this.TelegramUserId = telegramUserId;
         this.PhoneNumber = phoneNumber;
         this.FirstName = firstName;
         this.LastName = lastName;
-        this.Email = email;
         this.WorkStartTime = new TimeOnly(10, 0);
         this.WorkEndTime = new TimeOnly(19, 0);
         IsActive = true;
     }
     
     [Column("telegramUser_id")] public long TelegramUserId { get; private set; }
-    [Column("phone_number")] public long PhoneNumber { get; private set; }
+    [Column("phone_number")] public string PhoneNumber { get; private set; }
     [Column("first_name")] public string FirstName { get; private set; }
     [Column("last_name")] public string LastName { get; private set; }
     [Column("email")] public string Email { get; set; }
