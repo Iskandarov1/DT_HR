@@ -39,9 +39,19 @@ public class CheckInCallbacks(
         }
     }
 
-    public Task OnCheckInFailureAsync(CheckInFailureDate date, CancellationToken cancellationToken = default)
+    public async Task OnCheckInFailureAsync(CheckInFailureDate data, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var message = $"Check in failed {data.ErrorMessage}\n please try again or contact support ";
+            await telegramBotService.SendTextMessageAsync(data.TelegramUserId, message, cancellationToken);
+            
+            logger.LogWarning("Check in failed for user {TelegramUserId} : {ErrorCode}", data.TelegramUserId,data.ErrorCode);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error sending a Check in failure notification to user {TelegramUserID}",data.TelegramUserId);
+        }
     }
 
     private static string BuildSuccesMessage(CheckInSuccessData data)
