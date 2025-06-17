@@ -8,4 +8,4 @@ public sealed record CheckInCommand(
     long TelegramUserId,
     double Latitude,
     double Longitude
-    ) : ICommand<Result<Guid>>;
+) : ICommand<Result<Guid>>;

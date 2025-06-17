@@ -58,6 +58,11 @@ public static class DomainErrors
         public static Error InvalidLatitude => new("location.not_found", "The location with the specified Latitude is not valid.");
         public static Error InvalidLongitude => new("location.not_found", "A location with this Longitude is not valid.");
     }
+    
+    public static class Attendance
+    {
+        public static Error AlreadyChekedIn => new("user_already_checked_in", "The employee already checked in");
+    }
     public static class User
     {
         public static Error NotFound => new Error("User.NotFound", "The user with the specified identifier was not found.");

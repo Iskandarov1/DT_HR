@@ -18,7 +18,6 @@ public class Attendance : AggregateRoot
     }
     public User User { get; set; } = null!;
     [Column("user_Id")]public Guid UserId { get; set; }
-    
     [Column("check_in_time")]public DateTime? CheckInTime { get; set; }
     
     [Column("check_out_time")] public DateTime? CheckOutTime { get; set; }
@@ -45,7 +44,14 @@ public class Attendance : AggregateRoot
         this.EstimatedArrivalTime = estimatedArrival;
         return this;
     }
+    public bool IsLateArrival(TimeOnly workStartTime)
+    {
+        if (!CheckInTime.HasValue)
+            return false;
+        var checkInTimeOnly = TimeOnly.FromDateTime(CheckInTime.Value);
+        return checkInTimeOnly > workStartTime;
 
+    }
 
 
 

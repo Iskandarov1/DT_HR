@@ -15,5 +15,5 @@ public interface IInputHandler<in TCommand>
     /// </summary>
     /// <param name="command">The command to validate</param>
     /// <returns>Success if valid, Failure with error if invalid</returns>
-    Task<Result> ValidateAsync(TCommand command, CancellationToken cancellationToken);
+    Task<Result> ValidateAsync(TCommand command, CancellationToken cancellationToken = default);
 }
