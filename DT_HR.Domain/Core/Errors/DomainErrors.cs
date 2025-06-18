@@ -62,6 +62,17 @@ public static class DomainErrors
     public static class Attendance
     {
         public static Error AlreadyChekedIn => new("user_already_checked_in", "The employee already checked in");
+        public static Error ResonRequired => new("reason_required", "need to provide the reason");
+        
+        public static Error InvalidEstimatedArivalTime => new("invalid_ETA", "ETA should be higher than current time");
+        public static Error EstimatedArrivalTooFar => new("invalid_ETA", "ETA Can't be more than 12 hours from now");
+        
+        public static Error ETARequiredForOnTheWay => new("invalid_ETA", "ETA not provided for on the way option");
+        
+        public static Error ETANotAllowedForAbsent => new("invalid_ETA", "ETA is No tAllowed For Absent");
+        
+        public static Error InvalidAbsenceType => new("invalid_ETA", "Invalid Absence Type");
+
     }
     public static class User
     {

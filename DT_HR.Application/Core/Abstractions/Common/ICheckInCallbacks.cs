@@ -1,7 +1,7 @@
 using DT_HR.Contract.FailureData;
 using DT_HR.Contract.SuccessData;
 
-namespace DT_HR.Domain.Repositories;
+namespace DT_HR.Application.Core.Abstractions.Common;
 
 public interface ICheckInCallbacks
 {

@@ -5,5 +5,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
+    
+    <ItemGroup>
+    <ProjectReference Include="..\DT_HR.Application\DT_HR.Application.csproj" />
+    </ItemGroup>
 </Project>

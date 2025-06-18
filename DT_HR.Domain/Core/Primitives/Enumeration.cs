@@ -12,7 +12,7 @@ public abstract class Enumeration<TEnum> : IEquatable<Enumeration<TEnum>>, IComp
 {
 	private static readonly Lazy<Dictionary<int, TEnum>> EnumerationsDictionary =
 		new Lazy<Dictionary<int, TEnum>>(() => GetAllEnumerationOptions().ToDictionary(item => item.Value));
-
+	
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Enumeration{TEnum}"/> class.
 	/// </summary>
