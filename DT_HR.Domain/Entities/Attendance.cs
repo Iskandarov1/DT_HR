@@ -31,6 +31,7 @@ public class Attendance : AggregateRoot
     
     public Attendance CheckIn(double latitute, double longtitude, bool isWithinRadius)
     {
+        this.CheckInTime = DateTime.UtcNow;
         this.CheckInLatitude = latitute;
         this.CheckInLongitude = longtitude;
         this.Status = AttendanceStatus.Present.Value;

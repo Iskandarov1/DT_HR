@@ -14,5 +14,5 @@ public interface IAuditableEntity
 	DateTime CreatedAt { get; }
 
 	[Column("updated_at")]
-	DateTime? UpdatedAt { get; }
+	DateTime? UpdatedAt { get; }	
 }

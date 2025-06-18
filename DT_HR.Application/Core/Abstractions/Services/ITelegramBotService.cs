@@ -1,7 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using Telegram.Bot.Types;
 
-namespace DT_HR.Application.Core.Abstractions.Common;
+namespace DT_HR.Application.Core.Abstractions.Services;
 
 public interface ITelegramBotService
 {

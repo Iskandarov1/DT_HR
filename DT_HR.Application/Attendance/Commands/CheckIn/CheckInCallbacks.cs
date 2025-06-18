@@ -1,4 +1,5 @@
 using DT_HR.Application.Core.Abstractions.Common;
+using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Contract.FailureData;
 using DT_HR.Contract.SuccessData;
 using DT_HR.Domain.Repositories;

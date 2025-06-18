@@ -1,3 +1,4 @@
+using DT_HR.Application.Core.Abstractions.Common;
 using DT_HR.Application.Core.Abstractions.Data;
 using DT_HR.Application.Core.Abstractions.Messaging;
 using DT_HR.Contract.FailureData;
