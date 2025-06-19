@@ -77,14 +77,13 @@ public class MarkAbsentCommandHandler(
 
             attendance.Value.MarkAbsent(request.Reason, request.EstimatedArrivalTime);
 
-            unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             await callbacks.OnAbsenceMarkedAsync(
                 new AbsenceMarkedData(
                     request.TelegramUserId,
                     $"{user.Value.FirstName} {user.Value.LastName}",
                     request.Reason,
-                    request.AbsenceType,
                     request.EstimatedArrivalTime,
                     DateTime.UtcNow
                     ), cancellationToken);

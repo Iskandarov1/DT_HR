@@ -72,6 +72,7 @@ public static class DomainErrors
         public static Error ETANotAllowedForAbsent => new("invalid_ETA", "ETA is No tAllowed For Absent");
         
         public static Error InvalidAbsenceType => new("invalid_ETA", "Invalid Absence Type");
+        
 
     }
     public static class User

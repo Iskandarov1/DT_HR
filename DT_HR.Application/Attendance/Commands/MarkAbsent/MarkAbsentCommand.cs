@@ -7,5 +7,6 @@ namespace DT_HR.Application.Attendance.Commands.MarkAbsent;
 public sealed record MarkAbsentCommand(
     long TelegramUserId,
     string Reason,
-    DateTime? EstimatedArrivalTime = null,
-    AbsenceType? AbsenceType = null ) : ICommand<Result<Guid>>;
+    AbsenceType AbsenceType,
+    DateTime? EstimatedArrivalTime = null
+    ) : ICommand<Result<Guid>>;
