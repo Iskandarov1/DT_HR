@@ -8,7 +8,19 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.6">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+        <PackageReference Include="Telegram.Bot" Version="22.5.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DT_HR.Application\DT_HR.Application.csproj" />
+        <ProjectReference Include="..\DT_HR.Persistence\DT_HR.Persistence.csproj" />
+        <ProjectReference Include="..\DT_HR.Services\DT_HR.Services.csproj" />
+
     </ItemGroup>
 
 </Project>

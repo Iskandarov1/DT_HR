@@ -16,6 +16,12 @@ public class AttendanceConfigurations : IEntityTypeConfiguration<Attendance>
         builder.Property(a => a.Status)
             .HasConversion<int>()
             .IsRequired();
+    builder.Property(a => a.AbsenceReason);
+    
+    
+    builder.Property(a => a.EstimatedArrivalTime);
+    
+    builder.Property(a => a.CheckInTime);
         
         builder.Property(item => item.CreatedAt)
             .IsRequired();

@@ -84,6 +84,7 @@ public class MarkAbsentCommandHandler(
                     request.TelegramUserId,
                     $"{user.Value.FirstName} {user.Value.LastName}",
                     request.Reason,
+                    request.AbsenceType.Value,
                     request.EstimatedArrivalTime,
                     DateTime.UtcNow
                     ), cancellationToken);

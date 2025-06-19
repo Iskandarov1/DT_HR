@@ -1,4 +1,4 @@
-﻿namespace Quote.Persistence.Infrastructure;
+﻿namespace DT_HR.Persistence.Infrastructure;
 
 /// <summary>
 /// Represents a connection string.

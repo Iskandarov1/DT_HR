@@ -80,7 +80,7 @@ public class MarkAbsentCallbacks(
 
     public static string BuildAbsenceConfirmationMessage(AbsenceMarkedData data)
     {
-        return data.AbsenceType.Value switch
+        return data.AbsenceType switch
         {
             0 => $"""
                   **Absence Recorded**
