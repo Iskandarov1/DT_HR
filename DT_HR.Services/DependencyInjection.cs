@@ -10,7 +10,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
     {
-        // Register Telegram Bot Client
+
         services.AddSingleton<ITelegramBotClient>(provider =>
         {
             var token = configuration["Telegram:BotToken"] 
@@ -18,12 +18,12 @@ public static class DependencyInjection
             return new TelegramBotClient(token);
         });
 
-        // Register Services
+
         services.AddScoped<ITelegramBotService, TelegramBotService>();
         services.AddScoped<ILocationService, LocationService>();
         //services.AddSingleton<IBackgroundTaskService, BackgroundTaskService>();
         
-        // Register State Management
+
         services.AddSingleton<IUserStateService, InMemoryUserStateService>();
         services.AddHostedService<InMemoryUserStateService>(provider => 
             (InMemoryUserStateService)provider.GetRequiredService<IUserStateService>());

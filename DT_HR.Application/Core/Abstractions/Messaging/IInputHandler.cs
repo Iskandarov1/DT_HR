@@ -1,5 +1,6 @@
-using System.Windows.Input;
 using DT_HR.Domain.Core.Primitives.Result;
+using DT_HR.Application.Core.Abstractions.Messaging;
+
 
 namespace DT_HR.Application.Core.Abstractions.Messaging;
 
@@ -8,7 +9,7 @@ namespace DT_HR.Application.Core.Abstractions.Messaging;
 /// </summary>
 /// <typeparam name="TCommand">The command type</typeparam>
 public interface IInputHandler<in TCommand>
-    where TCommand : ICommand
+    
 {
     /// <summary>
     /// Validates the command input

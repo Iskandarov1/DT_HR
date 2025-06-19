@@ -4,7 +4,7 @@ namespace DT_HR.Application.Core.Abstractions.Services;
 
 public interface IUserStateService
 {
-    Task<UserState> GetStateAsync(long userId);
+    Task<UserState?> GetStateAsync(long userId);
     Task SetStateAsync(long userId, UserState state);
     Task RemoveStateAsync(long userId);
     Task ClearExpiredStatusAsync();

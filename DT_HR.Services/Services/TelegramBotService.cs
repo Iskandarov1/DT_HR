@@ -191,8 +191,6 @@ public class TelegramBotService(
             {
                 await ShowMainMenuAsync(chatid, $"Check in failed {result.Error}", cancellationToken);
             }
-            
-            
         }
         else
         {
