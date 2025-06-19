@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using DT_HR.Domain.Enumeration;
+
 
 namespace DT_HR.Contract.CallbackData.Attendance;
 
@@ -11,9 +11,6 @@ public sealed record AbsenceMarkedData(
     
     [property: JsonPropertyName("absence_reason")]
     string AbsenceReason,
-    
-    [property: JsonPropertyName("absence_type")]
-    AbsenceType AbsenceType,
     
     [property: JsonPropertyName("estimated_arrival_time")]
     DateTime? EstimatedArrivalTime,

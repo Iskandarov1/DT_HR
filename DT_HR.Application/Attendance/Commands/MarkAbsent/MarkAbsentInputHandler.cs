@@ -27,22 +27,9 @@ public class MarkAbsentInputHandler(
         if(!user.Value.IsActive)
             return Result.Failure(DomainErrors.User.NotActive);
 
-        if (command.EstimatedArrivalTime.HasValue)
-        {
-            var eta = command.EstimatedArrivalTime.Value;
-            var now = DateTime.Now;
-            var maxArrivaltime = now.AddHours(12);
-            
-            if(eta <= now)
-                return Result.Failure(DomainErrors.Attendance.InvalidEstimatedArivalTime);
-            
-            if(eta > maxArrivaltime)
-                return Result.Failure(DomainErrors.Attendance.EstimatedArrivalTooFar);
-        }
-
-        var validationResult = ValidateAbsenceType(command);
-        if (validationResult.IsFailure)
-            return validationResult;
+        if (command.EstimatedArrivalTime.HasValue && command.EstimatedArrivalTime.Value <= DateTime.UtcNow)
+            return Result.Failure(DomainErrors.Attendance.InvalidEstimatedArivalTime);
+        
         
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
         var existingAttendance =
@@ -54,20 +41,5 @@ public class MarkAbsentInputHandler(
         return Result.Success();
     }
 
-    public static Result ValidateAbsenceType(MarkAbsentCommand command)
-    {
-        return command.AbsenceType.Value switch
-        {
-            1 => command.EstimatedArrivalTime.HasValue
-                ? Result.Success()
-                : Result.Failure(DomainErrors.Attendance.ETARequiredForOnTheWay),
-            2 => Result.Success(),
-            0 => command.EstimatedArrivalTime.HasValue
-                ? Result.Failure(DomainErrors.Attendance.ETANotAllowedForAbsent)
-                : Result.Success(),
-            3 => Result.Success(),
-            _ => Result.Failure(DomainErrors.Attendance.InvalidAbsenceType)
-        };
-
-    }
+    
 }
