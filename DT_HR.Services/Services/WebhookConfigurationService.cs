@@ -19,7 +19,7 @@ public class WebhookConfigurationService(
             var webhookUrl = configuration["Telegram:WebhookUrl"];
             var useWebhook = configuration.GetValue<bool>("Telegram:UseWebhook", true);
 
-            if (!useWebhook || environment.IsDevelopment())
+            if (!useWebhook)
             {
                 await botClient.DeleteWebhook(cancellationToken: cancellationToken);
                 logger.LogInformation("Webhook deleted. Bot will use long polling.");
