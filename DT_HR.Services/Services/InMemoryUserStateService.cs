@@ -7,7 +7,8 @@ using Microsoft.Extensions.Logging;
 
 namespace DT_HR.Services.Services;
 
-public class InMemoryUserStateService(ILogger<InMemoryUserStateService> logger) : IUserStateService, IHostedService
+public class InMemoryUserStateService(
+    ILogger<InMemoryUserStateService> logger) : IUserStateService, IHostedService
 {
     private readonly ConcurrentDictionary<long, UserState> _states = new();
     private Timer? _cleanUpTimer;
