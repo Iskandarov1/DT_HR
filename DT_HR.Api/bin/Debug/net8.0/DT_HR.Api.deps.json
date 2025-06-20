@@ -1116,6 +1116,7 @@
         "dependencies": {
           "DT_HR.Application": "1.0.0",
           "DT_HR.Domain": "1.0.0",
+          "DT_HR.Services": "1.0.0",
           "Microsoft.EntityFrameworkCore": "9.0.6",
           "Microsoft.Extensions.DependencyInjection": "9.0.6",
           "Microsoft.Extensions.DependencyModel": "9.0.6",

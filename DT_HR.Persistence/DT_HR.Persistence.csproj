@@ -13,10 +13,15 @@
     <ItemGroup>
       <ProjectReference Include="..\DT_HR.Application\DT_HR.Application.csproj" />
       <ProjectReference Include="..\DT_HR.Domain\DT_HR.Domain.csproj" />
+      <ProjectReference Include="..\DT_HR.Services\DT_HR.Services.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.6" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.6">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
       <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="9.0.6" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
