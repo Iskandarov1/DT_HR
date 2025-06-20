@@ -28,7 +28,10 @@ public static class DependencyInjection
         services.AddScoped<ITelegramMessageService, TelegramMessageService>();
         services.AddScoped<ITelegramKeyboardService, TelegramKeyboardService>();
         services.AddScoped<ILocationService, LocationService>();
-        //services.AddScoped<IBackgroundTaskService, BackgroundTaskService>();
+
+        services.AddSingleton<IBackgroundTaskService, BackgroundTaskService>();
+        services.AddHostedService<BackgroundTaskService>(provider => 
+            (BackgroundTaskService)provider.GetRequiredService<IBackgroundTaskService>());
         
         services.AddScoped<IDateTime, DateTimeService>();
         //State
@@ -49,6 +52,8 @@ public static class DependencyInjection
         services.AddScoped<OversleptETACallbackHandler>();
         
         services.AddHostedService<WebhookConfigurationService>();
+        services.AddHostedService<TelegramPollingService>();
+
         
         return services;
     }
