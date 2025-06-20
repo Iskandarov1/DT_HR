@@ -1,3 +1,4 @@
+using DT_HR.Application.Core.Abstractions.Common;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Services.Services;
 using DT_HR.Services.Telegram;
@@ -29,6 +30,7 @@ public static class DependencyInjection
         services.AddScoped<ILocationService, LocationService>();
         //services.AddScoped<IBackgroundTaskService, BackgroundTaskService>();
         
+        services.AddScoped<IDateTime, DateTimeService>();
         //State
 
         services.AddSingleton<IUserStateService, InMemoryUserStateService>();

@@ -3,6 +3,8 @@ using DT_HR.Application.Attendance.Commands.CheckIn;
 using DT_HR.Application.Attendance.Commands.MarkAbsent;
 using DT_HR.Application.Core.Abstractions.Common;
 using DT_HR.Application.Core.Abstractions.Messaging;
+using DT_HR.Application.Resources;
+using DT_HR.Domain.Core.Localizations;
 using DT_HR.Domain.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +16,8 @@ public static class DependencyInjection
     {
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         
+        services.AddLocalization();
+        services.AddScoped<ISharedViewLocalizer, ApplicationSharedViewLocalizer>();
         // Input Handlers
         services.AddScoped<IInputHandler<CheckInCommand>, CheckInInputHandler>();
         services.AddScoped<IInputHandler<MarkAbsentCommand>, MarkAbsentInputHandler>();

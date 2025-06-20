@@ -19,13 +19,22 @@ public static class DependencyInjection
         string connectionString = configuration.GetConnectionString(ConnectionString.SettingsKey)
         ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
+        
         services.AddSingleton(new ConnectionString(connectionString));
 
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseNpgsql(connectionString);
-            options.EnableSensitiveDataLogging();
-            options.EnableDetailedErrors();
+            
+            if (configuration.GetValue<bool>("EnableSensitiveDataLogging", false))
+            {
+                options.EnableSensitiveDataLogging();
+            }
+            
+            if (configuration.GetValue<bool>("EnableDetailedErrors", false))
+            {
+                options.EnableDetailedErrors();
+            }
         });
         
         
