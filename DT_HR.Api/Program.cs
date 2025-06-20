@@ -45,6 +45,12 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.Map("/error", (HttpContext context) =>
+{
+    return Results.Problem(
+        title: "An error occurred",
+        statusCode: StatusCodes.Status500InternalServerError);
+});
 
 
 

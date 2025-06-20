@@ -23,7 +23,7 @@ public static class DependencyInjection
         });
 
         //Core
-        services.AddScoped<ITelegramBotService, ITelegramBotService>();
+        services.AddScoped<ITelegramBotService, TelegramBotService>();
         services.AddScoped<ITelegramMessageService, TelegramMessageService>();
         services.AddScoped<ITelegramKeyboardService, TelegramKeyboardService>();
         services.AddScoped<ILocationService, LocationService>();
@@ -45,6 +45,8 @@ public static class DependencyInjection
 
         services.AddScoped<AbsenceTypeCallbackHandler>();
         services.AddScoped<OversleptETACallbackHandler>();
+        
+        services.AddHostedService<WebhookConfigurationService>();
         
         return services;
     }

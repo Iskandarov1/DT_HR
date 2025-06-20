@@ -8,10 +8,12 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
+        builder.ToTable("users");
         builder.Property(item => item.Id)
             .IsRequired();
 
         builder.HasKey(item => item.Id);
+        
 
         builder.Property(item => item.FirstName)
             .IsRequired();
@@ -23,6 +25,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired();
         
         builder.Property(item => item.PhoneNumber)
+            .IsRequired();
+        
+        builder.Property(u => u.IsActive)
+            .HasDefaultValue(true)
             .IsRequired();
         
         builder.HasMany<Attendance>()
