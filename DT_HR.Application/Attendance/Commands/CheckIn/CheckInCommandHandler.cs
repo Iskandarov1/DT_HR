@@ -1,8 +1,8 @@
 using DT_HR.Application.Core.Abstractions.Common;
 using DT_HR.Application.Core.Abstractions.Data;
 using DT_HR.Application.Core.Abstractions.Messaging;
+using DT_HR.Contract.CallbackData.Attendance;
 using DT_HR.Contract.FailureData;
-using DT_HR.Contract.SuccessData;
 using DT_HR.Domain.Core.Errors;
 using DT_HR.Domain.Core.Primitives.Result;
 using DT_HR.Domain.Repositories;
