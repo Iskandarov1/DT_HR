@@ -91,6 +91,6 @@ public class TelegramMessageService(
     public async Task ShowMainMenuAsync(long chatId, string text, CancellationToken cancellationToken = default)
     {
         var keyboard = keyboardService.GetMainMenuKeyboard();
-        await SendTextMessageAsync(chatId, text);
+        await SendTextMessageAsync(chatId, text,replyMarkup:keyboard,cancellationToken:cancellationToken);
     }
 }

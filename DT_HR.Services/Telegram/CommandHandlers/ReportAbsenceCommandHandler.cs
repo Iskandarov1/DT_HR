@@ -16,7 +16,7 @@ public class ReportAbsenceCommandHandler(
         var text = message.Text.ToLower();
         return Task.FromResult(
             text == "/absent" ||
-            text == "report absence");
+            text == "report absence" || text.Contains("report absence"));
     }
 
     public async Task HandleAsync(Message message, CancellationToken cancellationToken = default)

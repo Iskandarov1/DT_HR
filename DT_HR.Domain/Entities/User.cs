@@ -19,6 +19,7 @@ public class User : AggregateRoot
         this.PhoneNumber = phoneNumber;
         this.FirstName = firstName;
         this.LastName = lastName;
+        this.Email = "";
         this.WorkStartTime = new TimeOnly(10, 0);
         this.WorkEndTime = new TimeOnly(19, 0);
         IsActive = true;

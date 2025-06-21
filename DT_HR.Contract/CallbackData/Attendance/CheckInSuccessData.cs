@@ -1,4 +1,4 @@
-namespace DT_HR.Contract.SuccessData;
+namespace DT_HR.Contract.CallbackData.Attendance;
 
 public record CheckInSuccessData(
     long TelegramUserId,
