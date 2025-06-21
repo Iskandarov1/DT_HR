@@ -1,4 +1,5 @@
 using DT_HR.Application.Core.Abstractions.Common;
+using DT_HR.Application.Core.Abstractions.Data;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Contract.CallbackData.Attendance;
 using DT_HR.Contract.FailureData;
@@ -10,7 +11,8 @@ namespace DT_HR.Application.Attendance.Commands.CheckIn;
 public class CheckInCallbacks(
     ILocationService locationService,
     ITelegramBotService telegramBotService,
-    ILogger<CheckInCallbacks> logger) : ICheckInCallbacks
+    ILogger<CheckInCallbacks> logger,
+    IUnitOfWork unitOfWork) : ICheckInCallbacks
 {
     public async Task<bool> ValidateLocationAsync(double latitude, double longitude, CancellationToken cancellationToken)
     {
@@ -31,7 +33,7 @@ public class CheckInCallbacks(
         {
             var message = BuildSuccesMessage(data);
             await telegramBotService.SendTextMessageAsync(data.TelegramUserId, message, cancellationToken);
-            
+            await unitOfWork.SaveChangesAsync(cancellationToken);
             logger.LogInformation("Check-in success notification sent to the user {TelegramUserId}",data.TelegramUserId);
         }
         catch (Exception e)
