@@ -16,8 +16,15 @@ public class LocationMessageService (
     {
         if(message.Location == null || message.From == null) return;
 
+        
         var userId = message.From!.Id;
         var chatId = message.Chat.Id;
+
+        if (message.ForwardDate != null || message.ForwardFrom != null || message.ForwardFromChat != null)
+            await messageService.SendTextMessageAsync(chatId,
+                "❌ Forwarded locations are not accepted. Tap the live-location button inside Telegram.");
+        if (message.Location.LivePeriod is null or 0)
+            await messageService.SendTextMessageAsync(chatId, "Please share a location instead of pin");
         
         logger.LogInformation("Processing location message from the user {UserId}",userId);
 
@@ -26,7 +33,7 @@ public class LocationMessageService (
         {
             await stateService.RemoveStateAsync(userId);
 
-            var command = new CheckInCommand(
+            var command = new CheckInCommand(   
                 userId,
                 message.Location.Latitude,
                 message.Location.Longitude);

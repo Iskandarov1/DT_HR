@@ -31,16 +31,16 @@ public class MarkAbsentInputHandler(
         {
             var eta = command.EstimatedArrivalTime.Value;
             var now = DateTime.UtcNow;
-            var maxArrivalTime = now.AddHours(4);
+            var maxArrivalTime = now.AddHours(12);
 
-            if (eta <now)
+            if (eta < now)
             {
                 return Result.Failure(DomainErrors.Attendance.InvalidEstimatedArivalTime);
             }
 
             if (eta > maxArrivalTime)
             {
-                return Result.Failure(DomainErrors.Attendance.ETARequiredForOnTheWay);
+                return Result.Failure(DomainErrors.Attendance.EstimatedArrivalTooFar);
             }
         }
 
