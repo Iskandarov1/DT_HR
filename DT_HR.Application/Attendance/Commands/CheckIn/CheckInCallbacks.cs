@@ -64,7 +64,7 @@ public class CheckInCallbacks(
             ? $"Late Arrival ({data.LateBy?.ToString(@"hh\:mm")} late)"
             : "On time";
         
-        return $"""
+        return $""" 
                 ✅**Check-in Successful!**
                 
                 👤Welcome, {data.UserName}!
@@ -74,15 +74,6 @@ public class CheckInCallbacks(
                 Have a Productive Day! 🚀
                 """;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     
 }

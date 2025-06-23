@@ -42,6 +42,7 @@ public static class DependencyInjection
 
         services.AddScoped<StartCommandHandler>();
         services.AddScoped<CheckInCommandHandler>();
+        services.AddScoped<CheckOutCommandHandler>();
         services.AddScoped<ReportAbsenceCommandHandler>();
         services.AddScoped<StateBasedMessageHandler>();
 

@@ -30,6 +30,7 @@ public class TelegramBotService : ITelegramBotService
         {
             serviceProvider.GetRequiredService<StartCommandHandler>(),
             serviceProvider.GetRequiredService<CheckInCommandHandler>(),
+            serviceProvider.GetRequiredService<CheckOutCommandHandler>(),
             serviceProvider.GetRequiredService<ReportAbsenceCommandHandler>(),
             serviceProvider.GetRequiredService<StateBasedMessageHandler>()
         };

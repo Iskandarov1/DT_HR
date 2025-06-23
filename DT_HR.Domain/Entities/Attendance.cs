@@ -38,12 +38,25 @@ public class Attendance : AggregateRoot
         return this;
     }
 
+    public Attendance CheckOut()
+    {
+        this.CheckOutTime = DateTime.UtcNow;
+        return this;
+    }
+
     public Attendance MarkAbsent(string reason, DateTime? estimatedArrival = null )
     {
         this.Status = estimatedArrival.HasValue ? AttendanceStatus.OnTheWay.Value : AttendanceStatus.Absent.Value;
         this.AbsenceReason = reason;
         this.EstimatedArrivalTime = estimatedArrival?.ToUniversalTime();
         return this;
+    }
+
+    public TimeSpan? GetWorkDuration()
+    {
+        if (!CheckInTime.HasValue || !CheckOutTime.HasValue)
+            return null;
+        return CheckOutTime - CheckInTime;
     }
     public bool IsLateArrival(TimeOnly workStartTime)
     {
@@ -53,6 +66,16 @@ public class Attendance : AggregateRoot
         return checkInTimeOnly > workStartTime;
 
     }
+
+    public bool IsEarlyDeparture(TimeOnly workEndTime)
+    {
+        if (!CheckOutTime.HasValue)
+            return false;
+        var checkOutTimeOnly = TimeOnly.FromDateTime(CheckOutTime.Value);
+        return checkOutTimeOnly < workEndTime;
+    }
+    
+    
 
 
 

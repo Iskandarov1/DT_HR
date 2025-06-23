@@ -9,7 +9,7 @@ public class TelegramKeyboardService : ITelegramKeyboardService
     {
         return new ReplyKeyboardMarkup(new[]
         {
-            new[] { new KeyboardButton("✅ Check In") },
+            new[] { new KeyboardButton("✅ Check In") , new KeyboardButton("⏰ Check Out")},
             new[] { new KeyboardButton("🏠 Report Absence") },
         })
         {

@@ -62,6 +62,8 @@ public static class DomainErrors
     public static class Attendance
     {
         public static Error AlreadyChekedIn => new("user_already_checked_in", "The employee already checked in");
+        public static Error AlreadyChekedOut => new("user_already_checked_out", "The employee already checked out");
+
         public static Error ResonRequired => new("reason_required", "need to provide the reason");
         
         public static Error InvalidEstimatedArivalTime => new("invalid_ETA", "ETA should be higher than current time");
@@ -72,6 +74,7 @@ public static class DomainErrors
         public static Error ETANotAllowedForAbsent => new("invalid_ETA", "ETA is No tAllowed For Absent");
         
         public static Error InvalidAbsenceType => new("invalid_ETA", "Invalid Absence Type");
+        public static Error NoCheckInRecord => new("no_check_in_record", "You must check in first");
         
 
     }

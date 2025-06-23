@@ -24,6 +24,7 @@ public enum UserAction
     None,
     Registering,
     CheckingIn,
+    CheckingOut,
     ReportingAbsence
     
 }
