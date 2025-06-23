@@ -71,6 +71,7 @@ public class CheckOutCommandHandler(
                 return Result.Failure<Guid>(DomainErrors.Attendance.AlreadyChekedOut);
             }
 
+            attendance.Value.CheckOut();
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
             var checkOutTime = attendance.Value.CheckOutTime!.Value;

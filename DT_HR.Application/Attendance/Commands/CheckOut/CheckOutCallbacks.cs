@@ -57,7 +57,7 @@ public class CheckOutCallbacks(
 
                  👤 Goodbye, {{data.UserName}}!
                  ⏱️  Status: {{departureStatus}}
-                 🕐 {workDurationText}
+                 🕐 {{workDurationText}}
 
                  Have a great day! 🌟
                  """;
