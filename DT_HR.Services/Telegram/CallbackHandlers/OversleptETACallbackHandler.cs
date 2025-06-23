@@ -44,7 +44,7 @@ public class OversleptETACallbackHandler (
         else
         {
             var minutes = int.Parse(eta);
-            var expectedTime = DateTime.Now.AddMinutes(minutes);
+            var expectedTime = DateTime.UtcNow.AddMinutes(minutes);
 
 
             var command = new MarkAbsentCommand(

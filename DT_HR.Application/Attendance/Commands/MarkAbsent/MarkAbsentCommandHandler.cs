@@ -18,7 +18,7 @@ public class MarkAbsentCommandHandler(
 {
     public async Task<Result<Guid>> Handle(MarkAbsentCommand request, CancellationToken cancellationToken)
     {
-        // 1. neeed to validate the INPUT
+
         var validateResult = await inputHandler.ValidateAsync(request, cancellationToken);
 
         if (validateResult.IsFailure)
@@ -34,7 +34,7 @@ public class MarkAbsentCommandHandler(
         }
 
         var user = await userRepository.GetByTelegramUserIdAsync(request.TelegramUserId, cancellationToken);
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var today = DateOnly.FromDateTime(DateTime.UtcNow.AddHours(5));
 
         var attendance =
             await attendanceRepository.GetByUserAndDateAsync(user.Value.Id, today, cancellationToken);

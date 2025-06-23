@@ -11,6 +11,9 @@ public class MarkAbsentCallbacks(
     IBackgroundTaskService backgroundTaskService,
     ILogger<MarkAbsentCallbacks> logger) : IMarkAbsentCallbacks
 {
+
+    private static readonly TimeSpan localOffset = TimeSpan.FromHours(5);
+    private static DateTime ToLocal(DateTime utc) => DateTime.SpecifyKind(utc, DateTimeKind.Utc).Add(localOffset);
     public async Task OnAbsenceMarkedAsync(AbsenceMarkedData data, CancellationToken cancellationToken)
     {
         try
@@ -23,7 +26,7 @@ public class MarkAbsentCallbacks(
         }
         catch (Exception e)
         {
-                logger.LogInformation("Error sending absense confirmation to user {TelegramUserId} ",
+                logger.LogInformation("Error sending absence confirmation to user {TelegramUserId} ",
                     data.TelegramUserId);
         }
     }
@@ -39,13 +42,14 @@ public class MarkAbsentCallbacks(
                 scheduledFor : followUpTime,
                 payload: new {data.TelegramUserId, data.EstimatedArrivalTime}
                 ,cancellationToken);
+            var etalocal = ToLocal(data.EstimatedArrivalTime);
             var message = $"""
                            🚗 **Got it!** You're on your way.
 
-                           📅 Expected arrival: {data.EstimatedArrivalTime:HH:mm}
+                           📅 Expected arrival: {etalocal:HH:mm}
                            💬 Reason: {data.AbsenceReason}
 
-                           We'll check with you around {data.EstimatedArrivalTime:HH:mm} to confirm your arrival.
+                           We'll check with you around {etalocal:HH:mm} to confirm your arrival.
                            Safe travels! 🚗💨
                            """;
             await telegramBotService.SendTextMessageAsync(data.TelegramUserId, message, cancellationToken);
@@ -80,49 +84,52 @@ public class MarkAbsentCallbacks(
 
     public static string BuildAbsenceConfirmationMessage(AbsenceMarkedData data)
     {
+        var marked = data.MarkedAt.HasValue ? ToLocal(data.MarkedAt.Value) : (DateTime?)null;
+        var eta = data.EstimatedArrivalTime.HasValue ? ToLocal(data.EstimatedArrivalTime.Value) : (DateTime?)null;
+        
         return data.AbsenceType switch
         {
             0 => $"""
                   **Absence Recorded**
 
-                      Date: {data.MarkedAt:MMM dd, yyyy}
+                      Date: {marked:MMM dd, yyyy}
                       Reason: {data.AbsenceReason}
-                      Marked at: {data.MarkedAt:HH:mm}
+                      Marked at: {marked:HH:mm}
                               
                   Hope you feel better soon! 
                   """,
             1 => $"""
                   🚗 **"On the way" status recorded**
                                  
-                     📅 Date: {data.MarkedAt:MMM dd, yyyy}
+                     📅 Date: {marked:MMM dd, yyyy}
                      💬 Reason: {data.AbsenceReason}
-                     ⏰ Expected: {data.EstimatedArrivalTime:HH:mm}
+                     ⏰ Expected: {eta:HH:mm}
                      
                      See you soon! 🚀
                   """,
             2 => $""""
                   😴 **Overslept - No worries!**
 
-                  📅 Date: {data.MarkedAt:MMM dd, yyyy}
-                  ⏰ Expected: {data.EstimatedArrivalTime:HH:mm}
+                  📅 Date: {marked:MMM dd, yyyy}
+                  ⏰ Expected: {eta:HH:mm}
 
-                  Take your time and come when ready! ☕
+                  Take your time and come when ready! ☕️
 
                   """",
             3 => data.EstimatedArrivalTime.HasValue
                 ? $"""
                    ✅ **Custom absence recorded**
 
-                   📅 Date: {data.MarkedAt:MMM dd, yyyy}
+                   📅 Date: {marked:MMM dd, yyyy}
                    💬 Reason: {data.AbsenceReason}
-                   ⏰ Expected: {data.EstimatedArrivalTime:HH:mm}
+                   ⏰ Expected: {eta:HH:mm}
 
                    Thanks for letting us know! 👍
                    """
                 : $"""
                    ✅ **Absence recorded**
 
-                   📅 Date: {data.MarkedAt:MMM dd, yyyy}
+                   📅 Date: {marked:MMM dd, yyyy}
                    💬 Reason: {data.AbsenceReason}
 
                    Thanks for letting us know! 👍

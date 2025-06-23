@@ -11,11 +11,12 @@ public class MarkAbsentInputHandler(
     IAttendanceRepository attendanceRepository
     ) : IInputHandler<MarkAbsentCommand>
 {
+    private static readonly TimeSpan LocalOffset = TimeSpan.FromHours(5);
     public async Task<Result> ValidateAsync(MarkAbsentCommand command, CancellationToken cancellationToken = default)
     {
         if (command.TelegramUserId <= 0)
             return Result.Failure(DomainErrors.TelegramUserId.Invalid);
-        
+         
         if (string.IsNullOrWhiteSpace(command.Reason))
             return Result.Failure(DomainErrors.Attendance.ResonRequired);
         
@@ -25,23 +26,28 @@ public class MarkAbsentInputHandler(
         
         if(!user.Value.IsActive)
             return Result.Failure(DomainErrors.User.NotActive);
-
-
+        
         if (command.EstimatedArrivalTime.HasValue)
         {
             var eta = command.EstimatedArrivalTime.Value;
-            var now = DateTime.UtcNow;
-            var maxArrivalTime = now.AddHours(12);
 
-            if (eta < now)
-            {
-                return Result.Failure(DomainErrors.Attendance.InvalidEstimatedArivalTime);
-            }
+            if (eta.Kind == DateTimeKind.Local)
+                eta = eta.ToUniversalTime();
+            else if (eta.Kind == DateTimeKind.Unspecified)
+                eta = new DateTimeOffset(eta, LocalOffset).UtcDateTime;
+            
+            var now = DateTime.UtcNow + LocalOffset;
+            var maxArrivalTime = now.AddHours(15);
 
-            if (eta > maxArrivalTime)
-            {
-                return Result.Failure(DomainErrors.Attendance.EstimatedArrivalTooFar);
-            }
+            // if (eta < now)
+            // {
+            //     return Result.Failure(DomainErrors.Attendance.InvalidEstimatedArivalTime);
+            // }
+            //
+            // if (eta > maxArrivalTime)
+            // {
+            //     return Result.Failure(DomainErrors.Attendance.EstimatedArrivalTooFar);
+            // }
         }
 
         var validationResult = ValidateAbsenceType(command);
@@ -62,7 +68,6 @@ public class MarkAbsentInputHandler(
 
     public static Result ValidateAbsenceType(MarkAbsentCommand command)
     {
-
         return command.AbsenceType.Value switch
         {
             1 => command.EstimatedArrivalTime.HasValue

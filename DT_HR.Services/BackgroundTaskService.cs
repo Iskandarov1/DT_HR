@@ -10,6 +10,7 @@ public class BackgroundTaskService : IBackgroundTaskService, IHostedService
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILogger<BackgroundTaskService> _logger;
+    private static readonly TimeSpan localOffset = TimeSpan.FromHours(5);
     private readonly ConcurrentDictionary<string, ScheduledTask> _scheduledTasks = new();
     private readonly ConcurrentDictionary<string, Timer> _recurringTasks = new();
     private Timer? _cleanupTimer;
@@ -149,10 +150,11 @@ public class BackgroundTaskService : IBackgroundTaskService, IHostedService
             var telegramService = scope.ServiceProvider.GetRequiredService<ITelegramBotService>();
             var userId = Convert.ToInt64(userIdObj);
             var eta = (DateTime)etaObj;
+            var etaLocal = DateTime.SpecifyKind(eta, DateTimeKind.Utc).Add(localOffset);
 
             await telegramService.SendTextMessageAsync(
                 userId,
-                $"👋 Hi! You were expected to arrive by {eta:HH:mm}. Have you arrived at the office?");
+                $"👋 Hi! You were expected to arrive by {etaLocal:HH:mm}. Have you arrived at the office?");
         }
     }
 

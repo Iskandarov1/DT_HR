@@ -34,7 +34,7 @@ public class CheckInCommandHandler(
 
         var user = await userRepository.GetByTelegramUserIdAsync(request.TelegramUserId, cancellationToken);
 
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var today = DateOnly.FromDateTime(DateTime.UtcNow.AddHours(5));
 
         var attandance = await attendanceRepository.GetByUserAndDateAsync(user.Value.Id, today, cancellationToken);
 

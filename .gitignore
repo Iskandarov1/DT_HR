@@ -27,7 +27,9 @@ x86/
 [Aa][Rr][Mm]64/
 bld/
 [Bb]in/
+**/[Bb]in/
 [Oo]bj/
+**/[Oo]bj/
 [Ll]og/
 [Ll]ogs/
 
@@ -354,3 +356,12 @@ MigrationBackup/
 
 # Rider
 .idea/
+
+# JSON files (except for essential configuration)
+*.json
+!appsettings.json
+!appsettings.*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!launchSettings.json

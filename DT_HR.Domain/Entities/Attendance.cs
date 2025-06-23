@@ -42,7 +42,7 @@ public class Attendance : AggregateRoot
     {
         this.Status = estimatedArrival.HasValue ? AttendanceStatus.OnTheWay.Value : AttendanceStatus.Absent.Value;
         this.AbsenceReason = reason;
-        this.EstimatedArrivalTime = estimatedArrival;
+        this.EstimatedArrivalTime = estimatedArrival?.ToUniversalTime();
         return this;
     }
     public bool IsLateArrival(TimeOnly workStartTime)

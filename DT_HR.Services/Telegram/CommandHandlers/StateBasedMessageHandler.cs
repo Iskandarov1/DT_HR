@@ -14,6 +14,7 @@ public class StateBasedMessageHandler(
     IMediator mediator,
     ILogger<StateBasedMessageHandler> logger) : ITelegramService
 {
+    private static readonly TimeSpan LocalOffset = TimeSpan.FromHours(5);
     public async Task<bool> CanHandleAsync(Message message, CancellationToken cancellationToken = default)
     {
         if (message.From == null) return false;
@@ -65,13 +66,20 @@ public class StateBasedMessageHandler(
             {
                 var hour = int.Parse(timeMatch.Groups[1].Value);
                 var minute = int.Parse(timeMatch.Groups[2].Value);
-                var today = DateTime.Today;
-                estimatedArrivalTime = today.AddHours(hour).AddMinutes(minute);
 
-                if (estimatedArrivalTime < DateTime.Now)
+                var localNow = DateTime.UtcNow + LocalOffset;
+                var todayLocal = localNow.Date;
+                var localEta = new DateTimeOffset(todayLocal.Year, todayLocal.Month, todayLocal.Day, hour, minute, 0,
+                    LocalOffset);
+                var etaUtc = localEta.UtcDateTime;
+
+                if (etaUtc < DateTime.UtcNow)
                 {
-                    estimatedArrivalTime = estimatedArrivalTime.Value.AddDays(1);
+                    localEta.AddDays(1);
+                    etaUtc = localEta.UtcDateTime;
                 }
+
+                estimatedArrivalTime = etaUtc;
 
                 reason = text.Replace(timeMatch.Value, "").Trim().TrimEnd(',').Trim();
                 
@@ -91,14 +99,17 @@ public class StateBasedMessageHandler(
             {
                 var hour = int.Parse(timeMatch.Groups[1].Value);
                 var minute = int.Parse(timeMatch.Groups[2].Value);
-                var today = DateTime.Today;
 
-                estimatedArrivalTime = today.AddHours(hour).AddMinutes(minute);
-
-                if (estimatedArrivalTime <DateTime.Now)
+                var localNow = DateTime.UtcNow + LocalOffset;
+                var todayLocal = localNow.Date;
+                var localEta = new DateTimeOffset(todayLocal.Year, todayLocal.Month, todayLocal.Day, hour, minute, 0, LocalOffset);
+                var etaUtc = localEta.UtcDateTime;
+                
+                if (etaUtc <DateTime.UtcNow)
                 {
-                    estimatedArrivalTime = estimatedArrivalTime.Value.AddDays(1);
-                }
+                    localEta = localEta.AddDays(1);
+                    etaUtc = localEta.UtcDateTime;                }
+                estimatedArrivalTime = etaUtc;
 
                 reason = "Overslept";
             }
