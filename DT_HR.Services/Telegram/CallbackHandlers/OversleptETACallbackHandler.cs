@@ -1,5 +1,6 @@
 using DT_HR.Application.Attendance.Commands.MarkAbsent;
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Domain.Core;
 using DT_HR.Domain.Enumeration;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -44,7 +45,7 @@ public class OversleptETACallbackHandler (
         else
         {
             var minutes = int.Parse(eta);
-            var expectedTime = DateTime.UtcNow.AddMinutes(minutes);
+            var expectedTime = TimeUtils.Now.AddMinutes(minutes);
 
 
             var command = new MarkAbsentCommand(

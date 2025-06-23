@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using DT_HR.Application.Attendance.Commands.MarkAbsent;
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Domain.Core;
 using DT_HR.Domain.Enumeration;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -14,7 +15,7 @@ public class StateBasedMessageHandler(
     IMediator mediator,
     ILogger<StateBasedMessageHandler> logger) : ITelegramService
 {
-    private static readonly TimeSpan LocalOffset = TimeSpan.FromHours(5);
+    private static readonly TimeSpan LocalOffset = TimeUtils.LocalOffset;
     public async Task<bool> CanHandleAsync(Message message, CancellationToken cancellationToken = default)
     {
         if (message.From == null) return false;
@@ -67,13 +68,13 @@ public class StateBasedMessageHandler(
                 var hour = int.Parse(timeMatch.Groups[1].Value);
                 var minute = int.Parse(timeMatch.Groups[2].Value);
 
-                var localNow = DateTime.UtcNow + LocalOffset;
+                var localNow = TimeUtils.Now;
                 var todayLocal = localNow.Date;
                 var localEta = new DateTimeOffset(todayLocal.Year, todayLocal.Month, todayLocal.Day, hour, minute, 0,
                     LocalOffset);
                 var etaUtc = localEta.UtcDateTime;
 
-                if (etaUtc < DateTime.UtcNow)
+                if (etaUtc < TimeUtils.Now)
                 {
                     localEta.AddDays(1);
                     etaUtc = localEta.UtcDateTime;
@@ -100,12 +101,12 @@ public class StateBasedMessageHandler(
                 var hour = int.Parse(timeMatch.Groups[1].Value);
                 var minute = int.Parse(timeMatch.Groups[2].Value);
 
-                var localNow = DateTime.UtcNow + LocalOffset;
+                var localNow = TimeUtils.Now;
                 var todayLocal = localNow.Date;
                 var localEta = new DateTimeOffset(todayLocal.Year, todayLocal.Month, todayLocal.Day, hour, minute, 0, LocalOffset);
                 var etaUtc = localEta.UtcDateTime;
                 
-                if (etaUtc <DateTime.UtcNow)
+                if (etaUtc < TimeUtils.Now)
                 {
                     localEta = localEta.AddDays(1);
                     etaUtc = localEta.UtcDateTime;                }

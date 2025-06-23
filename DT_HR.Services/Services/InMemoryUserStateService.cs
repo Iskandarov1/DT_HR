@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Domain.Core;
 using DT_HR.Domain.Core.Primitives.Result;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -17,7 +18,7 @@ public class InMemoryUserStateService(
     {
         if (_states.TryGetValue(userId, out var state))
         {
-            if (state.ExpiresAt < DateTime.UtcNow)
+            if (state.ExpiresAt < TimeUtils.Now)
             {
                 _states.TryRemove(userId, out _);
                 return Task.FromResult<UserState?>(null);
@@ -46,7 +47,7 @@ public class InMemoryUserStateService(
 
     public Task ClearExpiredStatusAsync()
     {
-        var now = DateTime.UtcNow;
+        var now = TimeUtils.Now;
         var expiredUsers = _states
             .Where(kvp => kvp.Value.ExpiresAt < now)
             .Select(kvp => kvp.Key)

@@ -2,6 +2,7 @@ using DT_HR.Application.Core.Abstractions.Common;
 using DT_HR.Application.Core.Abstractions.Data;
 using DT_HR.Application.Core.Abstractions.Messaging;
 using DT_HR.Contract.CallbackData.Attendance;
+using DT_HR.Domain.Core;
 using DT_HR.Domain.Core.Errors;
 using DT_HR.Domain.Core.Primitives.Result;
 using DT_HR.Domain.Repositories;
@@ -26,12 +27,12 @@ public class CheckOutCommandHandler(
             (request.TelegramUserId,
                 validationResult.Error.Code,
                 validationResult.Error.Message,
-                DateTime.UtcNow),cancellationToken);
+                TimeUtils.Now),cancellationToken);
             return Result.Failure<Guid>(validationResult.Error);
         }
 
         var user = await userRepository.GetByTelegramUserIdAsync(request.TelegramUserId, cancellationToken);
-        var today = DateOnly.FromDateTime(DateTime.UtcNow.AddHours(5));
+        var today = DateOnly.FromDateTime(TimeUtils.Now);
         var attendance = await attendanceRepository.GetByUserAndDateAsync(user.Value.Id, today, cancellationToken);
 
         try
@@ -43,7 +44,7 @@ public class CheckOutCommandHandler(
                         request.TelegramUserId, 
                         "No_Check_In_Record",
                         "You must check in first before checking out",
-                        DateTime.UtcNow), cancellationToken);
+                        TimeUtils.Now), cancellationToken);
                 return Result.Failure<Guid>(DomainErrors.Attendance.NoCheckInRecord);
             }
 
@@ -54,7 +55,7 @@ public class CheckOutCommandHandler(
                         request.TelegramUserId, 
                         "no_check_in_today",
                         "Please check in first",
-                        DateTime.UtcNow), cancellationToken);
+                        TimeUtils.Now), cancellationToken);
 
                 return Result.Failure<Guid>(DomainErrors.Attendance.NoCheckInRecord);
             }
@@ -66,7 +67,7 @@ public class CheckOutCommandHandler(
                         request.TelegramUserId, 
                         "Already_checked_out",
                         "you alrady checked out today", 
-                        DateTime.UtcNow), cancellationToken);
+                        TimeUtils.Now), cancellationToken);
 
                 return Result.Failure<Guid>(DomainErrors.Attendance.AlreadyChekedOut);
             }
@@ -88,7 +89,7 @@ public class CheckOutCommandHandler(
             await callbacks.OnCheckOutSuccessAsync(
                 new CheckOutSuccessData(
                     request.TelegramUserId, 
-                    $"{user.Value.FirstName}{user.Value.LastName}",
+                    $"{user.Value.FirstName} {user.Value.LastName}",
                     checkOutTime,
                     isEarlyDeparture,
                     workDuration,
@@ -103,7 +104,7 @@ public class CheckOutCommandHandler(
                     request.TelegramUserId,
                     "System_error",
                     "a system error occured during check ou", 
-                    DateTime.UtcNow), cancellationToken);
+                    TimeUtils.Now), cancellationToken);
                 throw;
         }
 

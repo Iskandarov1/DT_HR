@@ -1,4 +1,5 @@
 using DT_HR.Application.Core.Abstractions.Messaging;
+using DT_HR.Domain.Core;
 using DT_HR.Domain.Core.Errors;
 using DT_HR.Domain.Core.Primitives.Result;
 using DT_HR.Domain.Enumeration;
@@ -36,7 +37,7 @@ public class MarkAbsentInputHandler(
             else if (eta.Kind == DateTimeKind.Unspecified)
                 eta = new DateTimeOffset(eta, LocalOffset).UtcDateTime;
             
-            var now = DateTime.UtcNow + LocalOffset;
+            var now = TimeUtils.Now;
             var maxArrivalTime = now.AddHours(15);
 
             // if (eta < now)
@@ -56,7 +57,7 @@ public class MarkAbsentInputHandler(
             return validationResult;
         }
         
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var today = DateOnly.FromDateTime(TimeUtils.Now);
         var existingAttendance =
             await attendanceRepository.GetByUserAndDateAsync(user.Value.Id, today, cancellationToken);
         

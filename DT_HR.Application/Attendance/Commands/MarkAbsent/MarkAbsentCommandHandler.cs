@@ -2,6 +2,7 @@ using DT_HR.Application.Core.Abstractions.Common;
 using DT_HR.Application.Core.Abstractions.Data;
 using DT_HR.Application.Core.Abstractions.Messaging;
 using DT_HR.Contract.CallbackData.Attendance;
+using DT_HR.Domain.Core;
 using DT_HR.Domain.Core.Primitives;
 using DT_HR.Domain.Core.Primitives.Result;
 using DT_HR.Domain.Enumeration;
@@ -28,13 +29,13 @@ public class MarkAbsentCommandHandler(
                     request.TelegramUserId,
                     validateResult.Error.Code,
                     validateResult.Error.Message,
-                    DateTime.UtcNow
+                    TimeUtils.Now
                 ), cancellationToken);
             return Result.Failure<Guid>(validateResult.Error);
         }
 
         var user = await userRepository.GetByTelegramUserIdAsync(request.TelegramUserId, cancellationToken);
-        var today = DateOnly.FromDateTime(DateTime.UtcNow.AddHours(5));
+        var today = DateOnly.FromDateTime(TimeUtils.Now);
 
         var attendance =
             await attendanceRepository.GetByUserAndDateAsync(user.Value.Id, today, cancellationToken);
@@ -54,7 +55,7 @@ public class MarkAbsentCommandHandler(
                         request.TelegramUserId,
                         "Already_Cheked_In",
                         "You have already checked in today, Cannot mark as absent.",
-                        DateTime.UtcNow
+                        TimeUtils.Now
                     ),cancellationToken);
 
                 return Result.Failure<Guid>(new Error("Attendance.AlreadyCheckedIn",
@@ -69,7 +70,7 @@ public class MarkAbsentCommandHandler(
                         request.TelegramUserId,
                         "Already_Marked_Absent",
                         "You have already reported your absence today",
-                        DateTime.UtcNow), cancellationToken);
+                        TimeUtils.Now), cancellationToken);
 
                 return Result.Failure<Guid>(new Error("Attendance.AlreadyMarkedAbsent",
                     "Absence already reported today"));
@@ -86,7 +87,7 @@ public class MarkAbsentCommandHandler(
                     request.Reason,
                     request.AbsenceType.Value,
                     request.EstimatedArrivalTime,
-                    DateTime.UtcNow
+                    TimeUtils.Now
                     ), cancellationToken);
             
             return Result.Success(attendance.Value.Id);
@@ -99,7 +100,7 @@ public class MarkAbsentCommandHandler(
                     request.TelegramUserId,
                     "System_Error",
                     "A system error occured while marking the absence",
-                    DateTime.UtcNow
+                    TimeUtils.Now
                 ), cancellationToken);
             throw;
         }

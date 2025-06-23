@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Domain.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -10,7 +11,7 @@ public class BackgroundTaskService : IBackgroundTaskService, IHostedService
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILogger<BackgroundTaskService> _logger;
-    private static readonly TimeSpan localOffset = TimeSpan.FromHours(5);
+    private static readonly TimeSpan localOffset = DT_HR.Domain.Core.TimeUtils.LocalOffset;
     private readonly ConcurrentDictionary<string, ScheduledTask> _scheduledTasks = new();
     private readonly ConcurrentDictionary<string, Timer> _recurringTasks = new();
     private Timer? _cleanupTimer;
@@ -30,7 +31,7 @@ public class BackgroundTaskService : IBackgroundTaskService, IHostedService
         CancellationToken cancellationToken = default)
     {
         var taskId = Guid.NewGuid().ToString();
-        var delay = scheduledFor - DateTime.UtcNow;
+        var delay = scheduledFor - TimeUtils.Now;
 
         if (delay < TimeSpan.Zero)
         {
@@ -90,7 +91,7 @@ public class BackgroundTaskService : IBackgroundTaskService, IHostedService
         object? payload = null,
         CancellationToken cancellationToken = default)
     {
-        return ScheduleTaskAsync(taskType, DateTime.UtcNow.Add(delay), payload, cancellationToken);
+        return ScheduleTaskAsync(taskType, TimeUtils.Now.Add(delay), payload, cancellationToken);
     }
 
     public Task CancelTaskAsync(string taskId, CancellationToken cancellationToken)
@@ -190,7 +191,7 @@ public class BackgroundTaskService : IBackgroundTaskService, IHostedService
 
     private void CleanupExpiredTasks()
     {
-        var now = DateTime.UtcNow;
+        var now = TimeUtils.Now;
         var expiredTasks = _scheduledTasks
             .Where(kvp => kvp.Value.ScheduledFor < now.AddHours(-1))
             .Select(kvp => kvp.Key)

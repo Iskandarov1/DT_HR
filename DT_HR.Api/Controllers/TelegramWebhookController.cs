@@ -1,4 +1,5 @@
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Domain.Core;
 using Microsoft.AspNetCore.Mvc;
 using Telegram.Bot.Types;
 
@@ -39,6 +40,6 @@ public class TelegramWebhookController : ControllerBase
     [HttpGet("health")]
     public IActionResult Health()
     {
-        return Ok(new { status = "Healthy", timestamp = DateTime.UtcNow });
+        return Ok(new { status = "Healthy", timestamp = TimeUtils.Now });
     }
 }

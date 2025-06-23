@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using DT_HR.Domain.Core;
 using DT_HR.Domain.Core.Primitives;
 using DT_HR.Domain.Enumeration;
 
@@ -31,7 +32,7 @@ public class Attendance : AggregateRoot
     
     public Attendance CheckIn(double latitute, double longtitude, bool isWithinRadius)
     {
-        this.CheckInTime = DateTime.UtcNow;
+        this.CheckInTime = TimeUtils.Now;
         this.CheckInLatitude = latitute;
         this.CheckInLongitude = longtitude;
         this.Status = AttendanceStatus.Present.Value;
@@ -40,7 +41,7 @@ public class Attendance : AggregateRoot
 
     public Attendance CheckOut()
     {
-        this.CheckOutTime = DateTime.UtcNow;
+        this.CheckOutTime = TimeUtils.Now;
         return this;
     }
 
