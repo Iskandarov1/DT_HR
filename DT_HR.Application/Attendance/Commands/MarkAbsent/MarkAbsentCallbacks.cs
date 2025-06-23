@@ -11,6 +11,8 @@ public class MarkAbsentCallbacks(
     IBackgroundTaskService backgroundTaskService,
     ILogger<MarkAbsentCallbacks> logger) : IMarkAbsentCallbacks
 {
+    private static readonly TimeSpan localOffset = TimeSpan.FromHours(5);
+    private static DateTime ToLocal(DateTime utc) => DateTime.SpecifyKind(utc, DateTimeKind.Utc).Add(localOffset);
     
     public async Task OnAbsenceMarkedAsync(AbsenceMarkedData data, CancellationToken cancellationToken)
     {
@@ -40,7 +42,7 @@ public class MarkAbsentCallbacks(
                 scheduledFor : followUpTime,
                 payload: new {data.TelegramUserId, data.EstimatedArrivalTime}
                 ,cancellationToken);
-            var etalocal = data.EstimatedArrivalTime;
+            var etalocal = ToLocal(data.EstimatedArrivalTime);
             var message = $"""
                            🚗 **Got it!** You're on your way.
 
@@ -82,8 +84,8 @@ public class MarkAbsentCallbacks(
 
     public static string BuildAbsenceConfirmationMessage(AbsenceMarkedData data)
     {
-        var marked = data.MarkedAt.HasValue ? data.MarkedAt.Value : (DateTime?)null;
-        var eta = data.EstimatedArrivalTime.HasValue ? data.EstimatedArrivalTime.Value : (DateTime?)null;
+        var marked = data.MarkedAt.HasValue ? ToLocal(data.MarkedAt.Value) : (DateTime?)null;
+        var eta = data.EstimatedArrivalTime.HasValue ? ToLocal(data.EstimatedArrivalTime.Value) : (DateTime?)null;
         
         return data.AbsenceType switch
         {

@@ -25,5 +25,5 @@ public interface IBackgroundTaskService
 
     Task CancelTaskAsync(string taskId, CancellationToken cancellationToken);
 
-    //Task<TaskStatus> GetTaskStatusAsync(string taskId, CancellationToken cancellationToken);
+   // Task<TaskStatus> GetTaskStatusAsync(string taskId, CancellationToken cancellationToken);
 }

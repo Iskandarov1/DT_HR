@@ -49,7 +49,7 @@ public class Attendance : AggregateRoot
     {
         this.Status = estimatedArrival.HasValue ? AttendanceStatus.OnTheWay.Value : AttendanceStatus.Absent.Value;
         this.AbsenceReason = reason;
-        this.EstimatedArrivalTime = estimatedArrival?.ToUniversalTime();
+        this.EstimatedArrivalTime = estimatedArrival;
         return this;
     }
 

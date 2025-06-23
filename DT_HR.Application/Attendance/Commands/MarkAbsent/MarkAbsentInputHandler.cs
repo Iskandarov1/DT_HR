@@ -31,11 +31,6 @@ public class MarkAbsentInputHandler(
         if (command.EstimatedArrivalTime.HasValue)
         {
             var eta = command.EstimatedArrivalTime.Value;
-
-            if (eta.Kind == DateTimeKind.Local)
-                eta = eta.ToUniversalTime();
-            else if (eta.Kind == DateTimeKind.Unspecified)
-                eta = new DateTimeOffset(eta, LocalOffset).UtcDateTime;
             
             var now = TimeUtils.Now;
             var maxArrivalTime = now.AddHours(15);

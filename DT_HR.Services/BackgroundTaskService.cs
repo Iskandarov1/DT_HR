@@ -11,7 +11,7 @@ public class BackgroundTaskService : IBackgroundTaskService, IHostedService
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILogger<BackgroundTaskService> _logger;
-    private static readonly TimeSpan localOffset = DT_HR.Domain.Core.TimeUtils.LocalOffset;
+    private static readonly TimeSpan localOffset = TimeUtils.LocalOffset;
     private readonly ConcurrentDictionary<string, ScheduledTask> _scheduledTasks = new();
     private readonly ConcurrentDictionary<string, Timer> _recurringTasks = new();
     private Timer? _cleanupTimer;
