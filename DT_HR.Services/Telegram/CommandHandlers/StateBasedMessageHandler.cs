@@ -70,7 +70,7 @@ public class StateBasedMessageHandler(
                 
                 var localNow = TimeUtils.Now;
                 var todayLocal = localNow.Date;
-                var localEta = new DateTime(todayLocal.Year, todayLocal.Month, todayLocal.Day, hour, minute, 0);
+                var localEta = new DateTime(todayLocal.Year, todayLocal.Month, todayLocal.Day, hour, minute, 0, DateTimeKind.Utc);
 
 
                 if (localEta < localNow)
@@ -78,7 +78,7 @@ public class StateBasedMessageHandler(
                     localEta = localEta.AddDays(1);
                 }
 
-                estimatedArrivalTime = localEta;
+                estimatedArrivalTime = DateTime.SpecifyKind(localEta, DateTimeKind.Utc);
 
                 reason = text.Replace(timeMatch.Value, "").Trim().TrimEnd(',').Trim();
                 
@@ -101,13 +101,13 @@ public class StateBasedMessageHandler(
 
                 var localNow = TimeUtils.Now;
                 var todayLocal = localNow.Date;
-                var localEta = new DateTime(todayLocal.Year, todayLocal.Month, todayLocal.Day, hour, minute, 0);
+                var localEta = new DateTime(todayLocal.Year, todayLocal.Month, todayLocal.Day, hour, minute, 0,DateTimeKind.Utc);
                 
                 if (localEta < localNow)
                 {
                     localEta = localEta.AddDays(1);
                 }
-                estimatedArrivalTime = localEta;
+                estimatedArrivalTime = DateTime.SpecifyKind(localEta, DateTimeKind.Utc);
                 reason = "Overslept";
             }
             else
