@@ -17,16 +17,21 @@ public class GetTodayAttendanceQueryHandler(
     {
         var manager = await userRepository.GetByTelegramUserIdAsync(request.ManagerTelegramUserId, cancellationToken);
 
-        if (manager.HasNoValue || !manager.Value.IsManager())
-            return Result.Failure<TodayAttendanceResponse>(DomainErrors.User.InvalidPermissions);
+        // if (manager.HasNoValue || !manager.Value.IsManager())
+        //     return Result.Failure<TodayAttendanceResponse>(DomainErrors.User.InvalidPermissions);
 
         var today = DateOnly.FromDateTime(TimeUtils.Now);
 
+        
         var query = from user in dbContext.Set<User>()
             where user.IsActive && !user.IsDelete
-            join attendance in dbContext.Set<Domain.Entities.Attendance>() on new { UserId = user.Id, Date = today }
-                equals new { attendance.Id, attendance.Date } into attendances
-            from att in attendances.DefaultIfEmpty()
-            select new { User = user, Atttendance = att };
+                join attendance in dbContext.Set<Domain.Entities.Attendance>()
+                on new { UserId = user.Id, Date = today } 
+                equals new { attendance.UserId, attendance.Date } into attendances
+                from att in attendances.DefaultIfEmpty()
+                select new { User = user, Attendance = att };
+            
+        return Result<TodayAttendanceResponse>.None;
+            
     }
 }
