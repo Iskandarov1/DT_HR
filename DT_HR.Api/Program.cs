@@ -16,7 +16,6 @@ builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddServices(builder.Configuration);
 
 
-// Add CORS before building the app
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -25,24 +24,30 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
+    options.AddPolicy("TelegramWebhook", policy =>
+    {
+        policy.WithOrigins("https://api.telegram.org")
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
 });
 
 
 var app = builder.Build();
 
-// Add CORS middleware early in the pipeline
+
 app.UseCors();
 
-// Add middleware to handle ngrok and Telegram webhook headers
+
 app.Use(async (context, next) =>
 {
-    // Skip ngrok browser warning
+
     if (context.Request.Headers.ContainsKey("ngrok-skip-browser-warning"))
     {
         context.Response.Headers.Add("ngrok-skip-browser-warning", "true");
     }
     
-    // Log incoming webhook requests for debugging
+
     if (context.Request.Path.StartsWithSegments("/api/TelegramWebhook"))
     {
         var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
@@ -56,7 +61,7 @@ app.Use(async (context, next) =>
 });
 
 
-if (app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();

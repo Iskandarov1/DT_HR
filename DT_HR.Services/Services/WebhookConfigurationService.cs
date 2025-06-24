@@ -17,7 +17,7 @@ public class WebhookConfigurationService(
         try
         {
             var webhookUrl = configuration["Telegram:WebhookUrl"];
-            var useWebhook = configuration.GetValue<bool>("Telegram:UseWebhook", true);
+            var useWebhook = configuration.GetValue<bool>("Telegram:UseWebhook", true); 
 
             if (!useWebhook)
             {
@@ -33,9 +33,16 @@ public class WebhookConfigurationService(
                 return;
             }
 
-            var webhookEndpoint = $"{webhookUrl}/api/TelegramWebhook/update";
+            if (!webhookUrl.StartsWith("https://") && !webhookUrl.StartsWith("http://"))
+            {
+                webhookUrl = "https://" + webhookUrl;
+            }
+
+            var webhookEndpoint = $"{webhookUrl.TrimEnd('/')}/api/TelegramWebhook/update";
             
             logger.LogInformation("Setting webhook to {webhookUrl}",webhookEndpoint);
+
+            await Task.Delay(1000, cancellationToken);
 
             await botClient.SetWebhook(
                 url: webhookEndpoint,
@@ -44,15 +51,29 @@ public class WebhookConfigurationService(
                     UpdateType.Message,
                     UpdateType.CallbackQuery
                 },
+                dropPendingUpdates: true,
                 cancellationToken: cancellationToken);
 
             var webhookInfo = await botClient.GetWebhookInfo(cancellationToken);
+
+            if (string.IsNullOrEmpty(webhookInfo.Url))
+            {
+                logger.LogError("Failed to set webhook, Webhook url is empty");
+                throw new InvalidOperationException("Failed to set webhook");
+            }
             
             logger.LogInformation(
-                "Webhook configured. URL: {Url}, Has custom certificate: {HasCustomCertificate}, Pending updates: {PendingUpdateCount}",
+                "Webhook configured. URL: {Url}," +
+                " Has custom certificate: {HasCustomCertificate}," +
+                " Pending updates: {PendingUpdateCount}",
                 webhookInfo.Url,
                 webhookInfo.HasCustomCertificate,
                 webhookInfo.PendingUpdateCount);
+
+            if (!string.IsNullOrEmpty(webhookInfo.LastErrorMessage))
+            {
+                logger.LogWarning("Webhook has previous error: {LastError} at {LastErrorDate}",webhookInfo.LastErrorMessage, webhookInfo.LastErrorDate);
+            }
             
         }
         catch (Exception e)
