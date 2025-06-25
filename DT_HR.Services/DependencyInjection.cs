@@ -27,6 +27,7 @@ public static class DependencyInjection
         services.AddScoped<ITelegramBotService, TelegramBotService>();
         services.AddScoped<ITelegramMessageService, TelegramMessageService>();
         services.AddScoped<ITelegramKeyboardService, TelegramKeyboardService>();
+        services.AddScoped<ILocalizationService, LocalizationService>();
         services.AddScoped<ILocationService, LocationService>();
 
         services.AddSingleton<IBackgroundTaskService, BackgroundTaskService>();
