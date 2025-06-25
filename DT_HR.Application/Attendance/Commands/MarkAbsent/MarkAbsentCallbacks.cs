@@ -1,5 +1,6 @@
 using DT_HR.Application.Core.Abstractions.Common;
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Application.Resources;
 using DT_HR.Contract.CallbackData.Attendance;
 using DT_HR.Domain.Enumeration;
 using Microsoft.Extensions.Logging;
@@ -8,6 +9,8 @@ namespace DT_HR.Application.Attendance.Commands.MarkAbsent;
 
 public class MarkAbsentCallbacks(
     ITelegramBotService telegramBotService,
+    IUserStateService stateService,
+    ILocalizationService localization,
     IBackgroundTaskService backgroundTaskService,
     ILogger<MarkAbsentCallbacks> logger) : IMarkAbsentCallbacks
 {
@@ -16,7 +19,9 @@ public class MarkAbsentCallbacks(
     {
         try
         {
-            var message = BuildAbsenceConfirmationMessage(data);
+            var state = await stateService.GetStateAsync(data.TelegramUserId);
+            var language = state?.Language ?? "uz";
+            var message = BuildAbsenceConfirmationMessage(data,language);
             await telegramBotService.SendTextMessageAsync(data.TelegramUserId, message, cancellationToken);
             
             logger.LogInformation("Absence marked for user {TelegramUserId},type: {AbsenceType}",
@@ -66,7 +71,9 @@ public class MarkAbsentCallbacks(
     {
         try
         {
-            var message = $"**Unable to mark absence** \n\n{data.ErrorMessage}\n\n Please try again or contact support";
+            var state = await stateService.GetStateAsync(data.TelegramUserId);
+            var language = state?.Language ?? "uz";
+            var message = $"{localization.GetString(ResourceKeys.ErrorOccurred,language)} \n\n{data.ErrorMessage}\n\n ";
             await telegramBotService.SendTextMessageAsync(data.TelegramUserId, message, cancellationToken);
             logger.LogWarning("Mark absent failed for user {TelegramUserId}: {ErrorCode}", 
                 data.TelegramUserId, data.ErrorCode);
@@ -80,60 +87,69 @@ public class MarkAbsentCallbacks(
     
     
 
-    public static string BuildAbsenceConfirmationMessage(AbsenceMarkedData data)
+    public string BuildAbsenceConfirmationMessage(AbsenceMarkedData data, string language)
     {
+
         var marked = data.MarkedAt;
         var eta = data.EstimatedArrivalTime;
+        var absenceRecorded = localization.GetString(ResourceKeys.AbsenceRecorded, language);
+        var date = localization.GetString(ResourceKeys.Date, language);
+        var reason = localization.GetString(ResourceKeys.Reason, language);
+        var markedLan = localization.GetString(ResourceKeys.Marked, language);
+        var expected = localization.GetString(ResourceKeys.Expected, language);
+        var thank = localization.GetString(ResourceKeys.Thanks, language);
+
+
 
         return data.AbsenceType switch
         {
             0 => $"""
-                  **Absence Recorded**
+                  {absenceRecorded}
 
-                      Date: {marked:MMM dd, yyyy}
-                      Reason: {data.AbsenceReason}
-                      Marked at: {marked:HH:mm}
+                     📅 {date}: {marked:MMM dd, yyyy}
+                     💬 {reason}: {data.AbsenceReason}
+                     ⏰ {markedLan}: {marked:HH:mm}
                               
-                  Hope you feel better soon! 
+                  {thank} 👍
                   """,
             1 => $"""
-                  🚗 **"On the way" status recorded**
+                  🚗 {absenceRecorded}
                                  
-                     📅 Date: {marked:MMM dd, yyyy}
-                     💬 Reason: {data.AbsenceReason}
-                     ⏰ Expected: {eta:HH:mm}
+                     📅 {date}: {marked:MMM dd, yyyy}
+                     💬 {reason}: {data.AbsenceReason}
+                     ⏰ {expected}: {eta:HH:mm}
                      
-                     See you soon! 🚀
+                     {thank} 👍
                   """,
             2 => $""""
-                  😴 **Overslept - No worries!**
+                  😴 {absenceRecorded}
 
-                  📅 Date: {marked:MMM dd, yyyy}
-                  ⏰ Expected: {eta:HH:mm}
+                  📅 {date}: {marked:MMM dd, yyyy}
+                  ⏰ {expected}: {eta:HH:mm}
 
-                  Take your time and come when ready! ☕️
+                  {thank} 👍
 
                   """",
             3 => data.EstimatedArrivalTime.HasValue
                 ? $"""
-                   ✅ **Custom absence recorded**
+                   ✅ {absenceRecorded}
 
-                   📅 Date: {marked:MMM dd, yyyy}
-                   💬 Reason: {data.AbsenceReason}
-                   ⏰ Expected: {eta:HH:mm}
+                   📅 {date}: {marked:MMM dd, yyyy}
+                   💬 {reason}: {data.AbsenceReason}
+                   ⏰ {expected}: {eta:HH:mm}
 
-                   Thanks for letting us know! 👍
+                   {thank} 👍
                    """
                 : $"""
-                   ✅ **Absence recorded**
+                   ✅ {absenceRecorded}
 
-                   📅 Date: {marked:MMM dd, yyyy}
-                   💬 Reason: {data.AbsenceReason}
+                   📅 {date}: {marked:MMM dd, yyyy}
+                   💬 {reason}: {data.AbsenceReason}
 
-                   Thanks for letting us know! 👍
+                   {thank} 👍
                    """,
 
-            _ => "✅ Absence recorded successfully."
+            _ => $"✅ {absenceRecorded}."
         };
     }
     

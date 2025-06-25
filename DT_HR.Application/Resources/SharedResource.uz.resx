@@ -267,4 +267,24 @@
   <data name="tryAgainCall" xml:space="preserve">
     <value>Iltimos, qaytadan urinib ko'ring yoki yordam xizmatiga murojaat qiling</value>
   </data>
+  
+  
+  <data name="Reason" xml:space="preserve">
+    <value>Sabab</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Sana</value>
+  </data>
+  <data name="Marked at" xml:space="preserve">
+    <value>Belgilangan</value>
+  </data>
+  <data name="Expected" xml:space="preserve">
+    <value>Kelish vaqt</value>
+  </data>
+  <data name="Absence recorded" xml:space="preserve">
+    <value>Malumot Saqlandi</value>
+  </data>
+  <data name="Thanks" xml:space="preserve">
+    <value>Bizga xabar berganingiz uchun tashakkur</value>
+  </data>
 </root>

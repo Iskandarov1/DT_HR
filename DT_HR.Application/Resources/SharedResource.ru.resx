@@ -267,4 +267,22 @@
   <data name="tryAgainCall" xml:space="preserve">
     <value>Пожалуйста, попробуйте снова или обратитесь в поддержку</value>
   </data>
+  <data name="Reason" xml:space="preserve">
+    <value>Причина</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Дата</value>
+  </data> 
+  <data name="Marked at" xml:space="preserve">
+    <value>Отмечено на</value>
+  </data>
+  <data name="Expected" xml:space="preserve">
+    <value>ожидаемое время</value>
+  </data>
+  <data name="Absence recorded" xml:space="preserve">
+    <value>Отсутствие зафиксировано</value>
+  </data>
+  <data name="Thanks" xml:space="preserve">
+    <value>Спасибо, что сообщили нам.</value>
+  </data>
 </root>

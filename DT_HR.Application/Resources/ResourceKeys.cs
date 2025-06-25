@@ -90,4 +90,14 @@ public static class ResourceKeys
     public const string WorkDuration = "WorkDuration";
     public const string WorkDurationNotAvailable = "WorkDurationNotAvailable";
     public const string HaveAGreatDay = "HaveAGreatDay";
+
+    public const string Reason = "Reason";
+    public const string Date = "Date";
+    public const string Marked = "Marked at";
+    public const string Expected = "Expected";
+    public const string AbsenceRecordedCall = "Absence recorded";
+    public const string Thanks = "Thanks";
+
+    
+    
 }
