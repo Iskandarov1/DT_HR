@@ -1,5 +1,6 @@
 using DT_HR.Application.Attendance.Commands.CheckIn;
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Application.Resources;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
@@ -10,25 +11,20 @@ public class LocationMessageService (
     IUserStateService stateService,
     ITelegramMessageService messageService,
     IMediator mediator,
+    ILocalizationService localization,
     ILogger<LocationMessageService> logger )
 {
     public async Task HandleAsync(Message message, CancellationToken cancellationToken)
     {
         if(message.Location == null || message.From == null) return;
-
         
         var userId = message.From!.Id;
         var chatId = message.Chat.Id;
-
-        if (message.ForwardDate != null || message.ForwardFrom != null || message.ForwardFromChat != null)
-            await messageService.SendTextMessageAsync(chatId,
-                "❌ Forwarded locations are not accepted. Tap the live-location button inside Telegram.");
-        if (message.Location.LivePeriod is null or 0)
-            await messageService.SendTextMessageAsync(chatId, "Please share a location instead of pin");
         
         logger.LogInformation("Processing location message from the user {UserId}",userId);
 
         var state = await stateService.GetStateAsync(userId);
+        var language = state?.Language ?? "uz";
         if (state != null && state.CurrentAction == UserAction.CheckingIn)
         {
             await stateService.RemoveStateAsync(userId);
@@ -42,12 +38,18 @@ public class LocationMessageService (
 
             if (result.IsSuccess)
             {
-                await messageService.ShowMainMenuAsync(chatId, "Check in completed What would you like to do next?",
+                await messageService.ShowMainMenuAsync(
+                    chatId, 
+                    localization.GetString(ResourceKeys.CheckInCompleted,language),
+                    language,
                     cancellationToken);
             }
             else
             {
-                await messageService.ShowMainMenuAsync(chatId, $"Check in failed {result.Error.Message}",
+                await messageService.ShowMainMenuAsync(
+                    chatId, 
+                    $"{localization.GetString(ResourceKeys.CheckInFailed,language)}: {result.Error.Message}",
+                    language,
                     cancellationToken);
             }
 
@@ -55,7 +57,8 @@ public class LocationMessageService (
         else
         {
             await messageService.SendTextMessageAsync(chatId,
-                "Location received but no action was pending. Use /checkin to check in ",cancellationToken:cancellationToken);
+                localization.GetString(ResourceKeys.LocationReceived,language),
+                cancellationToken:cancellationToken);
         }
     }
 }

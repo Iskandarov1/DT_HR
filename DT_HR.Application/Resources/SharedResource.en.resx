@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  
+  <data name="Welcome" xml:space="preserve">
+    <value>Welcome</value>
+  </data>
+  <data name="SelectLanguage" xml:space="preserve">
+    <value>Select Language</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  
+  <data name="WelcomeToDTHR" xml:space="preserve">
+    <value>Welcome to DT HR Attendance System! 👋</value>
+  </data>
+  <data name="WelcomeBack" xml:space="preserve">
+    <value>Welcome back, {0}! 👋</value>
+  </data>
+  <data name="PleaseSelectLanguage" xml:space="preserve">
+    <value>Please select your preferred language:</value>
+  </data>
+  <data name="RegistrationPrompt" xml:space="preserve">
+    <value>To get started, I need to register you in our system. Please share your contact information or enter your phone number manually.</value>
+  </data>
+  <data name="ShareContactButton" xml:space="preserve">
+    <value>📱 Share Contact</value>
+  </data>
+  <data name="EnterPhoneManually" xml:space="preserve">
+    <value>✍️ Enter Phone Number</value>
+  </data>
+  <data name="WhatWouldYouLikeToDo" xml:space="preserve">
+    <value>What would you like to do today?</value>
+  </data>
+  
+  <data name="PleaseEnterPhoneNumber" xml:space="preserve">
+    <value>Please enter your phone number:</value>
+  </data>
+  <data name="PhoneNumberExample" xml:space="preserve">
+    <value>Example: +998901234567 or 901234567</value>
+  </data>
+  <data name="InvalidPhoneFormat" xml:space="preserve">
+    <value>❌ Invalid phone number format. Please enter a valid Uzbek phone number.</value>
+  </data>
+  <data name="ChooseHowToShare" xml:space="preserve">
+    <value>How would you like to share your phone number?</value>
+  </data>
+  
+  <data name="RegistrationSuccessful" xml:space="preserve">
+    <value>✅ Registration successful! Welcome to DT HR System.</value>
+  </data>
+  <data name="RegistrationFailed" xml:space="preserve">
+    <value>❌ Registration failed: {0}</value>
+  </data>
+  <data name="ContactReceived" xml:space="preserve">
+    <value>📱 Contact received but no action was pending.</value>
+  </data>
+  
+  <data name="CheckIn" xml:space="preserve">
+    <value>✅ Check In</value>
+  </data>
+  <data name="CheckOut" xml:space="preserve">
+    <value>⏰ Check Out</value>
+  </data>
+  <data name="ReportAbsence" xml:space="preserve">
+    <value>🏠 Report Absence</value>
+  </data>
+  
+  <data name="CheckInProcess" xml:space="preserve">
+    <value>📍 **Check-In Process**</value>
+  </data>
+  <data name="ShareLocationPrompt" xml:space="preserve">
+    <value>Please share your current location to check in. Make sure you're within the office radius for successful check-in.</value>
+  </data>
+  <data name="ShareLocation" xml:space="preserve">
+    <value>📍 Share Location</value>
+  </data>
+  <data name="CheckInCompleted" xml:space="preserve">
+    <value>Check-in completed! What would you like to do next?</value>
+  </data>
+  <data name="CheckInFailed" xml:space="preserve">
+    <value>Check-in failed: {0}</value>
+  </data>
+  <data name="LocationReceived" xml:space="preserve">
+    <value>📍 Location received but no action was pending. Use /checkin to check in.</value>
+  </data>
+  
+  <data name="CheckOutCompleted" xml:space="preserve">
+    <value>Check-out completed! Have a great day!</value>
+  </data>
+  <data name="CheckOutFailed" xml:space="preserve">
+    <value>Check-out failed: {0}</value>
+  </data>
+  
+  <data name="ReportAbsenceTitle" xml:space="preserve">
+    <value>📋 **Report Absence**</value>
+  </data>
+  <data name="SelectAbsenceReason" xml:space="preserve">
+    <value>Please select the reason for your absence:</value>
+  </data>
+  <data name="Sick" xml:space="preserve">
+    <value>🤒 Sick/Absent</value>
+  </data>
+  <data name="OnTheWay" xml:space="preserve">
+    <value>🚗 On the way</value>
+  </data>
+  <data name="Overslept" xml:space="preserve">
+    <value>😴 Overslept</value>
+  </data>
+  <data name="OtherReason" xml:space="preserve">
+    <value>📝 Other reason</value>
+  </data>
+  <data name="AbsenceRecorded" xml:space="preserve">
+    <value>Your absence has been recorded.</value>
+  </data>
+  <data name="AbsenceReasonPrompt" xml:space="preserve">
+    <value>Please describe your condition or reason for absence:</value>
+  </data>
+  <data name="OnTheWayPrompt" xml:space="preserve">
+    <value>🚗 You're on the way!\n\nPlease provide:\n1. Reason for being late\n2. Expected arrival time (format: HH:MM)\n\nExample: "Traffic jam, 10:30"</value>
+  </data>
+  <data name="OversleptPrompt" xml:space="preserve">
+    <value>😴 **Overslept**\n\nWhen do you expect to arrive?</value>
+  </data>
+  <data name="OtherReasonPrompt" xml:space="preserve">
+    <value>Please provide:\n1. Your reason for absence\n2. Expected arrival time if you're coming (format: HH:MM) or type "absent" if not coming\n\nExample: "Doctor appointment, 14:00" or "Family emergency, absent"</value>
+  </data>
+  <data name="InvalidTimeFormat" xml:space="preserve">
+    <value>❌ Please provide a valid time format (HH:MM).</value>
+  </data>
+  <data name="TimeFormatExample" xml:space="preserve">
+    <value>❌ Please provide a valid time format (HH:MM). Example: 'Traffic, 10:30'</value>
+  </data>
+  
+  <data name="ErrorOccurred" xml:space="preserve">
+    <value>❌ An error occurred. Please try again.</value>
+  </data>
+  <data name="UnsupportedMessageType" xml:space="preserve">
+    <value>❌ Unsupported message type. Please use the menu options.</value>
+  </data>
+  <data name="OptionNotAvailable" xml:space="preserve">
+    <value>Sorry, this option is not available</value>
+  </data>
+  <data name="PleaseSelectFromMenu" xml:space="preserve">
+    <value>Please select an option from the menu:</value>
+  </data>
+  
+  <data name="CheckInSuccessful" xml:space="preserve">
+    <value>✅ **Check-in Successful!**</value>
+  </data>
+  <data name="OfficeLocationVerified" xml:space="preserve">
+    <value>Office location verified</value>
+  </data>
+  <data name="OutsideOfficeRadius" xml:space="preserve">
+    <value>Outside office radius</value>
+  </data>
+  <data name="OnTime" xml:space="preserve">
+    <value>On time</value>
+  </data>
+  <data name="LateArrival" xml:space="preserve">
+    <value>Late Arrival</value>
+  </data>
+  <data name="Late" xml:space="preserve">
+    <value>late</value>
+  </data>
+  <data name="HaveAProductiveDay" xml:space="preserve">
+    <value>Have a Productive Day! 🚀</value>
+  </data>
+  
+  <data name="CheckOutSuccessful" xml:space="preserve">
+    <value>✅ **Check-out Successful!**</value>
+  </data>
+  <data name="Goodbye" xml:space="preserve">
+    <value>Goodbye</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="RegularDeparture" xml:space="preserve">
+    <value>Regular departure</value>
+  </data>
+  <data name="EarlyDeparture" xml:space="preserve">
+    <value>Early Departure</value>
+  </data>
+  <data name="Early" xml:space="preserve">
+    <value>early</value>
+  </data>
+  <data name="WorkDuration" xml:space="preserve">
+    <value>Work duration</value>
+  </data>
+  <data name="WorkDurationNotAvailable" xml:space="preserve">
+    <value>Work duration: not available</value>
+  </data>
+  <data name="HaveAGreatDay" xml:space="preserve">
+    <value>Have a great day! 🌟</value>
+  </data>
+  <data name="checkInFailedCall" xml:space="preserve">
+    <value>Check-in failed</value>
+  </data>
+  <data name="tryAgainCall" xml:space="preserve">
+    <value>Try again</value>
+  </data>
+</root>

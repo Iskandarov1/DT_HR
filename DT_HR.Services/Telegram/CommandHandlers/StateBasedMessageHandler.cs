@@ -1,6 +1,8 @@
 using System.Text.RegularExpressions;
 using DT_HR.Application.Attendance.Commands.MarkAbsent;
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Application.Resources;
+using DT_HR.Application.Users.Commands;
 using DT_HR.Domain.Core;
 using DT_HR.Domain.Enumeration;
 using MediatR;
@@ -13,15 +15,18 @@ public class StateBasedMessageHandler(
     IUserStateService  stateService,
     ITelegramMessageService messageService,
     IMediator mediator,
-    ILogger<StateBasedMessageHandler> logger) : ITelegramService
+    ILogger<StateBasedMessageHandler> logger,
+    ILocalizationService localizationService) : ITelegramService
 {
     private static readonly TimeSpan LocalOffset = TimeUtils.LocalOffset;
+    private static readonly Regex PhoneNumberRegex = new Regex(@"^(\+?998)?([3781]{2}|(9[013-57-9]))\d{7}$", RegexOptions.Compiled);
     public async Task<bool> CanHandleAsync(Message message, CancellationToken cancellationToken = default)
     {
         if (message.From == null) return false;
 
         var state = await stateService.GetStateAsync(message.From.Id);
-        return state != null && state.CurrentAction == UserAction.ReportingAbsence;
+        return state != null && (state.CurrentAction == UserAction.ReportingAbsence ||
+                                 state.CurrentAction == UserAction.Registering);
 
     }
 
@@ -32,6 +37,8 @@ public class StateBasedMessageHandler(
 
         var state = await stateService.GetStateAsync(userId);
 
+        var language = state.Language ?? "uz";
+
         if (state == null) return;
         
         logger.LogInformation("Processing state based message for the user {UserId}, action {Action}",userId, state.CurrentAction);
@@ -39,18 +46,105 @@ public class StateBasedMessageHandler(
         switch (state.CurrentAction)
         {
             case UserAction.ReportingAbsence:
-                await ProcessAbsenceReasonAsync(message, state, cancellationToken);
+                await ProcessAbsenceReasonAsync(message, state, language,cancellationToken);
+                break;
+            case UserAction.Registering:
+                await ProcessPhoneNumberAsync(message, language, cancellationToken);
                 break;
             default:
                 logger.LogWarning("Unknow user state action: {Action}",state.CurrentAction);
                 await stateService.RemoveStateAsync(userId);
-                await messageService.ShowMainMenuAsync(chatId, "Something went wrong try again", cancellationToken);
+                await messageService.ShowMainMenuAsync(
+                    chatId,
+                    localizationService.GetString(ResourceKeys.ErrorOccurred,language), 
+                    language,
+                    cancellationToken);
                 break;
         }
 
     }
 
-    public async Task ProcessAbsenceReasonAsync(Message message, UserState state, CancellationToken cancellationToken)
+    private async Task ProcessPhoneNumberAsync(Message message, string language, CancellationToken cancellationToken)
+    {
+        var userId = message.From!.Id;
+        var chatId = message.Chat.Id;
+        var text = message.Text?.Trim() ?? "";
+
+        if (text == localizationService.GetString(ResourceKeys.Cancel, language))
+        {
+            await stateService.RemoveStateAsync(userId);
+            await messageService.SendTextMessageAsync(
+                userId,
+                localizationService.GetString(ResourceKeys.Cancel, language),
+                cancellationToken: cancellationToken);
+            return;
+        }
+
+        var phoneNumber = NormalizePhoneNumber(text);
+
+        if (!IsValidPhoneNumber(phoneNumber))
+        {
+            await messageService.SendTextMessageAsync(chatId,
+                localizationService.GetString(ResourceKeys.InvalidPhoneFormat, language),
+                cancellationToken: cancellationToken);
+        }
+
+        var command = new RegisterUserCommand(
+            userId,
+            phoneNumber,
+            message.From.FirstName ?? "Unknown",
+            message.From.LastName ?? ""
+        );
+
+        var result = await mediator.Send(command, cancellationToken);
+
+        await stateService.RemoveStateAsync(userId);
+
+        if (result.IsSuccess)
+        {
+            await messageService.SendTextMessageAsync(chatId,
+                localizationService.GetString(ResourceKeys.RegistrationSuccessful, language),
+                cancellationToken: cancellationToken);
+            await messageService.ShowMainMenuAsync(chatId,
+                localizationService.GetString(ResourceKeys.WhatWouldYouLikeToDo,language), language,cancellationToken);
+        }
+        else
+        {
+            await messageService.SendTextMessageAsync(chatId,
+                localizationService.GetString(ResourceKeys.RegistrationFailed, language, result.Error.Message),
+                cancellationToken: cancellationToken);
+        }
+    }
+
+    private string NormalizePhoneNumber(string input)
+    {
+        var numbers = Regex.Replace(input, @"\D", "");
+        if (numbers.StartsWith("998"))
+        {
+            return $"+{numbers}";
+        }
+
+        // If it's 9 digits and starts with valid prefixes, add +998
+        if (numbers.Length == 9 && Regex.IsMatch(numbers, @"^([3781]{2}|(9[013-57-9]))\d{7}$"))
+        {
+            return $"+998{numbers}";
+        }
+
+        // If already has +, return as is
+        if (input.StartsWith("+"))
+        {
+            return $"+{numbers}";
+        }
+
+        return numbers;
+    }
+
+    private bool IsValidPhoneNumber(string phoneNumber)
+    {
+        return PhoneNumberRegex.IsMatch(phoneNumber);
+    }
+
+    public async Task ProcessAbsenceReasonAsync(Message message, UserState state, string language,CancellationToken cancellationToken)
     {
         var userId = message.From!.Id;
         var chatId = message.Chat.Id;
@@ -59,7 +153,7 @@ public class StateBasedMessageHandler(
         DateTime? estimatedArrivalTime = null;
         string reason = text;
 
-        if (state.AbsenceType == AbsenceType.OnTheWay || 
+        if (state.AbsenceType == AbsenceType.OnTheWay ||
             (state.AbsenceType == AbsenceType.Custom && !text.ToLower().Contains("absent")))
         {
             var timeMatch = Regex.Match(text, @"\b(\d{1,2}):(\d{2})\b");
@@ -67,7 +161,7 @@ public class StateBasedMessageHandler(
             {
                 var hour = int.Parse(timeMatch.Groups[1].Value);
                 var minute = int.Parse(timeMatch.Groups[2].Value);
-                
+
                 var localNow = TimeUtils.Now;
                 var todayLocal = localNow.Date;
                 var localEta = new DateTime(todayLocal.Year, todayLocal.Month, todayLocal.Day, hour, minute, 0, DateTimeKind.Utc);
@@ -81,12 +175,12 @@ public class StateBasedMessageHandler(
                 estimatedArrivalTime = DateTime.SpecifyKind(localEta, DateTimeKind.Utc);
 
                 reason = text.Replace(timeMatch.Value, "").Trim().TrimEnd(',').Trim();
-                
+
             }
             else if (state.AbsenceType == AbsenceType.OnTheWay)
             {
                 await messageService.SendTextMessageAsync(chatId,
-                    "❌ Please provide a valid time format (HH:MM). Example: 'Traffic, 10:30'",
+                    localizationService.GetString(ResourceKeys.TimeFormatExample,language),
                     cancellationToken: cancellationToken);
                 return;
             }
@@ -101,18 +195,24 @@ public class StateBasedMessageHandler(
 
                 var localNow = TimeUtils.Now;
                 var todayLocal = localNow.Date;
-                var localEta = new DateTime(todayLocal.Year, todayLocal.Month, todayLocal.Day, hour, minute, 0,DateTimeKind.Utc);
-                
+                var localEta = new DateTime(todayLocal.Year, todayLocal.Month, todayLocal.Day, hour, minute, 0, DateTimeKind.Utc);
+
                 if (localEta < localNow)
                 {
                     localEta = localEta.AddDays(1);
                 }
                 estimatedArrivalTime = DateTime.SpecifyKind(localEta, DateTimeKind.Utc);
-                reason = "Overslept";
+                reason = language switch
+                {
+                    "ru" => "Проспал",
+                    "en" => "Overslept",
+                    _ => "Uxlab Qoldim"
+                };
             }
             else
             {
-                await messageService.SendTextMessageAsync(chatId, "❌ Please provide a valid time format (HH:MM).",
+                await messageService.SendTextMessageAsync(
+                    chatId, localizationService.GetString(ResourceKeys.InvalidTimeFormat,language),
                     cancellationToken: cancellationToken);
                 return;
             }
@@ -129,11 +229,15 @@ public class StateBasedMessageHandler(
 
         if (result.IsSuccess)
         {
-            await messageService.ShowMainMenuAsync(chatId, "Your absence has been recorded", cancellationToken);
+            await messageService.ShowMainMenuAsync(
+                chatId, 
+                localizationService.GetString(ResourceKeys.AbsenceRecorded,language), cancellationToken:cancellationToken);
         }
         else
         {
-            await messageService.ShowMainMenuAsync(chatId, $"Failed to record absence: {result.Error.Message}",
+            await messageService.ShowMainMenuAsync(
+                chatId, $"{localizationService.GetString(ResourceKeys.ErrorOccurred,language)}:{result.Error.Message}",
+                language,
                 cancellationToken);
         }
     }

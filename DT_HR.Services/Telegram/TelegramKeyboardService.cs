@@ -1,16 +1,61 @@
+using System.Diagnostics;
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Application.Resources;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace DT_HR.Services.Telegram;
 
-public class TelegramKeyboardService : ITelegramKeyboardService
+public class TelegramKeyboardService(ILocalizationService localization) : ITelegramKeyboardService
 {
-    public ReplyKeyboardMarkup GetMainMenuKeyboard()
+    public InlineKeyboardMarkup GetLanguageSelectionKeyboard()
+    {
+        return new InlineKeyboardMarkup(new []
+        {
+            new []
+            {
+                InlineKeyboardButton.WithCallbackData("🇺🇿 O'zbek", "lang:uz"), 
+            },
+            new []
+            {
+                InlineKeyboardButton.WithCallbackData("🇷🇺 Русский","lang:ru"), 
+            },
+            new []
+            {
+                InlineKeyboardButton.WithCallbackData("🇬🇧 English", "lang:en"), 
+            }
+        });
+    }
+
+    public ReplyKeyboardMarkup GetPhoneNumberOptionsKeyboard(string language = "uz")
     {
         return new ReplyKeyboardMarkup(new[]
         {
-            new[] { new KeyboardButton("✅ Check In") , new KeyboardButton("⏰ Check Out")},
-            new[] { new KeyboardButton("🏠 Report Absence") },
+            new[]
+            {
+                KeyboardButton.WithRequestContact(localization.GetString(ResourceKeys.ShareContactButton, language)),
+            },
+            new[]
+            {
+                new KeyboardButton(localization.GetString(ResourceKeys.EnterPhoneManually, language))
+            },
+            new[]
+            {
+                new KeyboardButton(localization.GetString(ResourceKeys.Cancel, language))
+            }
+        });
+    }
+    public ReplyKeyboardMarkup GetMainMenuKeyboard(string language = "uz")
+    {
+        return new ReplyKeyboardMarkup(new[]
+        {
+            new[] {
+                new KeyboardButton(localization.GetString(ResourceKeys.CheckIn,language)) , 
+                new KeyboardButton(localization.GetString(ResourceKeys.CheckOut,language))},
+            
+            new[]
+            {
+                new KeyboardButton(localization.GetString(ResourceKeys.ReportAbsence,language))
+            },
         })
         {
             ResizeKeyboard = true,
@@ -18,12 +63,18 @@ public class TelegramKeyboardService : ITelegramKeyboardService
         };
     }
 
-    public ReplyKeyboardMarkup GetLocationRequestKeyboard()
+    public ReplyKeyboardMarkup GetLocationRequestKeyboard(string language = "uz")
     {
         return new ReplyKeyboardMarkup(new[]
         {
-            new[] { KeyboardButton.WithRequestLocation("📍 Share Location") },
-            new[] { new KeyboardButton("❌ Cancel") }
+            new[]
+            {
+                KeyboardButton.WithRequestLocation(localization.GetString(ResourceKeys.ShareLocation,language))
+            },
+            new[]
+            {
+                new KeyboardButton(localization.GetString(ResourceKeys.Cancel,language))
+            }
         })
         {
             ResizeKeyboard = true,
@@ -31,12 +82,12 @@ public class TelegramKeyboardService : ITelegramKeyboardService
         };
     }
 
-    public ReplyKeyboardMarkup GetContactRequestKeyboard()
+    public ReplyKeyboardMarkup GetContactRequestKeyboard(string language = "uz")
     {
         return new ReplyKeyboardMarkup(new[]
         {
-            new[] { KeyboardButton.WithRequestContact("📱 Share Contact") },
-            new[] { new KeyboardButton("❌ Cancel") }
+            new[] { KeyboardButton.WithRequestContact(localization.GetString(ResourceKeys.ShareContactButton, language)) },
+            new[] { new KeyboardButton(localization.GetString(ResourceKeys.Cancel)) }
         })
         {
             ResizeKeyboard = true,
@@ -44,51 +95,78 @@ public class TelegramKeyboardService : ITelegramKeyboardService
         };
     }
 
-    public InlineKeyboardMarkup GetAbsenceTypeKeyboard()
+    public InlineKeyboardMarkup GetAbsenceTypeKeyboard(string language = "uz")
     {
         return new InlineKeyboardMarkup(new[]
         {
             new[]
             {
-                InlineKeyboardButton.WithCallbackData("🤒 Sick/Absent", "absent_type:sick"),
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.Sick, language), "absent_type:sick"),
             },
             new[]
             {
-                InlineKeyboardButton.WithCallbackData("🚗 On the way", "absent_type:ontheway"),
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.OnTheWay,language), "absent_type:ontheway"),
             },
             new[]
             {
-                InlineKeyboardButton.WithCallbackData("😴 Overslept", "absent_type:overslept"),
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.Overslept,language), "absent_type:overslept"),
             },
             new[]
             {
-                InlineKeyboardButton.WithCallbackData("📝 Other reason", "absent_type:other"),
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.OtherReason,language), "absent_type:other"),
             }
         });
     }
 
-    public InlineKeyboardMarkup GetOversleptEtaKeyboard()
+    public InlineKeyboardMarkup GetOversleptEtaKeyboard(string language = "uz")
     {
+        var minutesText = language switch
+        {
+            "ru" => "минут",
+            "en" => "minutes",
+            _ => "daqiqa"
+        };
+        var hourText = language switch
+        {
+            "ru" => "час",
+            "en" => "hour",
+            _ => "soat"
+        };
+        var hoursText = language switch
+        {
+            "ru" => "часа",
+            "en" => "hours",
+            _ => "soat"
+        };
+        var customTimeText = language switch
+        {
+            "ru" => "Другое время",
+            "en" => "Custom time",
+            _ => "Boshqa vaqt"
+        };
+        
+        
+        
         return new InlineKeyboardMarkup(new[]
         {
             new[]
             {
-                InlineKeyboardButton.WithCallbackData("30 minutes", "absent_overslept_eta:30"),
-                InlineKeyboardButton.WithCallbackData("1 hour", "absent_overslept_eta:60"),
+                InlineKeyboardButton.WithCallbackData($"30 {minutesText}", "absent_overslept_eta:30"),
+                InlineKeyboardButton.WithCallbackData($"1 {hourText}", "absent_overslept_eta:60"),
             },
             new[]
             {
-                InlineKeyboardButton.WithCallbackData("2 hours", "absent_overslept_eta:120"),
-                InlineKeyboardButton.WithCallbackData("Custom time", "absent_overslept_eta:custom"),
+                InlineKeyboardButton.WithCallbackData($"2 {hoursText}", "absent_overslept_eta:120"),
+                InlineKeyboardButton.WithCallbackData(customTimeText, "absent_overslept_eta:custom"),
             }
         });
     }
 
-    public ReplyKeyboardMarkup GetCancelKeyboard()
+    public ReplyKeyboardMarkup GetCancelKeyboard(string language = "uz")
     {
         return new ReplyKeyboardMarkup(new[]
         {
-            new[] { new KeyboardButton("❌ Cancel") }
+            new[] { new KeyboardButton(localization.GetString(ResourceKeys.Cancel, language)) }
         })
         {
             ResizeKeyboard = true,

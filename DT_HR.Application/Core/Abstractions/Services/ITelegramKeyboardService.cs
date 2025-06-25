@@ -4,10 +4,13 @@ namespace DT_HR.Application.Core.Abstractions.Services;
 
 public interface ITelegramKeyboardService
 {
-    ReplyKeyboardMarkup GetMainMenuKeyboard();
-    ReplyKeyboardMarkup GetLocationRequestKeyboard();
-    ReplyKeyboardMarkup GetContactRequestKeyboard();
-    InlineKeyboardMarkup GetAbsenceTypeKeyboard();
-    InlineKeyboardMarkup GetOversleptEtaKeyboard();
-    ReplyKeyboardMarkup GetCancelKeyboard();
+    InlineKeyboardMarkup GetLanguageSelectionKeyboard();
+    ReplyKeyboardMarkup GetPhoneNumberOptionsKeyboard(string language = "uz");
+
+    ReplyKeyboardMarkup GetMainMenuKeyboard(string language = "uz");
+    ReplyKeyboardMarkup GetLocationRequestKeyboard(string language = "uz");
+    ReplyKeyboardMarkup GetContactRequestKeyboard(string language = "uz");
+    InlineKeyboardMarkup GetAbsenceTypeKeyboard(string language = "uz");
+    InlineKeyboardMarkup GetOversleptEtaKeyboard(string language = "uz");
+    ReplyKeyboardMarkup GetCancelKeyboard(string language = "uz");
 }

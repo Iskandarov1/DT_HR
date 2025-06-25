@@ -1,5 +1,6 @@
 using DT_HR.Application.Attendance.Commands.MarkAbsent;
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Application.Resources;
 using DT_HR.Domain.Core;
 using DT_HR.Domain.Enumeration;
 using MediatR;
@@ -11,6 +12,7 @@ namespace DT_HR.Services.Telegram.CallbackHandlers;
 public class OversleptETACallbackHandler (
     ITelegramMessageService messageService,
     IUserStateService stateService,
+    ILocalizationService localization,
     IMediator mediator,
     ILogger<OversleptETACallbackHandler>logger) : ITelegramCallbackQuery
 {
@@ -24,33 +26,42 @@ public class OversleptETACallbackHandler (
         var userId = callbackQuery.From.Id;
         var chatId = callbackQuery.Message!.Chat.Id;
         var eta = callbackQuery.Data!.Split(':')[1];
+        var currentState = await stateService.GetStateAsync(userId);
+        var language = currentState?.Language ?? "uz";
         
         logger.LogInformation("Processing overslept ETA selection: {ETA} for the user {UserId}",eta,userId);
 
         await messageService.AnswerCallbackQueryAsync(callbackQuery.Id, cancellationToken: cancellationToken);
 
-        await stateService.SetStateAsync(userId, new UserState
+        var state = new UserState
         {
             CurrentAction = UserAction.ReportingAbsence,
             AbsenceType = AbsenceType.Overslept,
+            Language = language,
             Data = new Dictionary<string, object> { ["type"] = "overslept" }
-        });
+        };
+        await stateService.SetStateAsync(userId, state);
 
         if (eta == "custom")
         {
             await messageService.SendTextMessageAsync(chatId,
-                "Please enter your expected arrival time (format: HH:MM):",
+                localization.GetString(ResourceKeys.PleaseEnterPhoneNumber,language).Replace("phone number", "arrival time"),
                 cancellationToken: cancellationToken);
         }
         else
         {
             var minutes = int.Parse(eta);
             var expectedTime = TimeUtils.Now.AddMinutes(minutes);
-
+            var reason = language switch
+            {
+                "ru" => "Проспал",
+                "en" => "Overslept",
+                _ => "Uxlab Qoldim"
+            };
 
             var command = new MarkAbsentCommand(
                 userId,
-                "Overslept",
+                reason,
                 AbsenceType.Overslept,
                 expectedTime);
             var result = await mediator.Send(command,cancellationToken);
@@ -59,11 +70,17 @@ public class OversleptETACallbackHandler (
 
             if (result.IsSuccess)
             {
-                await messageService.ShowMainMenuAsync(chatId, "Your absence has been recorded.", cancellationToken);
+                await messageService.ShowMainMenuAsync(
+                    chatId, 
+                    localization.GetString(ResourceKeys.AbsenceRecorded,language),
+                    language,
+                    cancellationToken);
             }
             else
             {
-                await messageService.ShowMainMenuAsync(chatId, $"Failed to record absence : {result.Error.Message}",
+                await messageService.ShowMainMenuAsync(
+                    chatId, $"{localization.GetString(ResourceKeys.ErrorOccurred,language)}: {result.Error.Message}",
+                    language, 
                     cancellationToken);
             }
             

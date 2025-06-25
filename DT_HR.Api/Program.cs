@@ -1,3 +1,4 @@
+using DT_HR.Api.Helpers;
 using DT_HR.Application;
 using DT_HR.Persistence;
 using DT_HR.Services;
@@ -9,6 +10,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDtHrLocalization();
 
 
 builder.Services.AddApplication();
@@ -37,6 +39,7 @@ var app = builder.Build();
 
 
 app.UseCors();
+app.UseRequestLocalization();
 
 
 app.Use(async (context, next) =>

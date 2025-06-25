@@ -1,6 +1,7 @@
 using DT_HR.Application.Core.Abstractions.Common;
 using DT_HR.Application.Core.Abstractions.Data;
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Application.Resources;
 using DT_HR.Contract.CallbackData.Attendance;
 using Microsoft.Extensions.Logging;
 
@@ -9,15 +10,19 @@ namespace DT_HR.Application.Attendance.Commands.CheckOut;
 public class CheckOutCallbacks(
     ITelegramBotService botService,
     ILogger<CheckOutCallbacks> logger,
+    IUserStateService stateService,
+    ILocalizationService localization,
     IUnitOfWork unitOfWork) : ICheckOutCallbacks
 {
     public async Task OnCheckOutSuccessAsync(CheckOutSuccessData data, CancellationToken cancellationToken)
     {
         try
         {
-            var message = BuildSuccessMessage(data);
+            var state = await stateService.GetStateAsync(data.TelegramUserId);
+            var language = state?.Language ?? "uz";
+            var message = BuildSuccessMessage(data,language);
             await botService.SendTextMessageAsync(data.TelegramUserId, message, cancellationToken);
-            unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
             logger.LogInformation("Check out successfull message sent to the user {TelegramUserId}",data.TelegramUserId);
 
         }
@@ -32,7 +37,23 @@ public class CheckOutCallbacks(
     {
         try
         {
-            var message = $"Check out failed: {data.ErrorMessage} \n please try again or contact support";
+            var state = await stateService.GetStateAsync(data.TelegramUserId);
+            var language = state?.Language ?? "uz";
+
+            var checkOutFailed = language switch
+            {
+                "ru" => "Отметка ухода не удалась",
+                "en" => "Check-out failed",
+                _ => "Ishdan ketishni belgilash amalga oshmadi"
+            };
+            var tryAgain = language switch
+            {
+                "ru" => "Пожалуйста, попробуйте снова или обратитесь в поддержку",
+                "en" => "Please try again or contact support",
+                _ => "Iltimos, qaytadan urinib ko'ring yoki yordam xizmatiga murojaat qiling"
+            };
+            
+            var message = $"{checkOutFailed}: {data.ErrorMessage} \n {tryAgain}";
             await botService.SendTextMessageAsync(data.TelegramUserId, message, cancellationToken);
 
         }
@@ -42,24 +63,32 @@ public class CheckOutCallbacks(
         }
     }
 
-    private static string BuildSuccessMessage(CheckOutSuccessData data)
+    private string BuildSuccessMessage(CheckOutSuccessData data, string language)
     {
+        var checkOutSuccessful = localization.GetString(ResourceKeys.CheckOutSuccessful, language);
+        var status = localization.GetString(ResourceKeys.Status, language);
+        var goodbye = localization.GetString(ResourceKeys.Goodbye, language);
+        var haveGoodDay = localization.GetString(ResourceKeys.HaveAGreatDay, language);
+        
+        
+        
         var departureStatus = data.IsEarlyDeparture
-            ? $"Early Departure ({data.EarlyBy?.ToString(@"hh\:mm")} early)"
-            : "Regular departure";
+            ? $"{localization.GetString(ResourceKeys.EarlyDeparture,language)}" +
+              $" ({data.EarlyBy?.ToString(@"hh\:mm")} {localization.GetString(ResourceKeys.Early,language)})"
+            : localization.GetString(ResourceKeys.RegularDeparture,language);
 
         var workDurationText = data.WorkDuration.HasValue
-            ? $"Work duration: {data.WorkDuration.Value:hh\\:mm}"
-            : "Work duration: not available";
+            ? $"{localization.GetString(ResourceKeys.WorkDuration,language)}: {data.WorkDuration.Value:hh\\:mm}"
+            : localization.GetString(ResourceKeys.WorkDurationNotAvailable,language);
 
-        return $$"""
-                 ✅ **Check-out Successful!**
+        return $"""
+                 {checkOutSuccessful}
 
-                 👤 Goodbye, {{data.UserName}}!
-                 ⏱️  Status: {{departureStatus}}
-                 🕐 {{workDurationText}}
+                 👤 {goodbye}, {data.UserName}!
+                 ⏱️  {status}: {departureStatus}
+                 🕐 {workDurationText}
 
-                 Have a great day! 🌟
+                 {haveGoodDay}
                  """;
         
     } 

@@ -1,4 +1,5 @@
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Application.Resources;
 using DT_HR.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
@@ -10,6 +11,7 @@ public class StartCommandHandler(
     ITelegramMessageService messageService,
     ITelegramKeyboardService keyboardService,
     IUserStateService stateService,
+    ILocalizationService localizationService,
     ILogger<StartCommandHandler> logger) : ITelegramService
 {
     public Task<bool> CanHandleAsync(Message message, CancellationToken cancellationToken = default)
@@ -29,29 +31,38 @@ public class StartCommandHandler(
 
         if (user.HasNoValue)
         {
-            await stateService.SetStateAsync(userId, new UserState { CurrentAction = UserAction.Registering });
+            await stateService.SetStateAsync(userId, new UserState { CurrentAction = UserAction.SelectingLanguage });
 
-            var keyboard = keyboardService.GetContactRequestKeyboard();
+            var keyboard = keyboardService.GetLanguageSelectionKeyboard();
             
             await messageService.SendTextMessageAsync(
                 chatId,
                 """
                 Welcome to DT HR Attendance System! 👋
-
-                To get started, I need to register you in our system.
-                Please share your contact information by clicking the button below.
+                Добро пожаловать в систему учета посещаемости DT HR! 👋
+                DT HR Davomat Tizimiga xush kelibsiz! 👋
+                
+                Please select your preferred language:
+                Пожалуйста, выберите предпочитаемый язык:
+                Iltimos, o'zingizga qulay tilni tanlang:
                 """,
                 keyboard,
                 cancellationToken);
         }
         else
         {
+            var state = await stateService.GetStateAsync(userId);
+            var language = state?.Language ?? "uz";
+
+            var welcomeBack = localizationService.GetString(ResourceKeys.WelcomeBack, language, user.Value.FirstName);
+            
             await messageService.SendTextMessageAsync(
                 chatId,
-                $"Welcome back,{user.Value.FirstName!}! 👋",
+                welcomeBack,
                 cancellationToken:cancellationToken);
-
-            await messageService.ShowMainMenuAsync(chatId, "What would you like to do today?", cancellationToken);
+            var whatWouldYouLikeToDo =
+                localizationService.GetString(ResourceKeys.WhatWouldYouLikeToDo, language);
+            await messageService.ShowMainMenuAsync(chatId, whatWouldYouLikeToDo, language,cancellationToken);
         }
     }
 }

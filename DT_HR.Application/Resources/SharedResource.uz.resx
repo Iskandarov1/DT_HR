@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  
+  <data name="Welcome" xml:space="preserve">
+    <value>Xush kelibsiz</value>
+  </data>
+  <data name="SelectLanguage" xml:space="preserve">
+    <value>Tilni tanlang</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Bekor qilish</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Orqaga</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ha</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Yo'q</value>
+  </data>
+  
+  <data name="WelcomeToDTHR" xml:space="preserve">
+    <value>DT HR Davomat Tizimiga xush kelibsiz! 👋</value>
+  </data>
+  <data name="WelcomeBack" xml:space="preserve">
+    <value>Qaytganingizdan xursandmiz, {0}! 👋</value>
+  </data>
+  <data name="PleaseSelectLanguage" xml:space="preserve">
+    <value>Iltimos, o'zingizga qulay tilni tanlang:</value>
+  </data>
+  <data name="RegistrationPrompt" xml:space="preserve">
+    <value>Ishni boshlash uchun sizni tizimda ro'yxatdan o'tkazishim kerak. Iltimos, kontakt ma'lumotlaringizni ulashing yoki telefon raqamingizni qo'lda kiriting.</value>
+  </data>
+  <data name="ShareContactButton" xml:space="preserve">
+    <value>📱 Kontaktni ulashish</value>
+  </data>
+  <data name="EnterPhoneManually" xml:space="preserve">
+    <value>✍️ Telefon raqamini kiritish</value>
+  </data>
+  <data name="WhatWouldYouLikeToDo" xml:space="preserve">
+    <value>Bugun nima qilmoqchisiz?</value>
+  </data>
+  
+  <data name="PleaseEnterPhoneNumber" xml:space="preserve">
+    <value>Iltimos, telefon raqamingizni kiriting:</value>
+  </data>
+  <data name="PhoneNumberExample" xml:space="preserve">
+    <value>Misol: +998901234567 yoki 901234567</value>
+  </data>
+  <data name="InvalidPhoneFormat" xml:space="preserve">
+    <value>❌ Noto'g'ri telefon raqami formati. Iltimos, to'g'ri O'zbekiston telefon raqamini kiriting.</value>
+  </data>
+  <data name="ChooseHowToShare" xml:space="preserve">
+    <value>Telefon raqamingizni qanday ulashmoqchisiz?</value>
+  </data>
+  
+  <data name="RegistrationSuccessful" xml:space="preserve">
+    <value>✅ Ro'yxatdan o'tish muvaffaqiyatli amalga oshirildi! DT HR tizimiga xush kelibsiz.</value>
+  </data>
+  <data name="RegistrationFailed" xml:space="preserve">
+    <value>❌ Ro'yxatdan o'tish amalga oshmadi: {0}</value>
+  </data>
+  <data name="ContactReceived" xml:space="preserve">
+    <value>📱 Kontakt qabul qilindi, lekin hech qanday amal kutilmagan.</value>
+  </data>
+  
+  <data name="CheckIn" xml:space="preserve">
+    <value>✅ Ishga kelish</value>
+  </data>
+  <data name="CheckOut" xml:space="preserve">
+    <value>⏰ Ishdan ketish</value>
+  </data>
+  <data name="ReportAbsence" xml:space="preserve">
+    <value>🏠 Kelmaslik haqida xabar berish</value>
+  </data>
+  
+  <data name="CheckInProcess" xml:space="preserve">
+    <value>📍 **Ishga kelishni belgilash jarayoni**</value>
+  </data>
+  <data name="ShareLocationPrompt" xml:space="preserve">
+    <value>Ishga kelishingizni belgilash uchun joriy joylashuvingizni ulashing. Muvaffaqiyatli belgilash uchun ofis radiusida ekanligingizga ishonch hosil qiling.</value>
+  </data>
+  <data name="ShareLocation" xml:space="preserve">
+    <value>📍 Joylashuvni ulashish</value>
+  </data>
+  <data name="CheckInCompleted" xml:space="preserve">
+    <value>Ishga kelish belgilandi! Keyin nima qilmoqchisiz?</value>
+  </data>
+  <data name="CheckInFailed" xml:space="preserve">
+    <value>Ishga kelishni belgilash amalga oshmadi: {0}</value>
+  </data>
+  <data name="LocationReceived" xml:space="preserve">
+    <value>📍 Joylashuv qabul qilindi, lekin hech qanday amal kutilmagan. Ishga kelishni belgilash uchun /checkin buyrug'idan foydalaning.</value>
+  </data>
+  
+  <data name="CheckOutCompleted" xml:space="preserve">
+    <value>Ishdan ketish belgilandi! Yaxshi kun tilaymiz!</value>
+  </data>
+  <data name="CheckOutFailed" xml:space="preserve">
+    <value>Ishdan ketishni belgilash amalga oshmadi: {0}</value>
+  </data>
+  
+  <data name="ReportAbsenceTitle" xml:space="preserve">
+    <value>📋 **Kelmaslik haqida xabar berish**</value>
+  </data>
+  <data name="SelectAbsenceReason" xml:space="preserve">
+    <value>Iltimos, kelmaslik sababini tanlang:</value>
+  </data>
+  <data name="Sick" xml:space="preserve">
+    <value>🤒 Kasal/Kelmayman</value>
+  </data>
+  <data name="OnTheWay" xml:space="preserve">
+    <value>🚗 Yo'ldaman</value>
+  </data>
+  <data name="Overslept" xml:space="preserve">
+    <value>😴 Uxlab qoldim</value>
+  </data>
+  <data name="OtherReason" xml:space="preserve">
+    <value>📝 Boshqa sabab</value>
+  </data>
+  <data name="AbsenceRecorded" xml:space="preserve">
+    <value>Kelmasligingiz qayd etildi.</value>
+  </data>
+  <data name="AbsenceReasonPrompt" xml:space="preserve">
+    <value>Iltimos, ahvolingiz yoki kelmaslik sababini tavsiflang:</value>
+  </data>
+  <data name="OnTheWayPrompt" xml:space="preserve">
+    <value>🚗 Siz yo'ldasiz!\n\nIltimos, quyidagilarni ko'rsating:\n1. Kechikish sababi\n2. Kutilayotgan kelish vaqti (format: SS:DD)\n\nMisol: "Tirbandlik, 10:30"</value>
+  </data>
+  <data name="OversleptPrompt" xml:space="preserve">
+    <value>😴 **Uxlab qoldim**\n\nQachon kelishni rejalashtiryapsiz?</value>
+  </data>
+  <data name="OtherReasonPrompt" xml:space="preserve">
+    <value>Iltimos, quyidagilarni ko'rsating:\n1. Kelmaslik sababi\n2. Agar kelsangiz, kutilayotgan kelish vaqti (format: SS:DD) yoki kelmasangiz "kelmayman" deb yozing\n\nMisol: "Shifokorga tashrif, 14:00" yoki "Oilaviy holat, kelmayman"</value>
+  </data>
+  <data name="InvalidTimeFormat" xml:space="preserve">
+    <value>❌ Iltimos, vaqtni to'g'ri formatda ko'rsating (SS:DD).</value>
+  </data>
+  <data name="TimeFormatExample" xml:space="preserve">
+    <value>❌ Iltimos, vaqtni to'g'ri formatda ko'rsating (SS:DD). Misol: 'Tirbandlik, 10:30'</value>
+  </data>
+  
+  <data name="ErrorOccurred" xml:space="preserve">
+    <value>❌ Xatolik yuz berdi. Iltimos, qaytadan urinib ko'ring.</value>
+  </data>
+  <data name="UnsupportedMessageType" xml:space="preserve">
+    <value>❌ Qo'llab-quvvatlanmaydigan xabar turi. Iltimos, menyu variantlaridan foydalaning.</value>
+  </data>
+  <data name="OptionNotAvailable" xml:space="preserve">
+    <value>Kechirasiz, bu variant mavjud emas</value>
+  </data>
+  <data name="PleaseSelectFromMenu" xml:space="preserve">
+    <value>Iltimos, menyudan variantni tanlang:</value>
+  </data>
+  
+  <data name="CheckInSuccessful" xml:space="preserve">
+    <value>✅ **Ishga kelish muvaffaqiyatli belgilandi!**</value>
+  </data>
+  <data name="OfficeLocationVerified" xml:space="preserve">
+    <value>Ofis joylashuvi tasdiqlandi</value>
+  </data>
+  <data name="OutsideOfficeRadius" xml:space="preserve">
+    <value>Ofis radiusidan tashqarida</value>
+  </data>
+  <data name="OnTime" xml:space="preserve">
+    <value>O'z vaqtida</value>
+  </data>
+  <data name="LateArrival" xml:space="preserve">
+    <value>Kech kelish</value>
+  </data>
+  <data name="Late" xml:space="preserve">
+    <value>kechikish</value>
+  </data>
+  <data name="HaveAProductiveDay" xml:space="preserve">
+    <value>Samarali kun tilaymiz! 🚀</value>
+  </data>
+  
+  <data name="CheckOutSuccessful" xml:space="preserve">
+    <value>✅ **Ishdan ketish muvaffaqiyatli belgilandi!**</value>
+  </data>
+  <data name="Goodbye" xml:space="preserve">
+    <value>Xayr</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Holat</value>
+  </data>
+  <data name="RegularDeparture" xml:space="preserve">
+    <value>ketish</value>
+  </data>
+  <data name="EarlyDeparture" xml:space="preserve">
+    <value>Erta ketish</value>
+  </data>
+  <data name="Early" xml:space="preserve">
+    <value>erta</value>
+  </data>
+  <data name="WorkDuration" xml:space="preserve">
+    <value>Ish davomiyligi</value>
+  </data>
+  <data name="WorkDurationNotAvailable" xml:space="preserve">
+    <value>Ish davomiyligi: mavjud emas</value>
+  </data>
+  <data name="HaveAGreatDay" xml:space="preserve">
+    <value>Yaxshi kun tilaymiz! 🌟</value>
+  </data>
+  <data name="checkInFailedCall" xml:space="preserve">
+    <value>Ishga kelishni belgilash amalga oshmadi</value>
+  </data>
+  <data name="tryAgainCall" xml:space="preserve">
+    <value>Iltimos, qaytadan urinib ko'ring yoki yordam xizmatiga murojaat qiling</value>
+  </data>
+</root>

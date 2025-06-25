@@ -15,6 +15,7 @@ public class UserState
 {
     public UserAction CurrentAction { get; set; }
     public AbsenceType? AbsenceType { get; set; }
+    public string Language { get; set; } = "uz";
     public Dictionary<string, object> Data { get; set; } = new();
     public DateTime CreatedAt { get; set; } = TimeUtils.Now;
     public DateTime ExpiresAt { get; set; } = TimeUtils.Now.AddMinutes(30);
@@ -26,6 +27,7 @@ public enum UserAction
     Registering,
     CheckingIn,
     CheckingOut,
-    ReportingAbsence
+    ReportingAbsence,
+    SelectingLanguage
     
 }

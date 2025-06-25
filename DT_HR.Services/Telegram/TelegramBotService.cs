@@ -1,4 +1,5 @@
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Application.Resources;
 using DT_HR.Services.Telegram.CallbackHandlers;
 using DT_HR.Services.Telegram.CommandHandlers;
 using DT_HR.Services.Telegram.MessageHandlers;
@@ -13,6 +14,8 @@ public class TelegramBotService : ITelegramBotService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ITelegramMessageService _messageService;
+    private readonly ILocalizationService _localization;
+    private readonly IUserStateService _stateService;
     private readonly ILogger<TelegramBotService> _logger;
     private readonly List<ITelegramService> _command;
     private readonly List<ITelegramCallbackQuery> _callbackHandlers;
@@ -20,10 +23,14 @@ public class TelegramBotService : ITelegramBotService
     public TelegramBotService(
         IServiceProvider serviceProvider,
         ITelegramMessageService messageService,
+        ILocalizationService localization,
+        IUserStateService stateService,
         ILogger<TelegramBotService> logger)
     {
         _serviceProvider = serviceProvider;
         _messageService = messageService;
+        _localization = localization;
+        _stateService = stateService;
         _logger = logger;
 
         _command = new List<ITelegramService>
@@ -36,6 +43,7 @@ public class TelegramBotService : ITelegramBotService
         };
         _callbackHandlers = new List<ITelegramCallbackQuery>
         {
+            serviceProvider.GetRequiredService<LanguageSelectionCallbackHandler>(),
             serviceProvider.GetRequiredService<AbsenceTypeCallbackHandler>(),
             serviceProvider.GetRequiredService<OversleptETACallbackHandler>()
         };
@@ -48,7 +56,7 @@ public class TelegramBotService : ITelegramBotService
 
     public Task SendLocationRequestAsync(long chatId, string text, CancellationToken cancellationToken = default)
     {
-        return _messageService.SendLocationRequestAsync(chatId, text, cancellationToken);
+        return _messageService.SendLocationRequestAsync(chatId, text,  "uz", cancellationToken);
     }
 
     public async Task ProcessUpdateAsync(Update update, CancellationToken cancellationToken = default)
@@ -103,8 +111,10 @@ public class TelegramBotService : ITelegramBotService
                 await contactHandler.HandlerAsync(message, cancellationToken);
                 break;
             default:
+                var state =await _stateService.GetStateAsync(userId);
+                var language = state?.Language ?? "uz";
                 await _messageService.SendTextMessageAsync(message.Chat.Id,
-                    "❌ Unsupported message type. Please use the menu options.",
+                    _localization.GetString(ResourceKeys.UnsupportedMessageType,language),
                     cancellationToken: cancellationToken);
                 break;
         }
@@ -124,8 +134,13 @@ public class TelegramBotService : ITelegramBotService
             }
         }
 
-        await _messageService.ShowMainMenuAsync(message.Chat.Id,
-            "Please select an option from the menu:", cancellationToken);
+        var state = await _stateService.GetStateAsync(message.From!.Id);
+        var language = state?.Language ?? "uz";
+        await _messageService.ShowMainMenuAsync(
+            message.Chat.Id,
+            _localization.GetString(ResourceKeys.PleaseSelectFromMenu,language),
+            language,
+            cancellationToken);
     }
 
     public async Task ProcessCallbackQueryAsync(CallbackQuery? callbackQuery, CancellationToken cancellationToken)
@@ -147,7 +162,12 @@ public class TelegramBotService : ITelegramBotService
         }
         
         _logger.LogWarning("No handler found for callback data : {Data}",data);
-        await _messageService.AnswerCallbackQueryAsync(callbackQuery.Id, "Sorry, this option is not available",
+
+        var state = await _stateService.GetStateAsync(userId);
+        var language = state?.Language ?? "uz";
+        await _messageService.AnswerCallbackQueryAsync(
+            callbackQuery.Id, 
+            _localization.GetString(ResourceKeys.OptionNotAvailable,language),
             cancellationToken);
     }
 
@@ -155,7 +175,12 @@ public class TelegramBotService : ITelegramBotService
     {
         try
         {
-            await _messageService.ShowMainMenuAsync(chatId, "❌ An error occurred. Please try again.",
+            var state =await _stateService.GetStateAsync(chatId);
+            var language = state?.Language ?? "uz";
+            await _messageService.ShowMainMenuAsync(
+                chatId, 
+                _localization.GetString(ResourceKeys.ErrorOccurred,language),
+                language,
                 cancellationToken);
 
         }

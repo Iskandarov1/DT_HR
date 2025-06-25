@@ -49,6 +49,7 @@ public static class DependencyInjection
         services.AddScoped<LocationMessageHandler>();
         services.AddScoped<ContactMessageHandler>();
 
+        services.AddScoped<LanguageSelectionCallbackHandler>();
         services.AddScoped<AbsenceTypeCallbackHandler>();
         services.AddScoped<OversleptETACallbackHandler>();
         

@@ -1,4 +1,5 @@
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Application.Resources;
 using DT_HR.Application.Users.Commands;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ public class ContactMessageService(
     IUserStateService stateService,
     ITelegramMessageService messageService,
     IMediator mediator,
+    ILocalizationService localization,
     ILogger<ContactMessageService> logger)
 {
     public async Task HandleAsync(Message message, CancellationToken cancellationToken = default)
@@ -22,12 +24,12 @@ public class ContactMessageService(
         logger.LogInformation("Processing contact information for the user {UserId}",userId);
 
         var state = await stateService.GetStateAsync(userId);
+        var language = state?.Language ?? "uz";
         if (state != null && state.CurrentAction == UserAction.Registering)
         {
             await stateService.RemoveStateAsync(userId);
 
             var command = new RegisterUserCommand(
-
                 userId,
                 message.Contact.PhoneNumber,
                 message.From.FirstName ?? message.From.FirstName ?? "Unknown",
@@ -37,20 +39,20 @@ public class ContactMessageService(
 
             if (result.IsSuccess)
             {
-                await messageService.SendTextMessageAsync(chatId, "✅ Registration successful! Welcome to DT HR System.",
+                await messageService.SendTextMessageAsync(chatId,localization.GetString(ResourceKeys.RegistrationSuccessful,language) ,
                     cancellationToken: cancellationToken);
-                await messageService.ShowMainMenuAsync(chatId, "What would you like to do", cancellationToken);
+                await messageService.ShowMainMenuAsync(chatId, localization.GetString(ResourceKeys.WhatWouldYouLikeToDo,language),language, cancellationToken);
                 
             }
             else
             {
-                await messageService.SendTextMessageAsync(chatId, "Registration failed",
+                await messageService.SendTextMessageAsync(chatId, localization.GetString(ResourceKeys.RegistrationFailed,language),
                     cancellationToken: cancellationToken);
             }
         }
         else
         {
-            await messageService.SendTextMessageAsync(chatId, "Contact received but no action was pending ",
+            await messageService.SendTextMessageAsync(chatId, localization.GetString(ResourceKeys.ContactReceived,language),
                 cancellationToken: cancellationToken);
         }
     }

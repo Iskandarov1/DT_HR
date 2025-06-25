@@ -1,4 +1,5 @@
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Application.Resources;
 using DT_HR.Application.Users.Commands;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -8,6 +9,7 @@ namespace DT_HR.Services.Telegram.MessageHandlers;
 
 public class ContactMessageHandler(
     IUserStateService stateService,
+    ILocalizationService localization,
     ITelegramMessageService messageService,
     IMediator mediator, 
     ILogger<ContactMessageHandler> logger)
@@ -19,9 +21,12 @@ public class ContactMessageHandler(
         var userId = message.From!.Id;
         var chatId = message.Chat.Id;
         
+
+        
         logger.LogInformation("Processing Contact informatio for the user {UserId}",userId);
 
         var state = await stateService.GetStateAsync(userId);
+        var language = state?.Language ?? "uz";
 
         if (state != null && state.CurrentAction == UserAction.Registering)
         {
@@ -37,22 +42,28 @@ public class ContactMessageHandler(
 
             if (result.IsSuccess)
             {
-                await messageService.SendTextMessageAsync(chatId,
-                    "✅ Registration successful! Welcome to DT HR System.", 
+                await messageService.SendTextMessageAsync(
+                    chatId,
+                    localization.GetString(ResourceKeys.RegistrationSuccessful,language), 
                     cancellationToken: cancellationToken);
-                await messageService.ShowMainMenuAsync(chatId, "What would you like to do?", cancellationToken);
+                await messageService.ShowMainMenuAsync(
+                    chatId, 
+                    localization.GetString(ResourceKeys.WhatWouldYouLikeToDo, language),
+                    language,
+                    cancellationToken);
             }
             else
             {
                 await messageService.SendTextMessageAsync(chatId,
-                    $"❌ Registration failed: {result.Error.Message}",
+                    $"{localization.GetString(ResourceKeys.RegistrationFailed,language)}: {result.Error.Message}",
                     cancellationToken: cancellationToken);
             }
         }
         else
         {
-            await messageService.SendTextMessageAsync(chatId, 
-                "📱 Contact received but no action was pending.",
+            await messageService.SendTextMessageAsync(
+                chatId, 
+                localization.GetString(ResourceKeys.ContactReceived,language),
                 cancellationToken: cancellationToken);
         }
     }

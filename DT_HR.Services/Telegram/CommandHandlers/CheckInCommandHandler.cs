@@ -1,4 +1,5 @@
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Application.Resources;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
 
@@ -7,33 +8,47 @@ namespace DT_HR.Services.Telegram.CommandHandlers;
 public class CheckInCommandHandler(
     ITelegramMessageService messageService,
     IUserStateService stateService,
+    ILocalizationService localization,
     ILogger<CheckInCommandHandler> logger) : ITelegramService
 {
-    public Task<bool> CanHandleAsync(Message message, CancellationToken cancellationToken = default)
+    public async Task<bool> CanHandleAsync(Message message, CancellationToken cancellationToken = default)
     {
-        if (message.Text == null) return Task.FromResult(false);
+        if (message.Text == null) return false;
+
+        var state = await stateService.GetStateAsync(message.From!.Id);
+        var language = state?.Language ?? "uz";
         var text = message.Text.ToLower();
-        return Task.FromResult(
+        var checkInText = localization.GetString(ResourceKeys.CheckIn, language).ToLower();
+        return 
             text == "/checkin" ||
-            text == "✅ check in");
+            text == checkInText ||
+            text.Contains("check in");
     }
 
     public async Task HandleAsync(Message message, CancellationToken cancellationToken = default)
     {
         var userId = message.From!.Id;
         var chatId = message.Chat.Id;
+        var currentState = await stateService.GetStateAsync(userId);
+        var language = currentState?.Language ?? "uz";
         
         logger.LogInformation("Processing check-in command  for the user {UserId}",userId);
 
-        await stateService.SetStateAsync(userId, new UserState { CurrentAction = UserAction.CheckingIn });
-        
-        await messageService.SendLocationRequestAsync(chatId,
-            """
-            📍 **Check-In Process**
+        var state = new UserState
+        {
+            CurrentAction = UserAction.CheckingIn,
+            Language = language
+        };
+        await stateService.SetStateAsync(userId, state);
 
-            Please share your current location to check in.
-            Make sure you're within the office radius for successful check-in.
-            """, 
+        var checkInProgress = localization.GetString(ResourceKeys.CheckInProcess, language);
+        var shareLocationPrompt = localization.GetString(ResourceKeys.ShareLocationPrompt, language);
+        
+        
+        await messageService.SendLocationRequestAsync(
+            chatId,
+            $"{checkInProgress}\n\n{shareLocationPrompt}",
+            language,
             cancellationToken);
     }
 }

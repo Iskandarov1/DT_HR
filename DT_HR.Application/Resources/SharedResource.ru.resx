@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  
+  <data name="Welcome" xml:space="preserve">
+    <value>Добро пожаловать</value>
+  </data>
+  <data name="SelectLanguage" xml:space="preserve">
+    <value>Выберите язык</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  
+  <data name="WelcomeToDTHR" xml:space="preserve">
+    <value>Добро пожаловать в систему учета посещаемости DT HR! 👋</value>
+  </data>
+  <data name="WelcomeBack" xml:space="preserve">
+    <value>С возвращением, {0}! 👋</value>
+  </data>
+  <data name="PleaseSelectLanguage" xml:space="preserve">
+    <value>Пожалуйста, выберите предпочитаемый язык:</value>
+  </data>
+  <data name="RegistrationPrompt" xml:space="preserve">
+    <value>Для начала работы мне нужно зарегистрировать вас в системе. Пожалуйста, поделитесь контактной информацией или введите номер телефона вручную.</value>
+  </data>
+  <data name="ShareContactButton" xml:space="preserve">
+    <value>📱 Поделиться контактом</value>
+  </data>
+  <data name="EnterPhoneManually" xml:space="preserve">
+    <value>✍️ Ввести номер телефона</value>
+  </data>
+  <data name="WhatWouldYouLikeToDo" xml:space="preserve">
+    <value>Что бы вы хотели сделать сегодня?</value>
+  </data>
+  
+  <data name="PleaseEnterPhoneNumber" xml:space="preserve">
+    <value>Пожалуйста, введите ваш номер телефона:</value>
+  </data>
+  <data name="PhoneNumberExample" xml:space="preserve">
+    <value>Пример: +998901234567 или 901234567</value>
+  </data>
+  <data name="InvalidPhoneFormat" xml:space="preserve">
+    <value>❌ Неверный формат номера телефона. Пожалуйста, введите корректный узбекский номер телефона.</value>
+  </data>
+  <data name="ChooseHowToShare" xml:space="preserve">
+    <value>Как вы хотите поделиться номером телефона?</value>
+  </data>
+  
+  <data name="RegistrationSuccessful" xml:space="preserve">
+    <value>✅ Регистрация прошла успешно! Добро пожаловать в систему DT HR.</value>
+  </data>
+  <data name="RegistrationFailed" xml:space="preserve">
+    <value>❌ Регистрация не удалась: {0}</value>
+  </data>
+  <data name="ContactReceived" xml:space="preserve">
+    <value>📱 Контакт получен, но никаких действий не ожидалось.</value>
+  </data>
+  
+  <data name="CheckIn" xml:space="preserve">
+    <value>✅ Отметиться на работе</value>
+  </data>
+  <data name="CheckOut" xml:space="preserve">
+    <value>⏰ Завершить работу</value>
+  </data>
+  <data name="ReportAbsence" xml:space="preserve">
+    <value>🏠 Сообщить об отсутствии</value>
+  </data>
+  
+  <data name="CheckInProcess" xml:space="preserve">
+    <value>📍 **Процесс отметки прихода**</value>
+  </data>
+  <data name="ShareLocationPrompt" xml:space="preserve">
+    <value>Пожалуйста, поделитесь своим текущим местоположением для отметки. Убедитесь, что вы находитесь в радиусе офиса для успешной отметки.</value>
+  </data>
+  <data name="ShareLocation" xml:space="preserve">
+    <value>📍 Поделиться местоположением</value>
+  </data>
+  <data name="CheckInCompleted" xml:space="preserve">
+    <value>Отметка прихода выполнена! Что бы вы хотели сделать дальше?</value>
+  </data>
+  <data name="CheckInFailed" xml:space="preserve">
+    <value>Отметка прихода не удалась: {0}</value>
+  </data>
+  <data name="LocationReceived" xml:space="preserve">
+    <value>📍 Местоположение получено, но никаких действий не ожидалось. Используйте /checkin для отметки прихода.</value>
+  </data>
+  
+  <data name="CheckOutCompleted" xml:space="preserve">
+    <value>Отметка ухода выполнена! Хорошего дня!</value>
+  </data>
+  <data name="CheckOutFailed" xml:space="preserve">
+    <value>Отметка ухода не удалась: {0}</value>
+  </data>
+  
+  <data name="ReportAbsenceTitle" xml:space="preserve">
+    <value>📋 **Сообщить об отсутствии**</value>
+  </data>
+  <data name="SelectAbsenceReason" xml:space="preserve">
+    <value>Пожалуйста, выберите причину вашего отсутствия:</value>
+  </data>
+  <data name="Sick" xml:space="preserve">
+    <value>🤒 Болен/Отсутствую</value>
+  </data>
+  <data name="OnTheWay" xml:space="preserve">
+    <value>🚗 В пути</value>
+  </data>
+  <data name="Overslept" xml:space="preserve">
+    <value>😴 Проспал</value>
+  </data>
+  <data name="OtherReason" xml:space="preserve">
+    <value>📝 Другая причина</value>
+  </data>
+  <data name="AbsenceRecorded" xml:space="preserve">
+    <value>Ваше отсутствие зарегистрировано.</value>
+  </data>
+  <data name="AbsenceReasonPrompt" xml:space="preserve">
+    <value>Пожалуйста, опишите ваше состояние или причину отсутствия:</value>
+  </data>
+  <data name="OnTheWayPrompt" xml:space="preserve">
+    <value>🚗 Вы в пути!\n\nПожалуйста, укажите:\n1. Причину опоздания\n2. Ожидаемое время прибытия (формат: ЧЧ:ММ)\n\nПример: "Пробка, 10:30"</value>
+  </data>
+  <data name="OversleptPrompt" xml:space="preserve">
+    <value>😴 **Проспал**\n\nКогда вы планируете прибыть?</value>
+  </data>
+  <data name="OtherReasonPrompt" xml:space="preserve">
+    <value>Пожалуйста, укажите:\n1. Причину отсутствия\n2. Ожидаемое время прибытия, если придете (формат: ЧЧ:ММ) или напишите "отсутствую", если не придете\n\nПример: "Визит к врачу, 14:00" или "Семейные обстоятельства, отсутствую"</value>
+  </data>
+  <data name="InvalidTimeFormat" xml:space="preserve">
+    <value>❌ Пожалуйста, укажите время в правильном формате (ЧЧ:ММ).</value>
+  </data>
+  <data name="TimeFormatExample" xml:space="preserve">
+    <value>❌ Пожалуйста, укажите время в правильном формате (ЧЧ:ММ). Пример: 'Пробка, 10:30'</value>
+  </data>
+  
+  <data name="ErrorOccurred" xml:space="preserve">
+    <value>❌ Произошла ошибка. Пожалуйста, попробуйте снова.</value>
+  </data>
+  <data name="UnsupportedMessageType" xml:space="preserve">
+    <value>❌ Неподдерживаемый тип сообщения. Пожалуйста, используйте опции меню.</value>
+  </data>
+  <data name="OptionNotAvailable" xml:space="preserve">
+    <value>Извините, эта опция недоступна</value>
+  </data>
+  <data name="PleaseSelectFromMenu" xml:space="preserve">
+    <value>Пожалуйста, выберите опцию из меню:</value>
+  </data>
+  
+  <data name="CheckInSuccessful" xml:space="preserve">
+    <value>✅ **Отметка прихода выполнена успешно!**</value>
+  </data>
+  <data name="OfficeLocationVerified" xml:space="preserve">
+    <value>Местоположение офиса подтверждено</value>
+  </data>
+  <data name="OutsideOfficeRadius" xml:space="preserve">
+    <value>Вне радиуса офиса</value>
+  </data>
+  <data name="OnTime" xml:space="preserve">
+    <value>Вовремя</value>
+  </data>
+  <data name="LateArrival" xml:space="preserve">
+    <value>Позднее прибытие</value>
+  </data>
+  <data name="Late" xml:space="preserve">
+    <value>опоздание</value>
+  </data>
+  <data name="HaveAProductiveDay" xml:space="preserve">
+    <value>Продуктивного дня! 🚀</value>
+  </data>
+  
+  <data name="CheckOutSuccessful" xml:space="preserve">
+    <value>✅ **Отметка ухода выполнена успешно!**</value>
+  </data>
+  <data name="Goodbye" xml:space="preserve">
+    <value>До свидания</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="RegularDeparture" xml:space="preserve">
+    <value>Обычный уход</value>
+  </data>
+  <data name="EarlyDeparture" xml:space="preserve">
+    <value>Ранний уход</value>
+  </data>
+  <data name="Early" xml:space="preserve">
+    <value>рано</value>
+  </data>
+  <data name="WorkDuration" xml:space="preserve">
+    <value>Продолжительность работы</value>
+  </data>
+  <data name="WorkDurationNotAvailable" xml:space="preserve">
+    <value>Продолжительность работы: недоступно</value>
+  </data>
+  <data name="HaveAGreatDay" xml:space="preserve">
+    <value>Хорошего дня! 🌟</value>
+  </data>
+  <data name="checkInFailedCall" xml:space="preserve">
+    <value>Отметка прихода не удалась</value>
+  </data>
+  <data name="tryAgainCall" xml:space="preserve">
+    <value>Пожалуйста, попробуйте снова или обратитесь в поддержку</value>
+  </data>
+</root>
