@@ -184,13 +184,21 @@
     <value>Iltimos, ahvolingiz yoki kelmaslik sababini tavsiflang:</value>
   </data>
   <data name="OnTheWayPrompt" xml:space="preserve">
-    <value>🚗 Siz yo'ldasiz!\n\nIltimos, quyidagilarni ko'rsating:\n1. Kechikish sababi\n2. Kutilayotgan kelish vaqti (format: SS:DD)\n\nMisol: "Tirbandlik, 10:30"</value>
+    <value>🚗 Raxmat, Iltimos quyidagilarni ko'rsating:
+              Kechikish sababi. 
+              Kutilayotgan kelish vaqti (format: Soat:Daqiqa) 
+              Misol: "Tirbandlik, 10:30"</value>
   </data>
   <data name="OversleptPrompt" xml:space="preserve">
-    <value>😴 **Uxlab qoldim**\n\nQachon kelishni rejalashtiryapsiz?</value>
+    <value>😴 Qachon kelishni rejalashtiryapsiz?</value>
   </data>
   <data name="OtherReasonPrompt" xml:space="preserve">
-    <value>Iltimos, quyidagilarni ko'rsating:\n1. Kelmaslik sababi\n2. Agar kelsangiz, kutilayotgan kelish vaqti (format: SS:DD) yoki kelmasangiz "kelmayman" deb yozing\n\nMisol: "Shifokorga tashrif, 14:00" yoki "Oilaviy holat, kelmayman"</value>
+    <value>
+        Iltimos, quyidagilarni ko'rsating:
+          1.Kelmaslik sababi.
+          2.Agar kelsangiz, kutilayotgan kelish vaqti (format: Daqiqa yoki kelmasangiz "kelmayman" deb yozing
+          Misol: "Shifokorga tashrif, 14:00" yoki "Oilaviy holat, kelmayman"
+</value>
   </data>
   <data name="InvalidTimeFormat" xml:space="preserve">
     <value>❌ Iltimos, vaqtni to'g'ri formatda ko'rsating (SS:DD).</value>

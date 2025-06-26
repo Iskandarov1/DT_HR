@@ -184,13 +184,23 @@
     <value>Please describe your condition or reason for absence:</value>
   </data>
   <data name="OnTheWayPrompt" xml:space="preserve">
-    <value>🚗 You're on the way!\n\nPlease provide:\n1. Reason for being late\n2. Expected arrival time (format: HH:MM)\n\nExample: "Traffic jam, 10:30"</value>
+    <value>🚗 You're on the way!
+        Please provide: Reason for being late. 
+        Expected arrival time (format: HH:MM)
+        Example: "Traffic jam, 10:30"
+    </value>
   </data>
   <data name="OversleptPrompt" xml:space="preserve">
-    <value>😴 **Overslept**\n\nWhen do you expect to arrive?</value>
+    <value>😴 **Overslept**
+      When do you expect to arrive?
+    </value>
   </data>
   <data name="OtherReasonPrompt" xml:space="preserve">
-    <value>Please provide:\n1. Your reason for absence\n2. Expected arrival time if you're coming (format: HH:MM) or type "absent" if not coming\n\nExample: "Doctor appointment, 14:00" or "Family emergency, absent"</value>
+    <value> Please provide:
+        Your reason for absence.
+        Expected arrival time if you're coming (format: HH:MM) or type "absent" if not coming
+        Example: "Doctor appointment, 14:00" or "Family emergency, absent"
+    </value>
   </data>
   <data name="InvalidTimeFormat" xml:space="preserve">
     <value>❌ Please provide a valid time format (HH:MM).</value>
