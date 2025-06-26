@@ -27,7 +27,7 @@ public class OversleptETACallbackHandler (
         var chatId = callbackQuery.Message!.Chat.Id;
         var eta = callbackQuery.Data!.Split(':')[1];
         var currentState = await stateService.GetStateAsync(userId);
-        var language = currentState?.Language ?? "uz";
+        var language = currentState?.Language ?? await localization.GetUserLanguage(userId);
         
         logger.LogInformation("Processing overslept ETA selection: {ETA} for the user {UserId}",eta,userId);
 

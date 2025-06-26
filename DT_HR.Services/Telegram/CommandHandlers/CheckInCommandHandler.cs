@@ -16,7 +16,7 @@ public class CheckInCommandHandler(
         if (message.Text == null) return false;
 
         var state = await stateService.GetStateAsync(message.From!.Id);
-        var language = state?.Language ?? "uz";
+        var language = state?.Language ?? await localization.GetUserLanguage(message.From!.Id);
         var text = message.Text.ToLower();
         var checkInText = localization.GetString(ResourceKeys.CheckIn, language).ToLower();
         return 
@@ -30,7 +30,7 @@ public class CheckInCommandHandler(
         var userId = message.From!.Id;
         var chatId = message.Chat.Id;
         var currentState = await stateService.GetStateAsync(userId);
-        var language = currentState?.Language ?? "uz";
+        var language = currentState?.Language ?? await localization.GetUserLanguage(message.From!.Id);
         
         logger.LogInformation("Processing check-in command  for the user {UserId}",userId);
 

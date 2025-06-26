@@ -18,7 +18,7 @@ public class CheckOutCommandHandler(
     {
         if (message.Text == null) return false;
         var state = await stateService.GetStateAsync(message.From!.Id);
-        var language = state?.Language ?? "uz";
+        var language = state?.Language ?? await localization.GetUserLanguage(message.From!.Id);
         var text = message.Text.ToLower();
         var checkOutText = localization.GetString(ResourceKeys.CheckOut,language).ToLower();
 
@@ -33,7 +33,7 @@ public class CheckOutCommandHandler(
         var userId = message.From!.Id;
         var chatId = message.Chat.Id;
         var currestState = await stateService.GetStateAsync(userId);
-        var language = currestState?.Language ?? "uz";
+        var language = currestState?.Language ?? await localization.GetUserLanguage(userId);
 
         logger.LogInformation("Processing check out command for the user {UserId}",userId);
 

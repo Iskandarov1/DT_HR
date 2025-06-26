@@ -112,7 +112,7 @@ public class TelegramBotService : ITelegramBotService
                 break;
             default:
                 var state =await _stateService.GetStateAsync(userId);
-                var language = state?.Language ?? "uz";
+                var language = state?.Language ?? await _localization.GetUserLanguage(userId);
                 await _messageService.SendTextMessageAsync(message.Chat.Id,
                     _localization.GetString(ResourceKeys.UnsupportedMessageType,language),
                     cancellationToken: cancellationToken);
@@ -134,8 +134,9 @@ public class TelegramBotService : ITelegramBotService
             }
         }
 
-        var state = await _stateService.GetStateAsync(message.From!.Id);
-        var language = state?.Language ?? "uz";
+        var userId = message.From!.Id;
+        var state = await _stateService.GetStateAsync(userId);
+        var language = state?.Language ?? await _localization.GetUserLanguage(userId);
         await _messageService.ShowMainMenuAsync(
             message.Chat.Id,
             _localization.GetString(ResourceKeys.PleaseSelectFromMenu,language),
@@ -164,7 +165,7 @@ public class TelegramBotService : ITelegramBotService
         _logger.LogWarning("No handler found for callback data : {Data}",data);
 
         var state = await _stateService.GetStateAsync(userId);
-        var language = state?.Language ?? "uz";
+        var language = state?.Language ?? await _localization.GetUserLanguage(userId);
         await _messageService.AnswerCallbackQueryAsync(
             callbackQuery.Id, 
             _localization.GetString(ResourceKeys.OptionNotAvailable,language),
@@ -176,7 +177,7 @@ public class TelegramBotService : ITelegramBotService
         try
         {
             var state =await _stateService.GetStateAsync(chatId);
-            var language = state?.Language ?? "uz";
+            var language = state?.Language ?? await _localization.GetUserLanguage(chatId);
             await _messageService.ShowMainMenuAsync(
                 chatId, 
                 _localization.GetString(ResourceKeys.ErrorOccurred,language),

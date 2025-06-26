@@ -7,4 +7,5 @@ public sealed record RegisterUserCommand(
     long TelegramUserId,
     string PhoneNumber,
     string FirstName,
-    string LastName) : ICommand<Result<Guid>>;
+    string LastName,
+    string Language) : ICommand<Result<Guid>>;

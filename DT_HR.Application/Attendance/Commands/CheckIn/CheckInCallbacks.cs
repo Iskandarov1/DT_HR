@@ -35,7 +35,7 @@ public class CheckInCallbacks(
         try
         {
             var state = await stateService.GetStateAsync(data.TelegramUserId);
-            var language = state?.Language ?? "uz";
+            var language = state?.Language ?? await localization.GetUserLanguage(data.TelegramUserId);
             var message = BuildSuccesMessage(data,language);    
             await telegramBotService.SendTextMessageAsync(data.TelegramUserId, message, cancellationToken);
             await unitOfWork.SaveChangesAsync(cancellationToken);
@@ -52,7 +52,7 @@ public class CheckInCallbacks(
         try
         {
             var state = await stateService.GetStateAsync(data.TelegramUserId);
-            var language = state?.Language ?? "uz";
+            var language = state?.Language ?? await localization.GetUserLanguage(data.TelegramUserId);
             var checkInFailPrompt = localization.GetString(ResourceKeys.CheckInFailedCall, language);
             var tryAgainPrompt = localization.GetString(ResourceKeys.TryAgain, language);
             var message = $"{checkInFailPrompt}: {data.ErrorMessage}\n {tryAgainPrompt}";

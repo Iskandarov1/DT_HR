@@ -24,7 +24,7 @@ public class LocationMessageService (
         logger.LogInformation("Processing location message from the user {UserId}",userId);
 
         var state = await stateService.GetStateAsync(userId);
-        var language = state?.Language ?? "uz";
+        var language = state?.Language ?? await localization.GetUserLanguage(userId);
         if (state != null && state.CurrentAction == UserAction.CheckingIn)
         {
             await stateService.RemoveStateAsync(userId);

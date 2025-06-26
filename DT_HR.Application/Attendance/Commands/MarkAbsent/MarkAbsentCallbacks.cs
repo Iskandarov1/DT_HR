@@ -20,7 +20,7 @@ public class MarkAbsentCallbacks(
         try
         {
             var state = await stateService.GetStateAsync(data.TelegramUserId);
-            var language = state?.Language ?? "uz";
+            var language = state?.Language ?? await localization.GetUserLanguage(data.TelegramUserId);
             var message = BuildAbsenceConfirmationMessage(data,language);
             await telegramBotService.SendTextMessageAsync(data.TelegramUserId, message, cancellationToken);
             
@@ -72,7 +72,7 @@ public class MarkAbsentCallbacks(
         try
         {
             var state = await stateService.GetStateAsync(data.TelegramUserId);
-            var language = state?.Language ?? "uz";
+            var language = state?.Language ?? await localization.GetUserLanguage(data.TelegramUserId);
             var message = $"{localization.GetString(ResourceKeys.ErrorOccurred,language)} \n\n{data.ErrorMessage}\n\n ";
             await telegramBotService.SendTextMessageAsync(data.TelegramUserId, message, cancellationToken);
             logger.LogWarning("Mark absent failed for user {TelegramUserId}: {ErrorCode}", 

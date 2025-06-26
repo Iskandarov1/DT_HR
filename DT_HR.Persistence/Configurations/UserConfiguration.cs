@@ -26,6 +26,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         
         builder.Property(item => item.PhoneNumber)
             .IsRequired();
+
+        builder.Property(item => item.Language)
+            .HasDefaultValue("uz")
+            .IsRequired();
         
         builder.Property(u => u.IsActive)
             .HasDefaultValue(true)

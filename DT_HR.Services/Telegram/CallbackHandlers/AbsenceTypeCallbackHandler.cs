@@ -24,7 +24,7 @@ public class AbsenceTypeCallbackHandler(
         var chatId = callbackQuery.Message!.Chat.Id;
         var type = callbackQuery.Data!.Split(':')[1];
         var currentState = await stateService.GetStateAsync(userId);
-        var language = currentState?.Language ?? "uz";
+        var language = currentState?.Language ?? await localization.GetUserLanguage(userId);
         
         logger.LogInformation("Processing absence type selection {Type} for user {UserId}",type,userId);
 
@@ -58,6 +58,8 @@ public class AbsenceTypeCallbackHandler(
                 break;
             
             case "overslept":
+                state.AbsenceType = AbsenceType.Overslept;
+                state.Data = new Dictionary<string, object> { ["type"] = "overslept" };
                 var keyboard = keyboardService.GetOversleptEtaKeyboard(language);
                 await messageService.SendTextMessageAsync(
                     chatId,

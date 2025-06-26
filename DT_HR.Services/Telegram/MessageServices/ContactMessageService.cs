@@ -24,7 +24,7 @@ public class ContactMessageService(
         logger.LogInformation("Processing contact information for the user {UserId}",userId);
 
         var state = await stateService.GetStateAsync(userId);
-        var language = state?.Language ?? "uz";
+        var language = state?.Language ?? await localization.GetUserLanguage(userId);
         if (state != null && state.CurrentAction == UserAction.Registering)
         {
             await stateService.RemoveStateAsync(userId);
@@ -33,7 +33,8 @@ public class ContactMessageService(
                 userId,
                 message.Contact.PhoneNumber,
                 message.From.FirstName ?? message.From.FirstName ?? "Unknown",
-                message.From.LastName ?? message.From.LastName ?? "");
+                message.From.LastName ?? message.From.LastName ?? "",
+                language);
 
             var result = await mediator.Send(command,cancellationToken);
 

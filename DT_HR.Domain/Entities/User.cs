@@ -36,10 +36,9 @@ public class User : AggregateRoot
     [Column("email")] public string Email { get; set; }
     //[Column("role")] public string Role { get; set; }
     [Column("work_start_time")] public TimeOnly WorkStartTime { get;  set; }
-
     [Column("work_end_time")] public TimeOnly WorkEndTime { get;  set; }
     [Column("is_active")] public bool IsActive { get; private set; }
-    [Column("language")] public bool Language { get; private set; }
+    [Column("language")] public string Language { get; private set; }
 
     public void Deactivate() => IsActive = false;
     public void Activate() => IsActive = true;

@@ -19,7 +19,7 @@ public class CheckOutCallbacks(
         try
         {
             var state = await stateService.GetStateAsync(data.TelegramUserId);
-            var language = state?.Language ?? "uz";
+            var language = state?.Language ?? await localization.GetUserLanguage(data.TelegramUserId);
             var message = BuildSuccessMessage(data,language);
             await botService.SendTextMessageAsync(data.TelegramUserId, message, cancellationToken);
             await unitOfWork.SaveChangesAsync(cancellationToken);
@@ -38,7 +38,7 @@ public class CheckOutCallbacks(
         try
         {
             var state = await stateService.GetStateAsync(data.TelegramUserId);
-            var language = state?.Language ?? "uz";
+            var language = state?.Language ?? await localization.GetUserLanguage(data.TelegramUserId);
 
             var checkOutFailed = language switch
             {

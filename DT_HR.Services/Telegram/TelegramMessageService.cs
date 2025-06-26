@@ -30,7 +30,7 @@ public class TelegramMessageService(
         }
     }
 
-    public async Task SendLocationRequestAsync(long chatId, string text,string language = "uz", CancellationToken cancellationToken = default)
+    public async Task SendLocationRequestAsync(long chatId, string text,string language, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -88,7 +88,7 @@ public class TelegramMessageService(
         }
     }
 
-    public async Task ShowMainMenuAsync(long chatId, string text,string language = "uz", CancellationToken cancellationToken = default)
+    public async Task ShowMainMenuAsync(long chatId, string text,string language, CancellationToken cancellationToken = default)
     {
         var keyboard = keyboardService.GetMainMenuKeyboard(language);
         await SendTextMessageAsync(chatId, text,replyMarkup:keyboard,cancellationToken:cancellationToken);

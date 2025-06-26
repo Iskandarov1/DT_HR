@@ -16,7 +16,7 @@ public class ReportAbsenceCommandHandler(
     {
         if (message.Text == null) return false;
         var state = await stateService.GetStateAsync(message.From!.Id);
-        var language = state?.Language ?? "uz";
+        var language = state?.Language ?? await localization.GetUserLanguage(message.From!.Id);
         var reportAbsence = localization.GetString(ResourceKeys.ReportAbsence, language).ToLower();
         var text = message.Text.ToLower();
         return 
@@ -30,11 +30,11 @@ public class ReportAbsenceCommandHandler(
         var userId = message.From!.Id;
         var chatId = message.Chat.Id;
         var state = await stateService.GetStateAsync(userId);
-        var language = state?.Language ?? "uz";
+        var language = state?.Language ?? await localization.GetUserLanguage(userId);
         
         logger.LogInformation("Processing report absence command for the user {UserId}", userId);
 
-        var keyboard = keyboardService.GetAbsenceTypeKeyboard();
+        var keyboard = keyboardService.GetAbsenceTypeKeyboard(language);
 
         var reportAbsenceTitle = localization.GetString(ResourceKeys.ReportAbsenceTitle, language);
         var reportAbsencePromt = localization.GetString(ResourceKeys.AbsenceReasonPrompt,language);

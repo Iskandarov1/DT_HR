@@ -52,7 +52,7 @@ public class StartCommandHandler(
         else
         {
             var state = await stateService.GetStateAsync(userId);
-            var language = state?.Language ?? "uz";
+            var language = state?.Language ?? user.Value.Language;
 
             var welcomeBack = localizationService.GetString(ResourceKeys.WelcomeBack, language, user.Value.FirstName);
             

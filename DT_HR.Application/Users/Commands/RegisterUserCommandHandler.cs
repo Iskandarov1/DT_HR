@@ -45,7 +45,8 @@ public class RegisterUserCommandHandler(
             request.TelegramUserId,
             phoneNumberResult.Value,
             request.FirstName,
-            request.LastName);
+            request.LastName,
+            request.Language);
         
         userRepository.Insert(user);
         await unitOfWork.SaveChangesAsync(cancellationToken);

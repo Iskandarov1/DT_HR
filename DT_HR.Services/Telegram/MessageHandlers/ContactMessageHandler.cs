@@ -21,9 +21,7 @@ public class ContactMessageHandler(
         var userId = message.From!.Id;
         var chatId = message.Chat.Id;
         
-
-        
-        logger.LogInformation("Processing Contact informatio for the user {UserId}",userId);
+        logger.LogInformation("Processing Contact information for the user {UserId}",userId);
 
         var state = await stateService.GetStateAsync(userId);
         var language = state?.Language ?? "uz";
@@ -36,7 +34,8 @@ public class ContactMessageHandler(
                 userId,
                 message.Contact.PhoneNumber,
                 message.Contact.FirstName ?? message.From.FirstName ?? "Unknown",
-                message.Contact.LastName ?? message.From.LastName ?? "");
+                message.Contact.LastName ?? message.From.LastName ?? "",
+                language);
 
             var result = await mediator.Send(command, cancellationToken);
 

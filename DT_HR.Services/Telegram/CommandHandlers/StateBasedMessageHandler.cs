@@ -37,7 +37,7 @@ public class StateBasedMessageHandler(
 
         var state = await stateService.GetStateAsync(userId);
 
-        var language = state.Language ?? "uz";
+        var language = state?.Language ?? await localizationService.GetUserLanguage(userId);
 
         if (state == null) return;
         
@@ -93,7 +93,8 @@ public class StateBasedMessageHandler(
             userId,
             phoneNumber,
             message.From.FirstName ?? "Unknown",
-            message.From.LastName ?? ""
+            message.From.LastName ?? "",
+            language
         );
 
         var result = await mediator.Send(command, cancellationToken);
@@ -175,6 +176,11 @@ public class StateBasedMessageHandler(
                 estimatedArrivalTime = DateTime.SpecifyKind(localEta, DateTimeKind.Utc);
 
                 reason = text.Replace(timeMatch.Value, "").Trim().TrimEnd(',').Trim();
+                // await messageService.ShowMainMenuAsync(
+                //     chatId, 
+                //     "test",
+                //     language,
+                //     cancellationToken);
 
             }
             else if (state.AbsenceType == AbsenceType.OnTheWay)
@@ -182,6 +188,11 @@ public class StateBasedMessageHandler(
                 await messageService.SendTextMessageAsync(chatId,
                     localizationService.GetString(ResourceKeys.TimeFormatExample,language),
                     cancellationToken: cancellationToken);
+                // await messageService.ShowMainMenuAsync(
+                //     chatId, 
+                //     "test",
+                //     language,
+                //     cancellationToken);
                 return;
             }
         }
@@ -231,7 +242,8 @@ public class StateBasedMessageHandler(
         {
             await messageService.ShowMainMenuAsync(
                 chatId, 
-                localizationService.GetString(ResourceKeys.AbsenceRecorded,language), cancellationToken:cancellationToken);
+                localizationService.GetString(ResourceKeys.AbsenceRecorded ,language),language,
+                cancellationToken:cancellationToken);
         }
         else
         {

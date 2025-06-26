@@ -44,7 +44,7 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
             }
         });
     }
-    public ReplyKeyboardMarkup GetMainMenuKeyboard(string language = "uz")
+    public ReplyKeyboardMarkup GetMainMenuKeyboard(string language)
     {
         return new ReplyKeyboardMarkup(new[]
         {
@@ -63,7 +63,7 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
         };
     }
 
-    public ReplyKeyboardMarkup GetLocationRequestKeyboard(string language = "uz")
+    public ReplyKeyboardMarkup GetLocationRequestKeyboard(string language)
     {
         return new ReplyKeyboardMarkup(new[]
         {
@@ -82,7 +82,7 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
         };
     }
 
-    public ReplyKeyboardMarkup GetContactRequestKeyboard(string language = "uz")
+    public ReplyKeyboardMarkup GetContactRequestKeyboard(string language)
     {
         return new ReplyKeyboardMarkup(new[]
         {
@@ -95,7 +95,7 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
         };
     }
 
-    public InlineKeyboardMarkup GetAbsenceTypeKeyboard(string language = "uz")
+    public InlineKeyboardMarkup GetAbsenceTypeKeyboard(string language)
     {
         return new InlineKeyboardMarkup(new[]
         {
@@ -118,7 +118,7 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
         });
     }
 
-    public InlineKeyboardMarkup GetOversleptEtaKeyboard(string language = "uz")
+    public InlineKeyboardMarkup GetOversleptEtaKeyboard(string language)
     {
         var minutesText = language switch
         {
@@ -162,7 +162,7 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
         });
     }
 
-    public ReplyKeyboardMarkup GetCancelKeyboard(string language = "uz")
+    public ReplyKeyboardMarkup GetCancelKeyboard(string language)
     {
         return new ReplyKeyboardMarkup(new[]
         {
