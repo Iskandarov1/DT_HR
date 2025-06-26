@@ -3,7 +3,7 @@ using DT_HR.Application.Core.Abstractions.Data;
 using DT_HR.Domain.Repositories;
 using DT_HR.Persistence.Infrastructure;
 using DT_HR.Persistence.Repositories;
-using DT_HR.Services;
+using DT_HR.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

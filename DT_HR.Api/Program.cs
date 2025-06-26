@@ -1,7 +1,7 @@
 using DT_HR.Api.Helpers;
 using DT_HR.Application;
 using DT_HR.Persistence;
-using DT_HR.Services;
+using DT_HR.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 

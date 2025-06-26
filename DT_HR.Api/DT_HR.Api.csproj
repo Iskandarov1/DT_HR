@@ -19,7 +19,7 @@
     <ItemGroup>
       <ProjectReference Include="..\DT_HR.Application\DT_HR.Application.csproj" />
         <ProjectReference Include="..\DT_HR.Persistence\DT_HR.Persistence.csproj" />
-        <ProjectReference Include="..\DT_HR.Services\DT_HR.Services.csproj" />
+        <ProjectReference Include="..\DT_HR.Infrastructure\DT_HR.Infrastructure.csproj" />
 
     </ItemGroup>
 
