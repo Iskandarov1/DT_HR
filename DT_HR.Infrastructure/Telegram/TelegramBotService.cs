@@ -39,7 +39,9 @@ public class TelegramBotService : ITelegramBotService
             serviceProvider.GetRequiredService<CheckInCommandHandler>(),
             serviceProvider.GetRequiredService<CheckOutCommandHandler>(),
             serviceProvider.GetRequiredService<ReportAbsenceCommandHandler>(),
-            serviceProvider.GetRequiredService<StateBasedMessageHandler>()
+            serviceProvider.GetRequiredService<StateBasedMessageHandler>(),
+            serviceProvider.GetRequiredService<AttendanceStatsCommandHandler>(),
+            serviceProvider.GetRequiredService<AttendanceDetailsCommandHandler>(),
         };
         _callbackHandlers = new List<ITelegramCallbackQuery>
         {
@@ -141,6 +143,7 @@ public class TelegramBotService : ITelegramBotService
             message.Chat.Id,
             _localization.GetString(ResourceKeys.PleaseSelectFromMenu,language),
             language,
+            false,
             cancellationToken);
     }
 
@@ -182,6 +185,7 @@ public class TelegramBotService : ITelegramBotService
                 chatId, 
                 _localization.GetString(ResourceKeys.ErrorOccurred,language),
                 language,
+                false,
                 cancellationToken);
 
         }

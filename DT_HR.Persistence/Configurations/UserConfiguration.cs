@@ -37,8 +37,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired();
 
         builder.Property(u => u.Role)
-            .HasConversion<int>()
-            .HasDefaultValue(UserRole.Employee.Value)
+            .HasDefaultValue(UserRole.Employee.Name)
             .IsRequired();
         
         builder.HasMany<Attendance>()

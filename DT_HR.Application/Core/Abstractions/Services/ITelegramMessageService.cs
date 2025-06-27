@@ -11,6 +11,6 @@ public interface ITelegramMessageService
     Task AnswerCallbackQueryAsync(string callbackQueryId, string? text = null,
         CancellationToken cancellationToken = default);
 
-    Task ShowMainMenuAsync(long chatId, string text, string language , CancellationToken cancellationToken = default);
+    Task ShowMainMenuAsync(long chatId, string text, string language ,bool isManager = false, CancellationToken cancellationToken = default);
 
 }

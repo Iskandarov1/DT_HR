@@ -34,7 +34,8 @@ public static class ResourceKeys
     public const string CheckIn = "CheckIn";
     public const string CheckOut = "CheckOut";
     public const string ReportAbsence = "ReportAbsence";
-    
+    public const string AttendanceStats = "AttendanceStats";
+    public const string AttendanceDetails = "AttendanceDetails";
 
     public const string CheckInProcess = "CheckInProcess";
     public const string ShareLocationPrompt = "ShareLocationPrompt";

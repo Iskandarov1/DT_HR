@@ -53,14 +53,14 @@ public class CheckOutCommandHandler(
             await messageService.ShowMainMenuAsync(
                 chatId, 
                 localization.GetString(ResourceKeys.CheckOutCompleted,language),
-                language,
+                language,false,
                 cancellationToken);
         }
         else
         {
             await messageService.ShowMainMenuAsync(chatId, 
                 $"{localization.GetString(ResourceKeys.CheckOutFailed,language)} {result.Error.Message}",
-                language,
+                language,false,
                 cancellationToken);
         }
     }

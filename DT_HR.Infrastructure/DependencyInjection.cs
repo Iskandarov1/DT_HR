@@ -29,6 +29,8 @@ public static class DependencyInjection
         services.AddScoped<ITelegramKeyboardService, TelegramKeyboardService>();
         services.AddScoped<ILocalizationService, LocalizationService>();
         services.AddScoped<ILocationService, LocationService>();
+        services.AddScoped<IAttendanceReportService, AttendanceReportService>();
+
 
         services.AddSingleton<IBackgroundTaskService, BackgroundTaskService>();
         services.AddHostedService<BackgroundTaskService>(provider => 
@@ -45,6 +47,8 @@ public static class DependencyInjection
         services.AddScoped<CheckInCommandHandler>();
         services.AddScoped<CheckOutCommandHandler>();
         services.AddScoped<ReportAbsenceCommandHandler>();
+        services.AddScoped<AttendanceStatsCommandHandler>();
+        services.AddScoped<AttendanceDetailsCommandHandler>();
         services.AddScoped<StateBasedMessageHandler>();
 
         services.AddScoped<LocationMessageHandler>();

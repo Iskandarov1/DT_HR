@@ -5,7 +5,7 @@ using Telegram.Bot.Types;
 
 namespace DT_HR.Api.Controllers;
 
-[ApiController]
+
 [Route("api/[controller]")]
 public class TelegramWebhookController : ControllerBase
 {

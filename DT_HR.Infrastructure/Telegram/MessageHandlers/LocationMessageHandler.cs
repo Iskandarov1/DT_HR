@@ -44,7 +44,7 @@ public class LocationMessageHandler(
                 await messageService.ShowMainMenuAsync(
                     chatId, 
                     checkInPrompt,
-                    language,
+                    language,false,
                     cancellationToken);
             }
             else
@@ -52,7 +52,7 @@ public class LocationMessageHandler(
                 await messageService.ShowMainMenuAsync(
                     chatId, 
                     checkInFailPrompt,
-                    language,
+                    language,false,
                     cancellationToken);
             }
         }

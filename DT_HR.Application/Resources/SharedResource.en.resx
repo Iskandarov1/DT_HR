@@ -295,4 +295,10 @@
   <data name="Thanks" xml:space="preserve">
     <value>Thanks for letting us know</value>
   </data>
+  <data name="AttendanceStats" xml:space="preserve">
+    <value>📊 Attendance Stats</value>
+  </data>
+  <data name="AttendanceDetails" xml:space="preserve">
+    <value>📋 Detailed Attendance</value>
+  </data>
 </root>

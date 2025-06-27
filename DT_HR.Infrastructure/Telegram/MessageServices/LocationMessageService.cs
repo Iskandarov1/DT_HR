@@ -41,7 +41,7 @@ public class LocationMessageService (
                 await messageService.ShowMainMenuAsync(
                     chatId, 
                     localization.GetString(ResourceKeys.CheckInCompleted,language),
-                    language,
+                    language,false,
                     cancellationToken);
             }
             else
@@ -49,7 +49,7 @@ public class LocationMessageService (
                 await messageService.ShowMainMenuAsync(
                     chatId, 
                     $"{localization.GetString(ResourceKeys.CheckInFailed,language)}: {result.Error.Message}",
-                    language,
+                    language,false,
                     cancellationToken);
             }
 

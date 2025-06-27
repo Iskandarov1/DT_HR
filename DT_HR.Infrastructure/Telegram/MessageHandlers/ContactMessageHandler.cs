@@ -48,7 +48,7 @@ public class ContactMessageHandler(
                 await messageService.ShowMainMenuAsync(
                     chatId, 
                     localization.GetString(ResourceKeys.WhatWouldYouLikeToDo, language),
-                    language,
+                    language,false,
                     cancellationToken);
             }
             else

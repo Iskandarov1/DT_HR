@@ -88,9 +88,9 @@ public class TelegramMessageService(
         }
     }
 
-    public async Task ShowMainMenuAsync(long chatId, string text,string language, CancellationToken cancellationToken = default)
+    public async Task ShowMainMenuAsync(long chatId, string text,string language,bool isManager = false, CancellationToken cancellationToken = default)
     {
-        var keyboard = keyboardService.GetMainMenuKeyboard(language);
+        var keyboard = keyboardService.GetMainMenuKeyboard(language,isManager);
         await SendTextMessageAsync(chatId, text,replyMarkup:keyboard,cancellationToken:cancellationToken);
     }
 }

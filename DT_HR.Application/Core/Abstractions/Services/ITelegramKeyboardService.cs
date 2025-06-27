@@ -7,7 +7,7 @@ public interface ITelegramKeyboardService
     InlineKeyboardMarkup GetLanguageSelectionKeyboard();
     ReplyKeyboardMarkup GetPhoneNumberOptionsKeyboard(string language = "uz");
 
-    ReplyKeyboardMarkup GetMainMenuKeyboard(string language = "uz");
+    ReplyKeyboardMarkup GetMainMenuKeyboard(string language = "uz", bool isManager = false);
     ReplyKeyboardMarkup GetLocationRequestKeyboard(string language = "uz");
     ReplyKeyboardMarkup GetContactRequestKeyboard(string language = "uz");
     InlineKeyboardMarkup GetAbsenceTypeKeyboard(string language = "uz");

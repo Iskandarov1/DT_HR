@@ -44,19 +44,30 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
             }
         });
     }
-    public ReplyKeyboardMarkup GetMainMenuKeyboard(string language)
+    public ReplyKeyboardMarkup GetMainMenuKeyboard(string language,bool isManager = false)
     {
-        return new ReplyKeyboardMarkup(new[]
+        var rows = new List<KeyboardButton[]>
         {
-            new[] {
-                new KeyboardButton(localization.GetString(ResourceKeys.CheckIn,language)) , 
-                new KeyboardButton(localization.GetString(ResourceKeys.CheckOut,language))},
-            
             new[]
             {
-                new KeyboardButton(localization.GetString(ResourceKeys.ReportAbsence,language))
+                new KeyboardButton(localization.GetString(ResourceKeys.CheckIn, language)),
+                new KeyboardButton(localization.GetString(ResourceKeys.CheckOut, language))
             },
-        })
+
+            new[]
+            {
+                new KeyboardButton(localization.GetString(ResourceKeys.ReportAbsence, language))
+            }
+        };
+        if (isManager)
+        {
+            rows.Add(new[]
+            {
+                new KeyboardButton(localization.GetString(ResourceKeys.AttendanceStats, language)),
+                new KeyboardButton(localization.GetString(ResourceKeys.AttendanceDetails, language))
+            });
+        }
+        return new ReplyKeyboardMarkup(rows)
         {
             ResizeKeyboard = true,
             IsPersistent = true

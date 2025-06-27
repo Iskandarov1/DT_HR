@@ -62,7 +62,7 @@ public class StartCommandHandler(
                 cancellationToken:cancellationToken);
             var whatWouldYouLikeToDo =
                 localizationService.GetString(ResourceKeys.WhatWouldYouLikeToDo, language);
-            await messageService.ShowMainMenuAsync(chatId, whatWouldYouLikeToDo, language,cancellationToken);
+            await messageService.ShowMainMenuAsync(chatId, whatWouldYouLikeToDo, language,false,cancellationToken);
         }
     }
 }
