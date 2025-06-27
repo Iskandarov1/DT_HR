@@ -17,4 +17,4 @@ public sealed record AttendanceResponse(
     [property:JsonPropertyName("early_departure")] int EarlyDepartures,
     [property:JsonPropertyName("total_absent")] int TotalAbsent,
     [property:JsonPropertyName("employee")] List<EmployeeAttendanceResponse> Employees);
-     
+        

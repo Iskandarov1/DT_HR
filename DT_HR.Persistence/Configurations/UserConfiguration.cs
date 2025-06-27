@@ -1,4 +1,5 @@
 using DT_HR.Domain.Entities;
+using DT_HR.Domain.Enumeration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -33,6 +34,11 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         
         builder.Property(u => u.IsActive)
             .HasDefaultValue(true)
+            .IsRequired();
+
+        builder.Property(u => u.Role)
+            .HasConversion<int>()
+            .HasDefaultValue(UserRole.Employee.Value)
             .IsRequired();
         
         builder.HasMany<Attendance>()
