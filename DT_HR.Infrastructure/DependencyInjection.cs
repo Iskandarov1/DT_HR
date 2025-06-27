@@ -32,9 +32,7 @@ public static class DependencyInjection
         services.AddScoped<IAttendanceReportService, AttendanceReportService>();
 
 
-        services.AddSingleton<IBackgroundTaskService, BackgroundTaskService>();
-        services.AddHostedService<BackgroundTaskService>(provider => 
-            (BackgroundTaskService)provider.GetRequiredService<IBackgroundTaskService>());
+        
         
         services.AddScoped<IDateTime, DateTimeService>();
         //State
