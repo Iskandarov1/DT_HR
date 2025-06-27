@@ -295,4 +295,10 @@
   <data name="Thanks" xml:space="preserve">
     <value>Bizga xabar berganingiz uchun tashakkur</value>
   </data>
+  <data name="AttendanceStats" xml:space="preserve">
+    <value>📊 Statistika </value>
+  </data>
+  <data name="AttendanceDetails" xml:space="preserve">
+    <value>📋 Batafsil</value>
+  </data>
 </root>

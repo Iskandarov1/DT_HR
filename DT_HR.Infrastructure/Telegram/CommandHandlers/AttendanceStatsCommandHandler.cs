@@ -22,6 +22,7 @@ public class AttendanceStatsCommandHandler(
         var language = state?.Language ?? await localization.GetUserLanguage(message.From!.Id);
         var text = message.Text.ToLower();
         var startsText = localization.GetString(ResourceKeys.AttendanceStats, language).ToLower();
+
         return text == "/stats" || text == startsText;
     }
 
@@ -51,11 +52,12 @@ public class AttendanceStatsCommandHandler(
 
         await messageService.SendTextMessageAsync(chatId, text, cancellationToken: cancellationToken);
 
-        await messageService.ShowMainMenuAsync(chatId,
+        await messageService.ShowMainMenuAsync(
+            chatId,
             localization.GetString(ResourceKeys.PleaseSelectFromMenu, language),
             language, 
-            true,
-            cancellationToken);
+            isManager:true,
+            cancellationToken : cancellationToken);
 
 
 

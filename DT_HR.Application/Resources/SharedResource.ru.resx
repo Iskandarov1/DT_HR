@@ -295,4 +295,10 @@
   <data name="Thanks" xml:space="preserve">
     <value>Спасибо, что сообщили нам.</value>
   </data>
+  <data name="AttendanceStats" xml:space="preserve">
+    <value>📊 Статистика </value>
+  </data>
+  <data name="AttendanceDetails" xml:space="preserve">
+    <value>📋 Подробная посещаемость</value>
+  </data>
 </root>

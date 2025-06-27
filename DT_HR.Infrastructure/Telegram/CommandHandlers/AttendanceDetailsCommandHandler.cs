@@ -22,7 +22,7 @@ public class AttendanceDetailsCommandHandler(
         var state = await stateService.GetStateAsync(message.From!.Id);
         var language = state?.Language ?? await localization.GetUserLanguage(message.From!.Id);
         var text = message.Text.ToLower();
-        var startsText = localization.GetString(ResourceKeys.AttendanceStats, language).ToLower();
+        var startsText = localization.GetString(ResourceKeys.AttendanceDetails, language).ToLower();
 
         return text == "/details" || text == startsText;
     }
@@ -50,7 +50,10 @@ public class AttendanceDetailsCommandHandler(
 
         foreach (var item in list)
         {
-            sb.AppendLine($"{item.Name} - {item.Status} {(item.IsLate == true ? "(late)" : string.Empty)}");
+            var checkIn = item.CheckInTime?.ToString("HH:mm") ?? "-";
+            var checkOut = item.CheckOutTime?.ToString("HH:mm") ?? "-";
+            var late = item.IsLate == true ? "(late)" : string.Empty;
+            sb.AppendLine($"{item.Name} - {item.Status} {late} - in:{checkIn} out:{checkOut}");
         }
 
         await messageService.SendTextMessageAsync(
@@ -61,8 +64,8 @@ public class AttendanceDetailsCommandHandler(
             chatId, 
             localization.GetString(ResourceKeys.PleaseSelectFromMenu,language),
             language, 
-            true,
-            cancellationToken);
+            isManager:true,
+            cancellationToken:cancellationToken);
 
     }
 }

@@ -58,8 +58,7 @@ public class StateBasedMessageHandler(
                     chatId,
                     localizationService.GetString(ResourceKeys.ErrorOccurred,language), 
                     language,
-                    false,
-                    cancellationToken);
+                    cancellationToken:cancellationToken);
                 break;
         }
 
@@ -107,12 +106,16 @@ public class StateBasedMessageHandler(
             await messageService.SendTextMessageAsync(chatId,
                 localizationService.GetString(ResourceKeys.RegistrationSuccessful, language),
                 cancellationToken: cancellationToken);
-            await messageService.ShowMainMenuAsync(chatId,
-                localizationService.GetString(ResourceKeys.WhatWouldYouLikeToDo,language), language,false,cancellationToken);
+            await messageService.ShowMainMenuAsync(
+                chatId,
+                localizationService.GetString(ResourceKeys.WhatWouldYouLikeToDo,language), 
+                language,
+                cancellationToken:cancellationToken);
         }
         else
         {
-            await messageService.SendTextMessageAsync(chatId,
+            await messageService.SendTextMessageAsync(
+                chatId,
                 localizationService.GetString(ResourceKeys.RegistrationFailed, language, result.Error.Message),
                 cancellationToken: cancellationToken);
         }
@@ -250,8 +253,8 @@ public class StateBasedMessageHandler(
         {
             await messageService.ShowMainMenuAsync(
                 chatId, $"{localizationService.GetString(ResourceKeys.ErrorOccurred,language)}:{result.Error.Message}",
-                language,false,
-                cancellationToken);
+                language,
+                cancellationToken:cancellationToken);
         }
     }
 }

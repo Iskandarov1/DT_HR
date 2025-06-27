@@ -1,4 +1,5 @@
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Requests;
@@ -10,6 +11,7 @@ namespace DT_HR.Infrastructure.Telegram;
 public class TelegramMessageService(
     ITelegramBotClient botClient,
     ITelegramKeyboardService keyboardService,
+    IUserRepository userRepository,
     ILogger<TelegramMessageService> logger) : ITelegramMessageService
 {
     public async Task SendTextMessageAsync(long chatId, string text, ReplyMarkup? replyMarkup=null,CancellationToken cancellationToken = default)
@@ -88,9 +90,11 @@ public class TelegramMessageService(
         }
     }
 
-    public async Task ShowMainMenuAsync(long chatId, string text,string language,bool isManager = false, CancellationToken cancellationToken = default)
+    public async Task ShowMainMenuAsync(long chatId, string text,string language,bool? isManager = null, CancellationToken cancellationToken = default)
     {
-        var keyboard = keyboardService.GetMainMenuKeyboard(language,isManager);
+        var maybeUser = await userRepository.GetByTelegramUserIdAsync(chatId, cancellationToken);
+        var managerFlag = isManager ?? (maybeUser.HasValue && maybeUser.Value.IsManager());
+        var keyboard = keyboardService.GetMainMenuKeyboard(language,managerFlag);
         await SendTextMessageAsync(chatId, text,replyMarkup:keyboard,cancellationToken:cancellationToken);
     }
 }

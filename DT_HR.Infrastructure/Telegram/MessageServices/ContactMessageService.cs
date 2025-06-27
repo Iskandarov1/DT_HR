@@ -42,7 +42,7 @@ public class ContactMessageService(
             {
                 await messageService.SendTextMessageAsync(chatId,localization.GetString(ResourceKeys.RegistrationSuccessful,language) ,
                     cancellationToken: cancellationToken);
-                await messageService.ShowMainMenuAsync(chatId, localization.GetString(ResourceKeys.WhatWouldYouLikeToDo,language),language,false, cancellationToken);
+                await messageService.ShowMainMenuAsync(chatId, localization.GetString(ResourceKeys.WhatWouldYouLikeToDo,language),language, cancellationToken:cancellationToken);
                 
             }
             else

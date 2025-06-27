@@ -143,8 +143,7 @@ public class TelegramBotService : ITelegramBotService
             message.Chat.Id,
             _localization.GetString(ResourceKeys.PleaseSelectFromMenu,language),
             language,
-            false,
-            cancellationToken);
+            cancellationToken:cancellationToken);
     }
 
     public async Task ProcessCallbackQueryAsync(CallbackQuery? callbackQuery, CancellationToken cancellationToken)
@@ -185,8 +184,7 @@ public class TelegramBotService : ITelegramBotService
                 chatId, 
                 _localization.GetString(ResourceKeys.ErrorOccurred,language),
                 language,
-                false,
-                cancellationToken);
+                cancellationToken:cancellationToken);
 
         }
         catch (Exception e)

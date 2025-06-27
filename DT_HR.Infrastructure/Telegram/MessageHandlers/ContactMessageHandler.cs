@@ -48,8 +48,8 @@ public class ContactMessageHandler(
                 await messageService.ShowMainMenuAsync(
                     chatId, 
                     localization.GetString(ResourceKeys.WhatWouldYouLikeToDo, language),
-                    language,false,
-                    cancellationToken);
+                    language,
+                    cancellationToken:cancellationToken);
             }
             else
             {
