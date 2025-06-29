@@ -2,6 +2,8 @@ using DT_HR.Api.Helpers;
 using DT_HR.Application;
 using DT_HR.Persistence;
 using DT_HR.Infrastructure;
+using Hangfire;
+using Hangfire.MemoryStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +18,8 @@ builder.Services.AddDtHrLocalization();
 builder.Services.AddApplication();
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddServices(builder.Configuration);
-
+builder.Services.AddHangfire(config => config.UseMemoryStorage());
+builder.Services.AddHangfireServer();
 
 builder.Services.AddCors(options =>
 {
@@ -72,6 +75,7 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
+app.UseHangfireDashboard();
 
 
 app.MapControllers();

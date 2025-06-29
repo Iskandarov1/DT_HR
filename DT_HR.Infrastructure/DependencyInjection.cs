@@ -30,6 +30,7 @@ public static class DependencyInjection
         services.AddScoped<ILocalizationService, LocalizationService>();
         services.AddScoped<ILocationService, LocationService>();
         services.AddScoped<IAttendanceReportService, AttendanceReportService>();
+        services.AddScoped<IBackgroundTaskService, HangfireBackgroundTaskService>();
 
 
         
@@ -58,6 +59,7 @@ public static class DependencyInjection
         
         services.AddHostedService<WebhookConfigurationService>();
         services.AddHostedService<TelegramPollingService>();
+        services.AddHostedService<BackgroundTaskInitializer>();
 
         
         return services;

@@ -40,11 +40,10 @@ public class MarkAbsentCallbacks(
         {
             var followUpTime = data.EstimatedArrivalTime.AddMinutes(1);
 
-            await backgroundTaskService.ScheduleTaskAsync(
-                taskType: "Check Arrival",
-                scheduledFor : followUpTime,
-                payload: new {data.TelegramUserId, data.EstimatedArrivalTime}
-                ,cancellationToken);
+            await backgroundTaskService.ScheduleArrivalCheckAsync(
+                data.TelegramUserId,
+                followUpTime,
+                cancellationToken);
     
             var message = $"""
                            🚗 **Got it!** You're on your way.
