@@ -28,7 +28,7 @@ public class BackgroundTaskJobs(
         await messageService.SendTextMessageAsync(telegramUserId, text, cancellationToken: cancellationToken);
         logger.LogInformation("Arrival follow-up sent to {UserId}", telegramUserId);
     }
-
+    
     public async Task SendAttendanceStatsAsync(CancellationToken cancellationToken = default)
     {
         var managers = await userRepository.GetManagersAsync(cancellationToken);

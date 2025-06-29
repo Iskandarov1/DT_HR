@@ -98,7 +98,8 @@ public static class ResourceKeys
     public const string Expected = "Expected";
     public const string AbsenceRecordedCall = "Absence recorded";
     public const string Thanks = "Thanks";
+    public const string Settings = "Settings";
 
-    
-    
+
+
 }

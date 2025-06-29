@@ -36,10 +36,10 @@ public class BackgroundTaskInitializer(
                 "daily-stats-end-of-day",
                 j => j.SendAttendanceStatsAsync(cancellationToken),
                 Cron.Daily(end.Hour + 1, end.Minute));
-            RecurringJob.AddOrUpdate<BackgroundTaskJobs>(
-                "frequent-stats-check",
-                j => j.SendAttendanceStatsAsync(cancellationToken),
-                "*/5 * * * * *"); //5 sec
+            // RecurringJob.AddOrUpdate<BackgroundTaskJobs>(
+            //     "frequent-stats-check",
+            //     j => j.SendAttendanceStatsAsync(cancellationToken),
+            //     "*/5 * * * * *"); //5 sec
         }
         logger.LogInformation("Background tasks configured");
     }

@@ -1,5 +1,7 @@
+using DT_HR.Application.Core.Abstractions.Data;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
+using DT_HR.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
 
@@ -9,6 +11,8 @@ public class LanguageSelectionCallbackHandler(
     ITelegramMessageService messageService,
     ITelegramKeyboardService keyboardService, 
     IUserStateService stateService,
+    IUserRepository userRepository,
+    IUnitOfWork unitOfWork,
     ILocalizationService localization ,
     ILogger<LanguageSelectionCallbackHandler> logger) : ITelegramCallbackQuery
 {
@@ -28,35 +32,59 @@ public class LanguageSelectionCallbackHandler(
 
         await messageService.AnswerCallbackQueryAsync(callbackQuery.Id, cancellationToken: cancellationToken);
         
-        // this will update user state with selected language
         var state = await stateService.GetStateAsync(userId) ?? new UserState();
-        state.Language = selectedLanguage;
-        state.CurrentAction = UserAction.Registering;
-        await stateService.SetStateAsync(userId, state);
+        if (state != null && state.CurrentAction == UserAction.SelectingLanguage)
+        {
+            var maybeUser = await userRepository.GetByTelegramUserIdAsync(userId, cancellationToken);
+            bool isManager = false;
+            if (maybeUser.HasValue)
+            {
+                var user = maybeUser.Value;
+                user.SetLanguage(selectedLanguage);
+                userRepository.Update(user);
+                await unitOfWork.SaveChangesAsync(cancellationToken);
+                isManager = user.IsManager();
+            }
 
-        //getting the phone keyboard options
-        var keyborad = keyboardService.GetPhoneNumberOptionsKeyboard(selectedLanguage);
+            await stateService.RemoveStateAsync(userId);
+            await messageService.EditMessageTextAsync(
+                chatId,
+                messageId,
+                localization.GetString(ResourceKeys.PleaseSelectFromMenu, selectedLanguage),
+                cancellationToken: cancellationToken);
+            await messageService.ShowMainMenuAsync(chatId,
+                localization.GetString(ResourceKeys.PleaseSelectFromMenu, selectedLanguage),
+                selectedLanguage, 
+                isManager,
+                cancellationToken);
 
-        var registrationPrompt = localization.GetString(ResourceKeys.RegistrationPrompt, selectedLanguage);
-        var chooseHowToShare = localization.GetString(ResourceKeys.ChooseHowToShare, selectedLanguage);
+        }
+        else
+        {
+            state ??= new UserState();
+            state.Language = selectedLanguage;
+            state.CurrentAction = UserAction.Registering;
+            await stateService.SetStateAsync(userId, state);
 
-        var message = $"{registrationPrompt}\n\n{chooseHowToShare}";
-
-        await messageService.EditMessageTextAsync(
-            chatId,
-            messageId,
-            message,
-            cancellationToken: cancellationToken);
-
-        await messageService.SendTextMessageAsync(
-            chatId, 
-            "👇", 
-            keyborad,
-            cancellationToken);
-
-
-
-
-
+            //getting the phone keyboard options
+            var keyborad = keyboardService.GetPhoneNumberOptionsKeyboard(selectedLanguage);
+        
+            var registrationPrompt = localization.GetString(ResourceKeys.RegistrationPrompt, selectedLanguage);
+            var chooseHowToShare = localization.GetString(ResourceKeys.ChooseHowToShare, selectedLanguage);
+        
+            var message = $"{registrationPrompt}\n\n{chooseHowToShare}";
+        
+            await messageService.EditMessageTextAsync(
+                chatId,
+                messageId,
+                message,
+                cancellationToken: cancellationToken);
+         
+            await messageService.SendTextMessageAsync(
+                chatId, 
+                "👇", 
+                keyborad,
+                cancellationToken);
+        }
     }
 }

@@ -301,4 +301,7 @@
   <data name="AttendanceDetails" xml:space="preserve">
     <value>📋 Detailed Attendance</value>
   </data>
+  <data name="Settings" xml:space="preserve">
+    <value>⚙️Settings</value>
+  </data>
 </root>

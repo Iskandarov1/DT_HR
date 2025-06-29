@@ -69,6 +69,10 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
                 new KeyboardButton(localization.GetString(ResourceKeys.ReportAbsence, language))
             });
         }
+        rows.Add(new []
+        {
+            new KeyboardButton(localization.GetString(ResourceKeys.Settings,language))
+        });
         
         return new ReplyKeyboardMarkup(rows)
         {

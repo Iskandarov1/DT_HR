@@ -51,5 +51,10 @@ public class User : AggregateRoot
         WorkEndTime = endTime;
     }
 
+    public void SetLanguage(string language)
+    {
+        Language = language;
+    }
+
 
 }

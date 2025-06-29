@@ -11,4 +11,5 @@ public interface IUserRepository
     Task<List<User>> GetActiveUsersAsync(CancellationToken cancellationToken);
     Task<List<User>> GetManagersAsync(CancellationToken cancellationToken);
     void Insert(User user);
+    void Update(User user);
 }
