@@ -35,7 +35,11 @@ public class MyEventsCommandHandler (
         var langauge = state?.Language ?? await localization.GetUserLanguage(userId);
         logger.LogInformation("Processing event getting for the user {UserId}",userId);
 
-        var events = await eventRepository.GetUpcomingEventsAsync(TimeUtils.Now, cancellationToken);
+
+        var localNow = TimeUtils.Now;
+        var utcNow = localNow.AddHours(-5); 
+        
+        var events = await eventRepository.GetUpcomingEventsAsync(utcNow, cancellationToken);
 
         if (events.Count == 0)
         {
@@ -49,9 +53,15 @@ public class MyEventsCommandHandler (
         }
 
         var sb = new StringBuilder();
-        foreach (var evt  in events)
+        sb.AppendLine("📅 *Upcoming Events:*\n");
+        
+        foreach (var evt in events)
         {
-            sb.AppendLine($"{evt.EventTime:yyyy-MM-dd HH:mm} - {evt.Description}");
+
+            var localEventTime = evt.EventTime.AddHours(5);
+            sb.AppendLine($"📝 {evt.Description}");
+            sb.AppendLine($"⏰ {localEventTime:yyyy-MM-dd HH:mm}");
+            sb.AppendLine();
         }
 
         await messageService.SendTextMessageAsync(chatId, sb.ToString(), cancellationToken: cancellationToken);

@@ -10,7 +10,7 @@ public class Event : AggregateRoot
     public Event(string description, DateTime eventTime)
     {
         Description = description;
-        EventTime = eventTime;
+        EventTime = DateTime.SpecifyKind(eventTime, DateTimeKind.Utc);;
     }
 
     [Column("description")] public string Description { get; set; } = string.Empty;

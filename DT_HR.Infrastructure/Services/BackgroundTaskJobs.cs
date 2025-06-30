@@ -51,7 +51,7 @@ public class BackgroundTaskJobs(
     public async Task SendEventReminderAsync(string description, DateTime eventTime,
         CancellationToken cancellationToken = default)
     {
-        logger.LogInformation("SendEventReminderAsync called with description: {Description}, eventTime: {EventTime}", description, eventTime);
+        logger.LogInformation("SendEventReminderAsync called with description: {Description}, eventTime: {EventTime} UTC", description, eventTime);
         
         var users = await userRepository.GetActiveUsersAsync(cancellationToken);
         logger.LogInformation("Found {Count} active users", users.Count);
@@ -72,9 +72,13 @@ public class BackgroundTaskJobs(
                 try
                 {
                     var language = await localization.GetUserLanguage(user.TelegramUserId);
+                    
+                    // Convert UTC to local time (UTC+5) for display
+                    var localEventTime = eventTime.AddHours(5);
+                    
                     var text = $"🔔 *Event Reminder*\n\n" +
                               $"📅 Event: {description}\n" +
-                              $"⏰ Time: {eventTime:yyyy-MM-dd HH:mm}";
+                              $"⏰ Time: {localEventTime:yyyy-MM-dd HH:mm}";
                     
                     await messageService.SendTextMessageAsync(user.TelegramUserId, text, 
                         cancellationToken: cancellationToken);

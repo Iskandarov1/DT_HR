@@ -36,21 +36,33 @@ public class HangfireBackgroundTaskService(
 
     public Task ScheduleEventReminderAsync(string description, DateTime eventTime, CancellationToken cancellationToken = default)
     {
-        logger.LogInformation("ScheduleEventReminderAsync called for event: {Description} at {EventTime}", description, eventTime);
+        logger.LogInformation("ScheduleEventReminderAsync called for event: {Description} at {EventTime} UTC", description, eventTime);
+
 
         var tenMinBefore = eventTime.AddMinutes(-10);
-        var runAt = new DateTimeOffset(eventTime, TimeSpan.Zero); 
 
-        if (tenMinBefore < TimeUtils.Now) tenMinBefore = TimeUtils.Now;
+
+        var utcNow = DateTime.UtcNow;
+        if (tenMinBefore < utcNow) 
+        {
+            tenMinBefore = utcNow.AddMinutes(1); 
+        }
+
+
+        var beforeOffset = new DateTimeOffset(tenMinBefore, TimeSpan.Zero);
+        var eventOffset = new DateTimeOffset(eventTime, TimeSpan.Zero);
+
 
         jobClient.Schedule<BackgroundTaskJobs>(
             j => j.SendEventReminderAsync(description, eventTime, cancellationToken),
-            tenMinBefore);
-        jobClient.Schedule<BackgroundTaskJobs>(
-            j => j.SendEventReminderAsync(description, eventTime, cancellationToken),
-            runAt);
+            beforeOffset);
         
-        logger.LogInformation("Event reminders scheduled at {First} and {Second}", tenMinBefore, eventTime);
+
+        jobClient.Schedule<BackgroundTaskJobs>(
+            j => j.SendEventReminderAsync(description, eventTime, cancellationToken),
+            eventOffset);
+        
+        logger.LogInformation("Event reminders scheduled at {First}  and {Second} ", tenMinBefore, eventTime);
 
         return Task.CompletedTask;
     }

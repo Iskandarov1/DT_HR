@@ -166,11 +166,11 @@ public class StateBasedMessageHandler(
             return;
         }
         
-        var tz = TimeZoneInfo.FindSystemTimeZoneById("Asia/Tashkent");
-        var eventTime = TimeZoneInfo.ConvertTimeToUtc(localTime, tz);
+
+        var utcEventTime = localTime.AddHours(-5);
         
         var description = state.Data["description"]?.ToString() ?? string.Empty;
-        var result = await mediator.Send(new CreateEventCommand(description, eventTime), cancellationToken);
+        var result = await mediator.Send(new CreateEventCommand(description, utcEventTime), cancellationToken);
         await stateService.RemoveStateAsync(userId);
 
         if (result.IsSuccess)
@@ -179,7 +179,11 @@ public class StateBasedMessageHandler(
             foreach (var u in users)
             {
                 var lang = await localizationService.GetUserLanguage(u.TelegramUserId);
-                var msg = $"{description}\n{localTime:yyyy-MM-dd HH:mm}";
+                // Display in local time (UTC+5)
+                var displayTime = utcEventTime.AddHours(5);
+                var msg = $"🔔 *New Event Created*\n\n" +
+                         $"📅 Event: {description}\n" +
+                         $"⏰ Time: {displayTime:yyyy-MM-dd HH:mm}";
                 await messageService.SendTextMessageAsync(u.TelegramUserId, msg, cancellationToken: cancellationToken);
             }
 
