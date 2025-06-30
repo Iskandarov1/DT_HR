@@ -32,7 +32,6 @@ public class StateBasedMessageHandler(
         return state != null && (state.CurrentAction == UserAction.ReportingAbsence ||
                                  state.CurrentAction == UserAction.Registering ||
                                  state.CurrentAction == UserAction.CreatingEvent);
-
     }
 
     public async Task HandleAsync(Message message, CancellationToken cancellationToken = default)
@@ -54,7 +53,7 @@ public class StateBasedMessageHandler(
                 await ProcessAbsenceReasonAsync(message, state, language,cancellationToken);
                 break;
             case UserAction.Registering:
-                await ProcessPhoneNumberAsync(message, language, cancellationToken);
+                await ProcessRegistrationAsync(message, language, cancellationToken);
                 break;
             case UserAction.CreatingEvent:
                 await ProcessEventAsync(message, state, language, cancellationToken);
@@ -72,7 +71,7 @@ public class StateBasedMessageHandler(
 
     }
 
-    private async Task ProcessPhoneNumberAsync(Message message, string language, CancellationToken cancellationToken)
+    private async Task ProcessRegistrationAsync(Message message, string language, CancellationToken cancellationToken)
     {
         var userId = message.From!.Id;
         var chatId = message.Chat.Id;
@@ -262,11 +261,6 @@ public class StateBasedMessageHandler(
                 estimatedArrivalTime = DateTime.SpecifyKind(localEta, DateTimeKind.Utc);
 
                 reason = text.Replace(timeMatch.Value, "").Trim().TrimEnd(',').Trim();
-                // await messageService.ShowMainMenuAsync(
-                //     chatId, 
-                //     "test",
-                //     language,
-                //     cancellationToken);
 
             }
             else if (state.AbsenceType == AbsenceType.OnTheWay)
@@ -274,11 +268,6 @@ public class StateBasedMessageHandler(
                 await messageService.SendTextMessageAsync(chatId,
                     localizationService.GetString(ResourceKeys.TimeFormatExample,language),
                     cancellationToken: cancellationToken);
-                // await messageService.ShowMainMenuAsync(
-                //     chatId, 
-                //     "test",
-                //     language,
-                //     cancellationToken);
                 return;
             }
         }

@@ -338,10 +338,35 @@
     <value>⏰ Your estimated arrival time has passed. Please check in if you have arrived.</value>
   </data>
   
+  <data name="EnterBirthDate" xml:space="preserve">
+    <value>Please enter your birth date (yyyy-MM-dd)</value>
+  </data>
+  <data name="InvalidDateFormat" xml:space="preserve">
+    <value>❌ Invalid date format. Please use yyyy-MM-dd.</value>
+  </data>
+  <data name="HappyBirthday" xml:space="preserve">
+    <value>🎉 Happy Birthday!</value>
+  </data>
+  <data name="HolidayGreeting" xml:space="preserve">
+    <value>🎉 Happy {0}!</value>
+  </data>
+  
   <data name="Present" xml:space="preserve">
     <value>Present</value>
   </data>
   <data name="Absent" xml:space="preserve">
     <value>Absent</value>
+  </data>
+  <data name="HolidayGreeting" xml:space="preserve">
+    <value>🎉 Happy {0}!</value>
+  </data>
+  <data name="TotalEmployees" xml:space="preserve">
+    <value>Total Employees</value>
+  </data>
+  <data name="AttendanceRate" xml:space="preserve">
+    <value>Attendance Rate</value>
+  </data>
+  <data name="Check" xml:space="preserve">
+    <value>✅</value>
   </data>
 </root>

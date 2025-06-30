@@ -119,6 +119,14 @@ public static class ResourceKeys
     public const string Absent = "Absent";
     public const string TotalEmployees = "TotalEmployees";
     public const string AttendanceRate = "AttendanceRate";
+    
+    public const string EnterBirthDate = "EnterBirthDate";
+    public const string InvalidDateFormat = "InvalidDateFormat";
+    public const string HappyBirthday = "HappyBirthday";
+    public const string HolidayGreeting = "HolidayGreeting";
+    
+    public const string Check = "Check";
+
 
 
 }

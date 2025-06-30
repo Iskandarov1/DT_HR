@@ -160,6 +160,38 @@ public class BackgroundTaskJobs(
             throw;
         }
     }
+    
+    private static readonly Dictionary<(int Month ,int Day),string> UzbekHolidays = new()
+    {
+        {(1,  1),  "Yangi yil"},                          
+        {(1, 14),  "Vatan himoyachilari kuni"},           
+        {(3,  8),  "Xotin-qizlar kuni"},                   
+        {(3, 21),  "Navro'z"},                            
+        {(5,  9),  "Xotira va qadrlash kuni"},            
+        {(6,  1),  "Xalqaro bolalar kuni"},                
+        {(6, 27),  "Matbuot va OAV xodimlari kuni"},      
+        {(6, 30),  "Yoshlar kuni"},                        
+        {(8, 31),  "Qatag'on qurbonlari xotirasi kuni"},   
+        {(9,  1),  "Mustaqillik kuni"},                    
+        {(10, 1),  "Ustoz va murabbiylar kuni"},           
+        {(10, 21), "O'zbek tili kuni"},                   
+        {(12, 8),  "Konstitutsiya kuni"}                   
+    };
+
+    public async Task SendHolidayGreetingsAsync(CancellationToken cancellationToken = default)
+    {
+        var today = DateOnly.FromDateTime(TimeUtils.Now);
+        if (!UzbekHolidays.TryGetValue((today.Month,today.Day), out var holidayName))
+            return;
+        var users = await userRepository.GetActiveUsersAsync(cancellationToken);
+        foreach (var user in users)
+        {
+            var language = await localization.GetUserLanguage(user.TelegramUserId);
+            var text = localization.GetString(ResourceKeys.HolidayGreeting, language, holidayName);
+            await messageService.SendTextMessageAsync(user.TelegramUserId, text, cancellationToken: cancellationToken);
+        }
+        logger.LogInformation("Holiday greetings sent for {Holiday}",holidayName);
+    }
 
 
 }

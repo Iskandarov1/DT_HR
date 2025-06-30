@@ -337,11 +337,32 @@
   <data name="TimePassed" xml:space="preserve">
     <value>⏰ Расчетное время вашего прибытия уже прошло. Пожалуйста, зарегистрируйтесь, если вы прибыли.</value>
   </data>
+  <data name="EnterBirthDate" xml:space="preserve">
+    <value>Введите дату рождения (yyyy-MM-dd)</value>
+  </data>
+  <data name="InvalidDateFormat" xml:space="preserve">
+    <value>❌ Неверный формат даты. Используйте yyyy-MM-dd.</value>
+  </data>
+  <data name="HappyBirthday" xml:space="preserve">
+    <value>🎉 С Днём Рождения!</value>
+  </data>
+  <data name="HolidayGreeting" xml:space="preserve">
+    <value>🎉 С праздником {0}!</value>
+  </data>
   
   <data name="Present" xml:space="preserve">
     <value>Отсутствует</value>
   </data>
   <data name="Absent" xml:space="preserve">
     <value>Tasdiqlandi</value>
+  </data>
+  <data name="TotalEmployees" xml:space="preserve">
+    <value>Всего сотрудников</value>
+  </data>
+  <data name="AttendanceRate" xml:space="preserve">
+    <value>Уровень посещаемости</value>
+  </data>
+  <data name="Check" xml:space="preserve">
+    <value>✅</value>
   </data>
 </root>

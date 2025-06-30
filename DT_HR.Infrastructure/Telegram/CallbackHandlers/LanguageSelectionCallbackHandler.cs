@@ -45,11 +45,8 @@ public class LanguageSelectionCallbackHandler(
 
                 await stateService.RemoveStateAsync(userId);
                 await messageService.EditMessageTextAsync(chatId, messageId,
-                    localization.GetString(ResourceKeys.PleaseSelectFromMenu, selectedLanguage),
+                    localization.GetString(ResourceKeys.Check, selectedLanguage),
                     cancellationToken: cancellationToken);
-                await messageService.ShowMainMenuAsync(chatId,
-                    localization.GetString(ResourceKeys.PleaseSelectFromMenu, selectedLanguage), selectedLanguage,
-                    user.IsManager(), cancellationToken);
 
             }
             else
@@ -82,7 +79,7 @@ public class LanguageSelectionCallbackHandler(
             state.CurrentAction = UserAction.Registering;
             await stateService.SetStateAsync(userId, state);
 
-            //getting the phone keyboard options
+
             var keyborad = keyboardService.GetPhoneNumberOptionsKeyboard(selectedLanguage);
         
             var registrationPrompt = localization.GetString(ResourceKeys.RegistrationPrompt, selectedLanguage);

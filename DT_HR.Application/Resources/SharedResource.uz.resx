@@ -337,11 +337,35 @@
   <data name="TimePassed" xml:space="preserve">
     <value>⏰ Taxminiy kelish vaqtingiz oʻtdi. Iltimos, kelganingizni tekshiring.</value>
   </data>
-  
+  <data name="EnterBirthDate" xml:space="preserve">
+    <value>Tug'ilgan kuningizni kiriting (yyyy-MM-dd)</value>
+  </data>
+  <data name="InvalidDateFormat" xml:space="preserve">
+    <value>❌ Sana formati noto'g'ri. yyyy-MM-dd shaklida kiriting.</value>
+  </data>
+  <data name="HappyBirthday" xml:space="preserve">
+    <value>🎉 Tug'ilgan kuningiz muborak!</value>
+  </data>
+  <data name="HolidayGreeting" xml:space="preserve">
+    <value>🎉 {0} bayramingiz muborak!</value>
+  </data>
   <data name="Present" xml:space="preserve">
     <value>Tasdiqlandi</value>
   </data>
   <data name="Absent" xml:space="preserve">
     <value>Yo'q</value>
   </data>
+  <data name="TotalEmployees" xml:space="preserve">
+    <value>Jami Hodimlar </value>
+  </data>
+  <data name="AttendanceRate" xml:space="preserve">
+    <value>Davomat darajasi</value>
+  </data>
+  
+  <data name="Check" xml:space="preserve">
+    <value>✅</value>
+  </data>
+  
+  
+  
 </root>

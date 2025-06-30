@@ -45,16 +45,26 @@ public class AttendanceDetailsCommandHandler(
         }
 
         var list = await reportService.GetDetailedAttendance(DateOnly.FromDateTime(TimeUtils.Now), cancellationToken);
-        var sb = new StringBuilder();
-        
+        var attendanceDetailsText =  localization.GetString(ResourceKeys.AttendanceRate, language);
+        var totalEmployeesText = localization.GetString(ResourceKeys.TotalEmployees, language);
+        var present = localization.GetString(ResourceKeys.Present, language);
+        var lateText = localization.GetString(ResourceKeys.Late, language);
+        var onTheWayText = localization.GetString(ResourceKeys.OnTheWay, language);
+        var absentText = localization.GetString(ResourceKeys.Absent, language);
 
-        sb.AppendLine($"📊 *Attendance Details*");
+
+
+        var sb = new StringBuilder();
+
+        sb.AppendLine($"📊 *{attendanceDetailsText}*");
         sb.AppendLine($"📅 *{TimeUtils.Now:yyyy-MM-dd}*");
         sb.AppendLine($"━━━━━━━━━━━━━━━━━━━━━━━━");
         sb.AppendLine();
 
 
-        var groupedByStatus = list.GroupBy(x => x.Status).OrderBy(g => GetStatusOrder(g.Key));
+        var groupedByStatus =
+            list.GroupBy(x => x.Status)
+                .OrderBy(g => GetStatusOrder(g.Key));
 
         foreach (var statusGroup in groupedByStatus)
         {
@@ -76,7 +86,7 @@ public class AttendanceDetailsCommandHandler(
 
 
         sb.AppendLine($"━━━━━━━━━━━━━━━━━━━━━━━━");
-        sb.AppendLine($"📋 Total Employees: *{list.Count}*");
+        sb.AppendLine($"📋 {totalEmployeesText}: *{list.Count}*");
 
         await messageService.SendTextMessageAsync(
             chatId,

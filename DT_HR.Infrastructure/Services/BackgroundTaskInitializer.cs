@@ -3,6 +3,7 @@ using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using TimeZoneConverter;
 
 namespace DT_HR.Infrastructure.Services;
 
@@ -44,6 +45,9 @@ public class BackgroundTaskInitializer(
             var utcStartHour = (start.Hour + 1 - 5 + 24) % 24;
             var utcEndHour = (end.Hour + 1 - 5 + 24) % 24;
             
+            // var utcMinus5 = TimeZoneInfo.FindSystemTimeZoneById("Etc/GMT+5");
+            var tz = TZConvert.GetTimeZoneInfo("Asia/Tashkent");
+            
             RecurringJob.AddOrUpdate<BackgroundTaskJobs>(
                 "daily-stats-after-checkin",
                 j => j.SendAttendanceStatsAsync(cancellationToken),
@@ -62,9 +66,11 @@ public class BackgroundTaskInitializer(
                     TimeZone = TimeZoneInfo.Utc
                 });
             
-            logger.LogInformation("Daily stats scheduled in UTC - After start: {LocalStart} -> UTC {UtcStart}, End: {LocalEnd} -> UTC {UtcEnd}", 
-                $"{start.Hour + 1}:{start.Minute:D2}", $"{utcStartHour}:{start.Minute:D2}",
-                $"{end.Hour + 1}:{end.Minute:D2}", $"{utcEndHour}:{end.Minute:D2}");
+            RecurringJob.AddOrUpdate<BackgroundTaskJobs>(
+                "holiday-greetings",
+                j => j.SendHolidayGreetingsAsync(cancellationToken),
+                Cron.Daily(0,2),tz);
+            
         }
         logger.LogInformation("Background tasks configured with UTC timezone");
     }
