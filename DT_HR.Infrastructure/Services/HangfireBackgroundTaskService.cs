@@ -21,7 +21,8 @@ public class HangfireBackgroundTaskService(
 
     public Task ScheduleArrivalCheckAsync(long telegramUserId, DateTime eta, CancellationToken cancellationToken = default)
     {
-            var checkTimeOffset = new DateTimeOffset(eta, TimeSpan.Zero);
+        var checkTime = eta.AddHours(-5);
+        var checkTimeOffset = new DateTimeOffset(checkTime, TimeSpan.Zero);
 
         jobClient.Schedule<BackgroundTaskJobs>(
             j => j.CheckArrivalAsync(telegramUserId, eta, cancellationToken),
@@ -60,8 +61,6 @@ public class HangfireBackgroundTaskService(
         jobClient.Schedule<BackgroundTaskJobs>(
             j => j.SendEventReminderAsync(description, eventTime, cancellationToken),
             beforeOffset);
-        
-
         jobClient.Schedule<BackgroundTaskJobs>(
             j => j.SendEventReminderAsync(description, eventTime, cancellationToken),
             eventOffset);

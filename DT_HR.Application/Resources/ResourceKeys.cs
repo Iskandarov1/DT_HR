@@ -109,7 +109,16 @@ public static class ResourceKeys
     public const string MyEvents = "MyEvents";
     public const string NoEvents = "NoEvents";
     public const string OnlyManagersCanCreateEvents = "OnlyManagersCanCreateEvents";
-
+    
+    public const string ThankYouCheckIn = "ThankYouCheckIn";
+    public const string CheckInCheck = "CheckInCheck";
+    public const string TimePassed = "TimePassed";
+    
+    
+    public const string Present = "Present";
+    public const string Absent = "Absent";
+    public const string TotalEmployees = "TotalEmployees";
+    public const string AttendanceRate = "AttendanceRate";
 
 
 }

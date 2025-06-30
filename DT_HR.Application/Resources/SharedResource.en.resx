@@ -328,4 +328,20 @@
   <data name="OnlyManagersCanCreateEvents" xml:space="preserve">
     <value>Only managers can create events</value>
   </data>
+  <data name="ThankYouCheckIn" xml:space="preserve">
+    <value>✅ Thank you for checking in on time! Have a great day at work.</value>
+  </data>
+  <data name="CheckInCheck" xml:space="preserve">
+    <value>Please remember to check in</value>
+  </data>
+  <data name="TimePassed" xml:space="preserve">
+    <value>⏰ Your estimated arrival time has passed. Please check in if you have arrived.</value>
+  </data>
+  
+  <data name="Present" xml:space="preserve">
+    <value>Present</value>
+  </data>
+  <data name="Absent" xml:space="preserve">
+    <value>Absent</value>
+  </data>
 </root>

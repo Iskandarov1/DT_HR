@@ -328,4 +328,20 @@
   <data name="OnlyManagersCanCreateEvents" xml:space="preserve">
     <value>Создавать события могут только менеджеры</value>
   </data>
+  <data name="ThankYouCheckIn" xml:space="preserve">
+    <value>✅ Спасибо, что зашли вовремя! Хорошего вам дня на работе.</value>
+  </data>
+  <data name="CheckInCheck" xml:space="preserve">
+    <value>Пожалуйста, не забудьте зарегистрироваться</value>
+  </data>
+  <data name="TimePassed" xml:space="preserve">
+    <value>⏰ Расчетное время вашего прибытия уже прошло. Пожалуйста, зарегистрируйтесь, если вы прибыли.</value>
+  </data>
+  
+  <data name="Present" xml:space="preserve">
+    <value>Отсутствует</value>
+  </data>
+  <data name="Absent" xml:space="preserve">
+    <value>Tasdiqlandi</value>
+  </data>
 </root>

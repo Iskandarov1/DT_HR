@@ -328,4 +328,20 @@
   <data name="OnlyManagersCanCreateEvents" xml:space="preserve">
     <value>Tadbirlarni faqat menejerlar yaratishi mumkin</value>
   </data>
+  <data name="ThankYouCheckIn" xml:space="preserve">
+    <value>✅ O'z vaqtida ro'yxatdan o'tganingiz uchun tashakkur! Ishda kuningiz yaxshi o'tsin.</value>
+  </data>
+  <data name="CheckInCheck" xml:space="preserve">
+    <value>Roʻyxatdan oʻtishni unutmang</value>
+  </data>
+  <data name="TimePassed" xml:space="preserve">
+    <value>⏰ Taxminiy kelish vaqtingiz oʻtdi. Iltimos, kelganingizni tekshiring.</value>
+  </data>
+  
+  <data name="Present" xml:space="preserve">
+    <value>Tasdiqlandi</value>
+  </data>
+  <data name="Absent" xml:space="preserve">
+    <value>Yo'q</value>
+  </data>
 </root>

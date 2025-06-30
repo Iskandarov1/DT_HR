@@ -80,7 +80,19 @@ public class MarkAbsentCommandHandler(
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            await callbacks.OnAbsenceMarkedAsync(
+            
+
+            if (request.EstimatedArrivalTime.HasValue)
+            {
+                await callbacks.OnEmployeeOnTheWayAsync(
+                    new OnTheWayData(
+                        request.TelegramUserId,
+                        request.EstimatedArrivalTime.Value,
+                        request.Reason), cancellationToken);
+            }
+            else
+            {
+                await callbacks.OnAbsenceMarkedAsync(
                 new AbsenceMarkedData(
                     request.TelegramUserId,
                     $"{user.Value.FirstName} {user.Value.LastName}",
@@ -89,7 +101,7 @@ public class MarkAbsentCommandHandler(
                     request.EstimatedArrivalTime,
                     TimeUtils.Now
                     ), cancellationToken);
-            
+            }
             return Result.Success(attendance.Value.Id);
             
         }
