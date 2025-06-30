@@ -6,11 +6,28 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DT_HR.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class AddAttendancePropertie : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "events",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: false),
+                    event_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    deleted_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_events", x => x.id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "users",
                 columns: table => new
@@ -21,9 +38,11 @@ namespace DT_HR.Persistence.Migrations
                     first_name = table.Column<string>(type: "text", nullable: false),
                     last_name = table.Column<string>(type: "text", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
+                    role = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
                     work_start_time = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
                     work_end_time = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
                     is_active = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
+                    language = table.Column<string>(type: "text", nullable: false, defaultValue: "uz"),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     deleted_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -76,6 +95,9 @@ namespace DT_HR.Persistence.Migrations
         {
             migrationBuilder.DropTable(
                 name: "attendances");
+
+            migrationBuilder.DropTable(
+                name: "events");
 
             migrationBuilder.DropTable(
                 name: "users");
