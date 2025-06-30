@@ -21,7 +21,11 @@ public class HangfireBackgroundTaskService(
 
     public Task ScheduleArrivalCheckAsync(long telegramUserId, DateTime eta, CancellationToken cancellationToken = default)
     {
-        jobClient.Schedule<BackgroundTaskJobs>(j => j.CheckArrivalAsync(telegramUserId, eta, cancellationToken), eta);
+            var checkTimeOffset = new DateTimeOffset(eta, TimeSpan.Zero);
+
+        jobClient.Schedule<BackgroundTaskJobs>(
+            j => j.CheckArrivalAsync(telegramUserId, eta, cancellationToken),
+            checkTimeOffset);
         logger.LogInformation("Arrival check scheduled for user {UserId} at {Time}", telegramUserId, eta);
         return Task.CompletedTask;
     }
