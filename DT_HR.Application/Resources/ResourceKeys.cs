@@ -106,6 +106,9 @@ public static class ResourceKeys
     public const string EventCreated = "EventCreated";
     public const string EventReminder = "EventReminder";
 
+    public const string MyEvents = "MyEvents";
+    public const string NoEvents = "NoEvents";
+
 
 
 }

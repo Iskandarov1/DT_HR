@@ -20,6 +20,6 @@ internal sealed class UserRepository(IDbContext dbContext) : GenericRepository<U
 
     public Task<List<User>> GetManagersAsync(CancellationToken cancellationToken) =>
         DbContext.Set<User>()
-            .Where(u => u.IsActive && u.Role == UserRole.Manager.Name)
+            .Where(u => u.IsActive && u.Role == UserRole.Manager.Value)
             .ToListAsync(cancellationToken);
 }

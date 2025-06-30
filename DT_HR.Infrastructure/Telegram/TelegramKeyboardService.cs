@@ -72,6 +72,10 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
             {
                 new KeyboardButton(localization.GetString(ResourceKeys.ReportAbsence, language))
             });
+            rows.Add(new []
+            {
+                new KeyboardButton(localization.GetString(ResourceKeys.MyEvents, language))
+            });
         }
         rows.Add(new []
         {

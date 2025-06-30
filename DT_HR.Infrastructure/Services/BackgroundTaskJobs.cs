@@ -55,7 +55,7 @@ public class BackgroundTaskJobs(
         foreach (var user in users)
         {
             var language = await localization.GetUserLanguage(user.TelegramUserId);
-            var localTime = eventTime + TimeUtils.LocalOffset;
+            var localTime = eventTime;
             var text = $"Reminder {description} at {localTime:yyyy-MM-dd HH:mm} ";
             await messageService.SendTextMessageAsync(user.TelegramUserId, text, cancellationToken: cancellationToken);
         }

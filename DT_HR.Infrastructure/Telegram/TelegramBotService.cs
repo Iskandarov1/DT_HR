@@ -44,7 +44,7 @@ public class TelegramBotService : ITelegramBotService
             serviceProvider.GetRequiredService<AttendanceStatsCommandHandler>(),
             serviceProvider.GetRequiredService<AttendanceDetailsCommandHandler>(),
             serviceProvider.GetRequiredService<EventCommandHandler>(),
-
+            serviceProvider.GetRequiredService<MyEventsCommandHandler>()
         };
         _callbackHandlers = new List<ITelegramCallbackQuery>
         {

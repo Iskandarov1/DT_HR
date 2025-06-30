@@ -319,4 +319,10 @@
   <data name="EventReminder" xml:space="preserve">
     <value>Event reminder</value>
   </data>
+  <data name="MyEvents" xml:space="preserve">
+    <value>📅 My Events</value>
+  </data>
+  <data name="NoEvents" xml:space="preserve">
+    <value>No upcoming events</value>
+  </data>
 </root>

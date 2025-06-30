@@ -319,4 +319,10 @@
   <data name="EventReminder" xml:space="preserve">
     <value>Tadbir eslatmasi</value>
   </data>
+  <data name="MyEvents" xml:space="preserve">
+    <value>📅 Tadbirlarim</value>
+  </data>
+  <data name="NoEvents" xml:space="preserve">
+    <value>Yaqin tadbirlar yo'q</value>
+  </data>
 </root>

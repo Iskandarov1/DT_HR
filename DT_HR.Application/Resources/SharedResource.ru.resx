@@ -319,4 +319,10 @@
   <data name="EventReminder" xml:space="preserve">
     <value>Напоминание о событии</value>
   </data>
+  <data name="MyEvents" xml:space="preserve">
+    <value>📅 Мои события</value>
+  </data>
+  <data name="NoEvents" xml:space="preserve">
+    <value>Предстоящих событий нет</value>
+  </data>
 </root>

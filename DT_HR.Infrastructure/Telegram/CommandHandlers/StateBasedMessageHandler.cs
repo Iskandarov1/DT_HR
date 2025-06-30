@@ -21,7 +21,7 @@ public class StateBasedMessageHandler(
     ILocalizationService localizationService,
     IUserRepository userRepository) : ITelegramService
 {
-    private static readonly TimeSpan LocalOffset = TimeUtils.LocalOffset;
+
     private static readonly Regex PhoneNumberRegex = new Regex(@"^(\+?998)?([3781]{2}|(9[013-57-9]))\d{7}$", RegexOptions.Compiled);
     public async Task<bool> CanHandleAsync(Message message, CancellationToken cancellationToken = default)
     {
@@ -156,7 +156,7 @@ public class StateBasedMessageHandler(
             return;
         }
 
-        var eventTime = DateTime.SpecifyKind(localTime - LocalOffset, DateTimeKind.Utc);
+        var eventTime = DateTime.SpecifyKind(localTime , DateTimeKind.Utc);
         var description = state.Data["description"]?.ToString() ?? string.Empty;
         var result = await mediator.Send(new CreateEventCommand(description, eventTime), cancellationToken);
         await stateService.RemoveStateAsync(userId);

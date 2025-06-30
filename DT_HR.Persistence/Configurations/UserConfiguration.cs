@@ -37,7 +37,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired();
 
         builder.Property(u => u.Role)
-            .HasDefaultValue(UserRole.Employee.Name)
+            .HasDefaultValue(UserRole.Employee.Value)
             .IsRequired();
         
         builder.HasMany<Attendance>()
