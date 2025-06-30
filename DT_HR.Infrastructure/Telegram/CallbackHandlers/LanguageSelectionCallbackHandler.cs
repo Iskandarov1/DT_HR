@@ -36,28 +36,44 @@ public class LanguageSelectionCallbackHandler(
         if (state != null && state.CurrentAction == UserAction.SelectingLanguage)
         {
             var maybeUser = await userRepository.GetByTelegramUserIdAsync(userId, cancellationToken);
-            bool isManager = false;
             if (maybeUser.HasValue)
             {
                 var user = maybeUser.Value;
                 user.SetLanguage(selectedLanguage);
                 userRepository.Update(user);
                 await unitOfWork.SaveChangesAsync(cancellationToken);
-                isManager = user.IsManager();
+
+                await stateService.RemoveStateAsync(userId);
+                await messageService.EditMessageTextAsync(chatId, messageId,
+                    localization.GetString(ResourceKeys.PleaseSelectFromMenu, selectedLanguage),
+                    cancellationToken: cancellationToken);
+                await messageService.ShowMainMenuAsync(chatId,
+                    localization.GetString(ResourceKeys.PleaseSelectFromMenu, selectedLanguage), selectedLanguage,
+                    user.IsManager(), cancellationToken);
+
             }
+            else
+            {
+                state.Language = selectedLanguage;
+                state.CurrentAction = UserAction.Registering;
+                await stateService.SetStateAsync(userId, state);
 
-            await stateService.RemoveStateAsync(userId);
-            await messageService.EditMessageTextAsync(
-                chatId,
-                messageId,
-                localization.GetString(ResourceKeys.PleaseSelectFromMenu, selectedLanguage),
-                cancellationToken: cancellationToken);
-            await messageService.ShowMainMenuAsync(chatId,
-                localization.GetString(ResourceKeys.PleaseSelectFromMenu, selectedLanguage),
-                selectedLanguage, 
-                isManager,
-                cancellationToken);
+                var keyboard = keyboardService.GetPhoneNumberOptionsKeyboard(selectedLanguage);
+                var registrationPrompt = localization.GetString(ResourceKeys.RegistrationPrompt, selectedLanguage);
+                var chooseHowtoShare = localization.GetString(ResourceKeys.ChooseHowToShare, selectedLanguage);
+                var message = $"{registrationPrompt}\n\n{chooseHowtoShare}";
 
+                await messageService.EditMessageTextAsync(
+                    chatId,
+                    messageId,
+                    message,
+                    cancellationToken: cancellationToken);
+                await messageService.SendTextMessageAsync(
+                    chatId, 
+                    "👇", 
+                    keyboard, 
+                    cancellationToken);
+            }
         }
         else
         {
