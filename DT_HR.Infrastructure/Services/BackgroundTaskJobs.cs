@@ -51,15 +51,49 @@ public class BackgroundTaskJobs(
     public async Task SendEventReminderAsync(string description, DateTime eventTime,
         CancellationToken cancellationToken = default)
     {
+        logger.LogInformation("SendEventReminderAsync called with description: {Description}, eventTime: {EventTime}", description, eventTime);
+        
         var users = await userRepository.GetActiveUsersAsync(cancellationToken);
-        foreach (var user in users)
+        logger.LogInformation("Found {Count} active users", users.Count);
+        
+        if (users.Count == 0)
         {
-            var language = await localization.GetUserLanguage(user.TelegramUserId);
-            var localTime = eventTime;
-            var text = $"Reminder {description} at {localTime:yyyy-MM-dd HH:mm} ";
-            await messageService.SendTextMessageAsync(user.TelegramUserId, text, cancellationToken: cancellationToken);
+            logger.LogWarning("No active users found for event reminder");
+            return;
         }
-        logger.LogInformation("Event reminder sent to {Count} users",users.Count);
+        
+        try
+        {
+            logger.LogInformation("Sending event reminder to {Count} users for event: {Description}", users.Count, description);
+            
+            var sentCount = 0;
+            foreach (var user in users)
+            {
+                try
+                {
+                    var language = await localization.GetUserLanguage(user.TelegramUserId);
+                    var text = $"🔔 *Event Reminder*\n\n" +
+                              $"📅 Event: {description}\n" +
+                              $"⏰ Time: {eventTime:yyyy-MM-dd HH:mm}";
+                    
+                    await messageService.SendTextMessageAsync(user.TelegramUserId, text, 
+                        cancellationToken: cancellationToken);
+                    sentCount++;
+                    logger.LogDebug("Event reminder sent to user {UserId}", user.TelegramUserId);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Failed to send event reminder to user {UserId}", user.TelegramUserId);
+                }
+            }
+            
+            logger.LogInformation("Event reminder sent successfully to {SentCount}/{TotalCount} users", sentCount, users.Count);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Failed to send event reminders for event: {Description}", description);
+            throw;
+        }
     }
 
 

@@ -1,5 +1,6 @@
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
+using DT_HR.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
 
@@ -9,11 +10,16 @@ public class EventCommandHandler(
     ITelegramMessageService messageService,
     IUserStateService stateService,
     ILocalizationService localization,
+    IUserRepository userRepository,
     ILogger<EventCommandHandler> logger) : ITelegramService
 {
     public async Task<bool> CanHandleAsync(Message message, CancellationToken cancellationToken = default)
     {
         if (message.Text == null) return false;
+        var maybeUser = await userRepository.GetByTelegramUserIdAsync(message.From!.Id,cancellationToken);
+        if (maybeUser.HasNoValue || !maybeUser.Value.IsManager())
+            return false;
+        
         var state = await stateService.GetStateAsync(message.From!.Id);
         var language = state?.Language ?? await localization.GetUserLanguage(message.From!.Id);
         var text = message.Text.ToLower();
@@ -25,7 +31,17 @@ public class EventCommandHandler(
     {
         var userId = message.From!.Id;
         var chatId = message.Chat.Id;
-        
+        var maybeUser = await userRepository.GetByTelegramUserIdAsync(message.From!.Id,cancellationToken);
+
+        if (maybeUser.HasNoValue || !maybeUser.Value.IsManager())
+        {
+            var language = await localization.GetUserLanguage(userId);
+            await messageService.ShowMainMenuAsync(chatId,
+                localization.GetString(ResourceKeys.OnlyManagersCanCreateEvents, language), 
+                language,
+                cancellationToken: cancellationToken);
+            return;
+        }
         logger.LogInformation("Processing event creating for the user {UserId}",userId);
 
         var state = new UserState

@@ -134,6 +134,16 @@ public class StateBasedMessageHandler(
     {
         var userId = message.From!.Id;
         var chatId = message.Chat.Id;
+        var maybeUser = await userRepository.GetByTelegramUserIdAsync(message.From!.Id,cancellationToken);
+        if (maybeUser.HasNoValue || !maybeUser.Value.IsManager())
+        {
+            await stateService.RemoveStateAsync(userId);
+            await messageService.ShowMainMenuAsync(chatId,
+                localizationService.GetString(ResourceKeys.OnlyManagersCanCreateEvents, language), language,
+                cancellationToken: cancellationToken);
+            return;
+        }
+        
         var text = message.Text?.Trim() ?? string.Empty;
         var step = state.Data.TryGetValue("step", out var s) ? s?.ToString() : "description";
 
@@ -155,8 +165,10 @@ public class StateBasedMessageHandler(
                 cancellationToken: cancellationToken);
             return;
         }
-
-        var eventTime = DateTime.SpecifyKind(localTime , DateTimeKind.Utc);
+        
+        var tz = TimeZoneInfo.FindSystemTimeZoneById("Asia/Tashkent");
+        var eventTime = TimeZoneInfo.ConvertTimeToUtc(localTime, tz);
+        
         var description = state.Data["description"]?.ToString() ?? string.Empty;
         var result = await mediator.Send(new CreateEventCommand(description, eventTime), cancellationToken);
         await stateService.RemoveStateAsync(userId);
@@ -183,7 +195,6 @@ public class StateBasedMessageHandler(
                 language,
                 cancellationToken: cancellationToken);
         }
-
 
     }
 

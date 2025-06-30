@@ -108,6 +108,7 @@ public static class ResourceKeys
 
     public const string MyEvents = "MyEvents";
     public const string NoEvents = "NoEvents";
+    public const string OnlyManagersCanCreateEvents = "OnlyManagersCanCreateEvents";
 
 
 

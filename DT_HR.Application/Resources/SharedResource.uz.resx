@@ -325,4 +325,7 @@
   <data name="NoEvents" xml:space="preserve">
     <value>Yaqin tadbirlar yo'q</value>
   </data>
+  <data name="OnlyManagersCanCreateEvents" xml:space="preserve">
+    <value>Tadbirlarni faqat menejerlar yaratishi mumkin</value>
+  </data>
 </root>

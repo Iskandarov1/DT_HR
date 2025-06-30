@@ -325,4 +325,7 @@
   <data name="NoEvents" xml:space="preserve">
     <value>No upcoming events</value>
   </data>
+  <data name="OnlyManagersCanCreateEvents" xml:space="preserve">
+    <value>Only managers can create events</value>
+  </data>
 </root>

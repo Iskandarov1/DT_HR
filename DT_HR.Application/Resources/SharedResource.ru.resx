@@ -325,4 +325,7 @@
   <data name="NoEvents" xml:space="preserve">
     <value>Предстоящих событий нет</value>
   </data>
+  <data name="OnlyManagersCanCreateEvents" xml:space="preserve">
+    <value>Создавать события могут только менеджеры</value>
+  </data>
 </root>

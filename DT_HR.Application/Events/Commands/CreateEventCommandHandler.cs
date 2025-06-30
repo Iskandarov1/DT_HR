@@ -7,7 +7,10 @@ using DT_HR.Domain.Repositories;
 
 namespace DT_HR.Application.Events.Commands;
 
-public class CreateEventCommandHandler(IEventRepository eventRepository,IUnitOfWork unitOfWork, IBackgroundTaskService taskService) : ICommandHandler<CreateEventCommand, Result<Guid>>
+public class CreateEventCommandHandler(
+    IEventRepository eventRepository,
+    IUnitOfWork unitOfWork, 
+    IBackgroundTaskService taskService) : ICommandHandler<CreateEventCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(CreateEventCommand request, CancellationToken cancellationToken)
     {
