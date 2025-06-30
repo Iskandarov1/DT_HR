@@ -1,4 +1,5 @@
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Domain.Core;
 using Hangfire;
 using Microsoft.Extensions.Logging;
 
@@ -31,5 +32,16 @@ public class HangfireBackgroundTaskService(
         logger.LogInformation("Attendance stats scheduled at {Time}", scheduledFor);
         return Task.CompletedTask;
 
+    }
+
+    public Task ScheduleEventReminderAsync(string description, DateTime eventTime, CancellationToken cancellationToken = default)
+    {
+        var runAt = eventTime.AddMinutes(-10);
+        if (runAt < TimeUtils.Now) runAt = TimeUtils.Now;
+
+        jobClient.Schedule<BackgroundTaskJobs>(
+            j => j.SendEventReminderAsync(description, eventTime, cancellationToken),
+            runAt);
+        return Task.CompletedTask;
     }
 }

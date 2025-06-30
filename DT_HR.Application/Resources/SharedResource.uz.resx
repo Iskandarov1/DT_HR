@@ -304,4 +304,19 @@
   <data name="Settings" xml:space="preserve">
     <value>⚙️Sozlamalar</value>
   </data>
+  <data name="CreateEvent" xml:space="preserve">
+    <value>📅 Tadbir yaratish</value>
+  </data>
+  <data name="EnterEventDescription" xml:space="preserve">
+    <value>Tadbiringiz haqida ma'lumot kiriting</value>
+  </data>
+  <data name="EnterEventTime" xml:space="preserve">
+    <value>Tadbir vaqtini kiriting (yyyy-MM-dd HH:mm)</value>
+  </data>
+  <data name="EventCreated" xml:space="preserve">
+    <value>Tadbir saqlandi</value>
+  </data>
+  <data name="EventReminder" xml:space="preserve">
+    <value>Tadbir eslatmasi</value>
+  </data>
 </root>

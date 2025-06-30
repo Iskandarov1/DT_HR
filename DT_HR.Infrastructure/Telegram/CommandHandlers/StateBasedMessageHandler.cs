@@ -1,10 +1,12 @@
 using System.Text.RegularExpressions;
 using DT_HR.Application.Attendance.Commands.MarkAbsent;
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Application.Events.Commands;
 using DT_HR.Application.Resources;
 using DT_HR.Application.Users.Commands;
 using DT_HR.Domain.Core;
 using DT_HR.Domain.Enumeration;
+using DT_HR.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
@@ -16,7 +18,8 @@ public class StateBasedMessageHandler(
     ITelegramMessageService messageService,
     IMediator mediator,
     ILogger<StateBasedMessageHandler> logger,
-    ILocalizationService localizationService) : ITelegramService
+    ILocalizationService localizationService,
+    IUserRepository userRepository) : ITelegramService
 {
     private static readonly TimeSpan LocalOffset = TimeUtils.LocalOffset;
     private static readonly Regex PhoneNumberRegex = new Regex(@"^(\+?998)?([3781]{2}|(9[013-57-9]))\d{7}$", RegexOptions.Compiled);
@@ -26,7 +29,8 @@ public class StateBasedMessageHandler(
 
         var state = await stateService.GetStateAsync(message.From.Id);
         return state != null && (state.CurrentAction == UserAction.ReportingAbsence ||
-                                 state.CurrentAction == UserAction.Registering);
+                                 state.CurrentAction == UserAction.Registering ||
+                                 state.CurrentAction == UserAction.CreatingEvent);
 
     }
 
@@ -50,6 +54,9 @@ public class StateBasedMessageHandler(
                 break;
             case UserAction.Registering:
                 await ProcessPhoneNumberAsync(message, language, cancellationToken);
+                break;
+            case UserAction.CreatingEvent:
+                await ProcessEventAsync(message, state, language, cancellationToken);
                 break;
             default:
                 logger.LogWarning("Unknow user state action: {Action}",state.CurrentAction);
@@ -119,6 +126,65 @@ public class StateBasedMessageHandler(
                 localizationService.GetString(ResourceKeys.RegistrationFailed, language, result.Error.Message),
                 cancellationToken: cancellationToken);
         }
+    }
+
+
+    private async Task ProcessEventAsync(Message message, UserState state, string language,
+        CancellationToken cancellationToken)
+    {
+        var userId = message.From!.Id;
+        var chatId = message.Chat.Id;
+        var text = message.Text?.Trim() ?? string.Empty;
+        var step = state.Data.TryGetValue("step", out var s) ? s?.ToString() : "description";
+
+        if (step == "description")
+        {
+            state.Data["description"] = text;
+            state.Data["step"] = "time";
+            await stateService.SetStateAsync(userId, state);
+            await messageService.SendTextMessageAsync(chatId,
+                localizationService.GetString(ResourceKeys.EnterEventTime, language),
+                cancellationToken: cancellationToken);
+            return;
+        }
+
+        if (!DateTime.TryParse(text, out var localTime))
+        {
+            await messageService.SendTextMessageAsync(chatId,
+                localizationService.GetString(ResourceKeys.InvalidTimeFormat, language),
+                cancellationToken: cancellationToken);
+            return;
+        }
+
+        var eventTime = DateTime.SpecifyKind(localTime - LocalOffset, DateTimeKind.Utc);
+        var description = state.Data["description"]?.ToString() ?? string.Empty;
+        var result = await mediator.Send(new CreateEventCommand(description, eventTime), cancellationToken);
+        await stateService.RemoveStateAsync(userId);
+
+        if (result.IsSuccess)
+        {
+            var users = await userRepository.GetActiveUsersAsync(cancellationToken);
+            foreach (var u in users)
+            {
+                var lang = await localizationService.GetUserLanguage(u.TelegramUserId);
+                var msg = $"{description}\n{localTime:yyyy-MM-dd HH:mm}";
+                await messageService.SendTextMessageAsync(u.TelegramUserId, msg, cancellationToken: cancellationToken);
+            }
+
+            await messageService.ShowMainMenuAsync(chatId,
+                localizationService.GetString(ResourceKeys.EventCreated, language),
+                language,
+                cancellationToken: cancellationToken);
+        }
+        else
+        {
+            await messageService.ShowMainMenuAsync(chatId,
+                localizationService.GetString(ResourceKeys.ErrorOccurred, language),
+                language,
+                cancellationToken: cancellationToken);
+        }
+
+
     }
 
     private string NormalizePhoneNumber(string input)

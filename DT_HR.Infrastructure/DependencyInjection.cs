@@ -50,6 +50,8 @@ public static class DependencyInjection
         services.AddScoped<AttendanceStatsCommandHandler>();
         services.AddScoped<AttendanceDetailsCommandHandler>();
         services.AddScoped<StateBasedMessageHandler>();
+        services.AddScoped<EventCommandHandler>();
+
 
         services.AddScoped<LocationMessageHandler>();
         services.AddScoped<ContactMessageHandler>();

@@ -7,4 +7,6 @@ public interface IBackgroundTaskService
 
     Task ScheduleArrivalCheckAsync(long telegramUserId, DateTime eta, CancellationToken cancellationToken = default);
     Task ScheduleAttendanceStatsAsync(DateTime scheduledFor, CancellationToken cancellationToken = default);
+    Task ScheduleEventReminderAsync(string description, DateTime eventTime, CancellationToken cancellationToken);
+    
 }

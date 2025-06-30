@@ -304,4 +304,19 @@
   <data name="Settings" xml:space="preserve">
     <value>⚙️Settings</value>
   </data>
+  <data name="CreateEvent" xml:space="preserve">
+    <value>📅 Create Event</value>
+  </data>
+  <data name="EnterEventDescription" xml:space="preserve">
+    <value>Please enter the event description</value>
+  </data>
+  <data name="EnterEventTime" xml:space="preserve">
+    <value>Please enter the event time (yyyy-MM-dd HH:mm)</value>
+  </data>
+  <data name="EventCreated" xml:space="preserve">
+    <value>Event scheduled</value>
+  </data>
+  <data name="EventReminder" xml:space="preserve">
+    <value>Event reminder</value>
+  </data>
 </root>

@@ -28,6 +28,8 @@ public enum UserAction
     CheckingIn,
     CheckingOut,
     ReportingAbsence,
+    CreatingEvent,
     SelectingLanguage
+    
     
 }

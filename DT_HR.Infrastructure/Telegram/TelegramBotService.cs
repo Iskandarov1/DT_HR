@@ -43,6 +43,8 @@ public class TelegramBotService : ITelegramBotService
             serviceProvider.GetRequiredService<StateBasedMessageHandler>(),
             serviceProvider.GetRequiredService<AttendanceStatsCommandHandler>(),
             serviceProvider.GetRequiredService<AttendanceDetailsCommandHandler>(),
+            serviceProvider.GetRequiredService<EventCommandHandler>(),
+
         };
         _callbackHandlers = new List<ITelegramCallbackQuery>
         {

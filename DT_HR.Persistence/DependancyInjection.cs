@@ -43,6 +43,8 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<ApplicationDbContext>());
         services.AddScoped<IAttendanceRepository, AttendanceRepository>();
         services.TryAddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IEventRepository, EventRepository>();
+
 
 
         return services;

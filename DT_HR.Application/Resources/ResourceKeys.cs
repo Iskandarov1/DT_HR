@@ -99,6 +99,12 @@ public static class ResourceKeys
     public const string AbsenceRecordedCall = "Absence recorded";
     public const string Thanks = "Thanks";
     public const string Settings = "Settings";
+    
+    public const string CreateEvent = "CreateEvent";
+    public const string EnterEventDescription = "EnterEventDescription";
+    public const string EnterEventTime = "EnterEventTime";
+    public const string EventCreated = "EventCreated";
+    public const string EventReminder = "EventReminder";
 
 
 

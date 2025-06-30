@@ -46,7 +46,20 @@ public class BackgroundTaskJobs(
                 cancellationToken: cancellationToken);
         }
         logger.LogInformation("Attendance stats sent to managers");
+    }
 
+    public async Task SendEventReminderAsync(string description, DateTime eventTime,
+        CancellationToken cancellationToken = default)
+    {
+        var users = await userRepository.GetActiveUsersAsync(cancellationToken);
+        foreach (var user in users)
+        {
+            var language = await localization.GetUserLanguage(user.TelegramUserId);
+            var localTime = eventTime + TimeUtils.LocalOffset;
+            var text = $"Reminder {description} at {localTime:yyyy-MM-dd HH:mm} ";
+            await messageService.SendTextMessageAsync(user.TelegramUserId, text, cancellationToken: cancellationToken);
+        }
+        logger.LogInformation("Event reminder sent to {Count} users",users.Count);
     }
 
 
