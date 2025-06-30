@@ -1,11 +1,11 @@
+using DT_HR.Application.Attendance.Commands.MarkAbsent;
 using DT_HR.Application.Core.Abstractions.Messaging;
 using DT_HR.Domain.Core;
 using DT_HR.Domain.Core.Errors;
 using DT_HR.Domain.Core.Primitives.Result;
-using DT_HR.Domain.Enumeration;
 using DT_HR.Domain.Repositories;
 
-namespace DT_HR.Application.Attendance.Commands.MarkAbsent;
+namespace DT_HR.Application.Attendance.InputHandler;
 
 public class MarkAbsentInputHandler(
     IUserRepository userRepository,

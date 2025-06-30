@@ -9,7 +9,7 @@ using DT_HR.Domain.Entities;
 using DT_HR.Domain.Repositories;
 using DT_HR.Domain.ValueObjects;
 
-namespace DT_HR.Application.Users.Commands;
+namespace DT_HR.Application.Users.Commands.RegisterUser;
 
 public class RegisterUserCommandHandler(
     IUserRepository userRepository,

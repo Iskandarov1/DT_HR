@@ -5,7 +5,7 @@ using DT_HR.Application.Resources;
 using DT_HR.Contract.CallbackData.Attendance;
 using Microsoft.Extensions.Logging;
 
-namespace DT_HR.Application.Attendance.Commands.CheckOut;
+namespace DT_HR.Application.Attendance.Callbacks;
 
 public class CheckOutCallbacks(
     ITelegramBotService botService,

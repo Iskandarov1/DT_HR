@@ -4,6 +4,7 @@ using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Events.Commands;
 using DT_HR.Application.Resources;
 using DT_HR.Application.Users.Commands;
+using DT_HR.Application.Users.Commands.RegisterUser;
 using DT_HR.Domain.Core;
 using DT_HR.Domain.Enumeration;
 using DT_HR.Domain.Repositories;

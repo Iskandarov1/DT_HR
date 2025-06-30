@@ -3,11 +3,9 @@ using DT_HR.Application.Core.Abstractions.Data;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
 using DT_HR.Contract.CallbackData.Attendance;
-using DT_HR.Contract.FailureData;
-using DT_HR.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace DT_HR.Application.Attendance.Commands.CheckIn;
+namespace DT_HR.Application.Attendance.Callbacks;
 
 public class CheckInCallbacks(
     ILocationService locationService,

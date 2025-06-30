@@ -1,5 +1,4 @@
 using DT_HR.Contract.CallbackData.Attendance;
-using DT_HR.Contract.FailureData;
 
 namespace DT_HR.Application.Core.Abstractions.Common;
 

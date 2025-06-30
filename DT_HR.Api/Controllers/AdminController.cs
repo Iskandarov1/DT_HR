@@ -1,5 +1,6 @@
 using DT_HR.Api.Contracts;
 using DT_HR.Application.Users.Commands;
+using DT_HR.Application.Users.Commands.UserRole;
 using DT_HR.Domain.Core.Primitives;
 using DT_HR.Domain.Core.Primitives.Result;
 using DT_HR.Domain.Enumeration;

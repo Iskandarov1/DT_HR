@@ -1,6 +1,7 @@
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
 using DT_HR.Application.Users.Commands;
+using DT_HR.Application.Users.Commands.RegisterUser;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;

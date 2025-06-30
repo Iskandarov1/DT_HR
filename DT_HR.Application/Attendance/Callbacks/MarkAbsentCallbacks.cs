@@ -2,10 +2,9 @@ using DT_HR.Application.Core.Abstractions.Common;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
 using DT_HR.Contract.CallbackData.Attendance;
-using DT_HR.Domain.Enumeration;
 using Microsoft.Extensions.Logging;
 
-namespace DT_HR.Application.Attendance.Commands.MarkAbsent;
+namespace DT_HR.Application.Attendance.Callbacks;
 
 public class MarkAbsentCallbacks(
     ITelegramBotService telegramBotService,

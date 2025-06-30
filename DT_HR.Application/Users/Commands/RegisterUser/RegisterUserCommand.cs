@@ -1,7 +1,7 @@
 using DT_HR.Application.Core.Abstractions.Messaging;
 using DT_HR.Domain.Core.Primitives.Result;
 
-namespace DT_HR.Application.Users.Commands;
+namespace DT_HR.Application.Users.Commands.RegisterUser;
 
 public sealed record RegisterUserCommand(
     long TelegramUserId,

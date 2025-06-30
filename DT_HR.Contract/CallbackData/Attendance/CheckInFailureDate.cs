@@ -1,4 +1,4 @@
-namespace DT_HR.Contract.FailureData;
+namespace DT_HR.Contract.CallbackData.Attendance;
 
 public record CheckInFailureDate(
     long TelegramUserId,

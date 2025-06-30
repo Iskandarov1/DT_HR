@@ -4,7 +4,7 @@ using DT_HR.Domain.Core.Errors;
 using DT_HR.Domain.Core.Primitives.Result;
 using DT_HR.Domain.Repositories;
 
-namespace DT_HR.Application.Users.Commands;
+namespace DT_HR.Application.Users.Commands.UserRole;
 
 public class ChangeUserRoleCommandHandler(
     IUserRepository userRepository,
