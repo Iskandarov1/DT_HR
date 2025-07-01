@@ -1,4 +1,5 @@
 using DT_HR.Application.Attendance.Commands.CheckOut;
+using DT_HR.Application.Core.Abstractions.Enum;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
 using MediatR;
@@ -53,6 +54,7 @@ public class CheckOutCommandHandler(
             await messageService.ShowMainMenuAsync(
                 chatId, 
                 language,
+                menuType: MainMenuType.CheckedOut,
                 cancellationToken:cancellationToken);
         }
         else
@@ -60,7 +62,7 @@ public class CheckOutCommandHandler(
             await messageService.ShowMainMenuAsync(
                 chatId, 
                 language,
-                cancellationToken:cancellationToken);
+                cancellationToken: cancellationToken);
         }
     }
 }

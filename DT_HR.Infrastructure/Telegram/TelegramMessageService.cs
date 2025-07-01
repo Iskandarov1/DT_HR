@@ -1,3 +1,4 @@
+using DT_HR.Application.Core.Abstractions.Enum;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Domain.Repositories;
 using Microsoft.Extensions.Logging;
@@ -92,11 +93,11 @@ public class TelegramMessageService(
 
  
 
-    public async Task ShowMainMenuAsync(long chatId,string language,bool? isManager = null, CancellationToken cancellationToken = default)
+    public async Task ShowMainMenuAsync(long chatId,string language,bool? isManager = null,MainMenuType menuType = MainMenuType.Default, CancellationToken cancellationToken = default)
     {
         var maybeUser = await userRepository.GetByTelegramUserIdAsync(chatId, cancellationToken);
         var managerFlag = isManager ?? (maybeUser.HasValue && maybeUser.Value.IsManager());
-        var keyboard = keyboardService.GetMainMenuKeyboard(language,managerFlag);
+        var keyboard = keyboardService.GetMainMenuKeyboard(language,menuType);
         var menuText = language switch
         {
             "ru" => "📋 Главное меню:",

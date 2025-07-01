@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 using DT_HR.Application.Attendance.Commands.MarkAbsent;
+using DT_HR.Application.Core.Abstractions.Enum;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Events.Commands;
 using DT_HR.Application.Resources;
@@ -365,17 +366,24 @@ public class StateBasedMessageHandler(
 
         if (result.IsSuccess)
         {
+            var menu = (state.AbsenceType == AbsenceType.OnTheWay ||
+                        (state.AbsenceType == AbsenceType.Custom && 
+                         estimatedArrivalTime.HasValue))
+                ? MainMenuType.OnTheWay
+                : MainMenuType.Default;
+            
             await messageService.ShowMainMenuAsync(
                 chatId, 
                 language,
-                cancellationToken:cancellationToken);
+                menuType: menu,
+                cancellationToken: cancellationToken);
         }
         else
         {
             await messageService.ShowMainMenuAsync(
                 chatId, 
                 language,
-                cancellationToken:cancellationToken);
+                cancellationToken: cancellationToken);
         }
     }
 }

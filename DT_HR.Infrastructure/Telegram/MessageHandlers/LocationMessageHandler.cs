@@ -1,4 +1,5 @@
 using DT_HR.Application.Attendance.Commands.CheckIn;
+using DT_HR.Application.Core.Abstractions.Enum;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
 using MediatR;
@@ -51,7 +52,8 @@ public class LocationMessageHandler(
                 await messageService.ShowMainMenuAsync(
                     chatId,
                     language,
-                    cancellationToken:cancellationToken);
+                    menuType: MainMenuType.CheckedIn,
+                    cancellationToken: cancellationToken);
             }
         }
         else

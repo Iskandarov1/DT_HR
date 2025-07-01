@@ -30,8 +30,6 @@ public class BackgroundTaskInitializer(
                 {
                     TimeZone = TimeZoneInfo.Utc
                 });
-            
-                
             logger.LogInformation("Check-in reminder scheduled for user {UserId} at {LocalTime} (UTC: {UtcHour}:{Minute})", 
                 user.TelegramUserId, user.WorkStartTime, utcHour, user.WorkStartTime.Minute);
         }  

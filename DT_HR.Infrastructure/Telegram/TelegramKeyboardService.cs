@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using DT_HR.Application.Core.Abstractions.Enum;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -45,7 +46,7 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
         };
         return keyboard;
     }
-    public ReplyKeyboardMarkup GetMainMenuKeyboard(string language, bool isManager = false)
+    public ReplyKeyboardMarkup GetMainMenuKeyboard(string language, MainMenuType menuType = MainMenuType.Default, bool isManager = false)
     {
         var rows = new List<KeyboardButton[]>();
         
@@ -61,22 +62,54 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
                 new KeyboardButton(localization.GetString(ResourceKeys.CreateEvent,language).Trim())
             });
         }
-        else
-        {
-            rows.Add(new[]
-            {
-                new KeyboardButton(localization.GetString(ResourceKeys.CheckIn, language)),
-                new KeyboardButton(localization.GetString(ResourceKeys.CheckOut, language))
-            });
 
-            rows.Add(new[]
-            {
-                new KeyboardButton(localization.GetString(ResourceKeys.ReportAbsence, language))
-            });
-            rows.Add(new []
-            {
-                new KeyboardButton(localization.GetString(ResourceKeys.MyEvents, language))
-            });
+        switch (menuType)
+        {
+           case MainMenuType.CheckPrompt :
+               rows.Add(new []
+               {
+                   new KeyboardButton(localization.GetString(ResourceKeys.CheckIn,language)),
+                   new KeyboardButton(localization.GetString(ResourceKeys.ReportAbsence,language))
+               });
+               break;
+           case MainMenuType.CheckedIn:
+               rows.Add(new[]
+               {
+                   new KeyboardButton(localization.GetString(ResourceKeys.CheckOut, language)),
+                   new KeyboardButton(localization.GetString(ResourceKeys.MyEvents, language))
+               });
+               break;
+           case MainMenuType.CheckedOut:
+               rows.Add(new[]
+               {
+                   new KeyboardButton(localization.GetString(ResourceKeys.MyEvents, language))
+               });
+               break;
+           case MainMenuType.OnTheWay:
+               rows.Add(new[]
+               {
+                   new KeyboardButton(localization.GetString(ResourceKeys.CheckIn, language)),
+                   new KeyboardButton(localization.GetString(ResourceKeys.ReportAbsence, language))
+               });
+               break;
+           default:
+               if (!isManager)
+               {
+                   rows.Add(new[]
+                   {
+                       new KeyboardButton(localization.GetString(ResourceKeys.CheckIn, language)),
+                       new KeyboardButton(localization.GetString(ResourceKeys.CheckOut, language))
+                   });
+                   rows.Add(new[]
+                   {
+                       new KeyboardButton(localization.GetString(ResourceKeys.ReportAbsence, language))
+                   });
+                   rows.Add(new[]
+                   {
+                       new KeyboardButton(localization.GetString(ResourceKeys.MyEvents, language))
+                   });
+               }
+               break;
         }
         rows.Add(new []
         {
@@ -114,7 +147,7 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
         return new ReplyKeyboardMarkup(new[]
         {
             new[] { KeyboardButton.WithRequestContact(localization.GetString(ResourceKeys.ShareContactButton, language)) },
-            new[] { new KeyboardButton(localization.GetString(ResourceKeys.Cancel)) }
+            new[] { new KeyboardButton(localization.GetString( ResourceKeys.Cancel)) }
         })
         {
             ResizeKeyboard = true,

@@ -1,3 +1,4 @@
+using DT_HR.Application.Core.Abstractions.Enum;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace DT_HR.Application.Core.Abstractions.Services;
@@ -11,6 +12,6 @@ public interface ITelegramMessageService
     Task AnswerCallbackQueryAsync(string callbackQueryId, string? text = null,
         CancellationToken cancellationToken = default);
 
-    Task ShowMainMenuAsync(long chatId, string language ,bool? isManager = null, CancellationToken cancellationToken = default);
+    Task ShowMainMenuAsync(long chatId, string language ,bool? isManager = null, MainMenuType menuType = MainMenuType.Default, CancellationToken cancellationToken = default);
 
 }
