@@ -1,3 +1,4 @@
+using DT_HR.Application.Core.Abstractions.Enum;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
 using DT_HR.Domain.Core;
@@ -41,6 +42,11 @@ public class BackgroundTaskJobs(
             {
                 var text = localization.GetString(ResourceKeys.CheckInCheck, language);
                 await messageService.SendTextMessageAsync(telegramUserId, text, cancellationToken: cancellationToken);
+                await messageService.ShowMainMenuAsync(
+                    telegramUserId,
+                    language,
+                    menuType: MainMenuType.CheckPrompt,
+                    cancellationToken: cancellationToken);
                 logger.LogInformation("Check-in reminder sent to user {UserId}", telegramUserId);
             }
         }

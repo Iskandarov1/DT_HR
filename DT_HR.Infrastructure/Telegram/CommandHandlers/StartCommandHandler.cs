@@ -1,3 +1,4 @@
+using DT_HR.Application.Core.Abstractions.Enum;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
 using DT_HR.Domain.Repositories;
@@ -63,6 +64,7 @@ public class StartCommandHandler(
            await messageService.ShowMainMenuAsync(
                 chatId,
                 language,
+                menuType: MainMenuType.CheckPrompt,
                 cancellationToken:cancellationToken);
         }
     }

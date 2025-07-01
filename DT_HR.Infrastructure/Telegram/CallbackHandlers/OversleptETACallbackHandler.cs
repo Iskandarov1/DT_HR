@@ -1,4 +1,5 @@
 using DT_HR.Application.Attendance.Commands.MarkAbsent;
+using DT_HR.Application.Core.Abstractions.Enum;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
 using DT_HR.Domain.Core;
@@ -71,13 +72,17 @@ public class OversleptETACallbackHandler (
             if (result.IsSuccess)
             {
                 await messageService.ShowMainMenuAsync(
-                    chatId,language,
+                    chatId,
+                    language,
+                    menuType: MainMenuType.OnTheWay,
                     cancellationToken:cancellationToken);
             }
             else
             {
                 await messageService.ShowMainMenuAsync(
-                    chatId, language, 
+                    chatId,
+                    language, 
+                    menuType: MainMenuType.OnTheWay,
                     cancellationToken:cancellationToken);
             }
             

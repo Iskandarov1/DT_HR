@@ -6,5 +6,9 @@ public enum MainMenuType
     CheckPrompt,
     CheckedIn,
     CheckedOut,
-    OnTheWay
+    OnTheWay,
+    OverSlept,
+    Custom,
+    Absent,
+    Start
 }

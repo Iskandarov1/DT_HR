@@ -1,3 +1,4 @@
+using DT_HR.Application.Core.Abstractions.Enum;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
 using DT_HR.Domain.Core;
@@ -63,7 +64,14 @@ public class CheckInCommandHandler(
                     await messageService.SendTextMessageAsync(chatId,
                         localization.GetString(ResourceKeys.AlreadyReportedAbsence, language),
                         cancellationToken: cancellationToken);
-                    await messageService.ShowMainMenuAsync(chatId, language, cancellationToken: cancellationToken);
+                    var menu = attendance.Value.Status == AttendanceStatus.OnTheWay.Value
+                        ? MainMenuType.OnTheWay
+                        : MainMenuType.CheckPrompt;
+                    await messageService.ShowMainMenuAsync(
+                        chatId,
+                        language, 
+                        menuType:menu,
+                        cancellationToken: cancellationToken);
                     return;
                 }
             }

@@ -67,6 +67,7 @@ public class StateBasedMessageHandler(
                 await messageService.ShowMainMenuAsync(
                     chatId,
                     language,
+                    menuType:MainMenuType.CheckPrompt,
                     cancellationToken:cancellationToken);
                 break;
         }
@@ -124,6 +125,7 @@ public class StateBasedMessageHandler(
                 await messageService.ShowMainMenuAsync(
                     chatId,
                     language,
+                    menuType: MainMenuType.CheckPrompt,
                     cancellationToken:cancellationToken);
             }
             else
@@ -367,7 +369,9 @@ public class StateBasedMessageHandler(
         if (result.IsSuccess)
         {
             var menu = (state.AbsenceType == AbsenceType.OnTheWay ||
-                        (state.AbsenceType == AbsenceType.Custom && 
+                        (state.AbsenceType == AbsenceType.Custom ||
+                state.AbsenceType ==AbsenceType.Overslept ||
+                state.AbsenceType ==AbsenceType.Absent && 
                          estimatedArrivalTime.HasValue))
                 ? MainMenuType.OnTheWay
                 : MainMenuType.Default;

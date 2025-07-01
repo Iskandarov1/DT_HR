@@ -24,8 +24,8 @@ public class User : AggregateRoot
         this.LastName = lastName;
         this.Email = "";
         this.Role = UserRole.Employee.Value;
-        this.WorkStartTime = new TimeOnly(18, 55);
-        this.WorkEndTime = new TimeOnly(23, 00);
+        this.WorkStartTime = new TimeOnly(23, 00);
+        this.WorkEndTime = new TimeOnly(23, 59);
         IsActive = true;
         this.Language = language;
         this.BirtDate = birthday;

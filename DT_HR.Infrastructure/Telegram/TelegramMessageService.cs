@@ -1,5 +1,7 @@
 using DT_HR.Application.Core.Abstractions.Enum;
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Domain.Core;
+using DT_HR.Domain.Enumeration;
 using DT_HR.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
@@ -13,6 +15,7 @@ public class TelegramMessageService(
     ITelegramBotClient botClient,
     ITelegramKeyboardService keyboardService,
     IUserRepository userRepository,
+    IAttendanceRepository attendanceRepository,
     ILogger<TelegramMessageService> logger) : ITelegramMessageService
 {
     public async Task SendTextMessageAsync(long chatId, string text, ReplyMarkup? replyMarkup=null,CancellationToken cancellationToken = default)
@@ -97,6 +100,41 @@ public class TelegramMessageService(
     {
         var maybeUser = await userRepository.GetByTelegramUserIdAsync(chatId, cancellationToken);
         var managerFlag = isManager ?? (maybeUser.HasValue && maybeUser.Value.IsManager());
+
+        var finalMenuType = menuType;
+
+        if (menuType == MainMenuType.Default && maybeUser.HasValue)
+        {
+            var today = DateOnly.FromDateTime(TimeUtils.Now);
+            var attendance =
+                await attendanceRepository.GetByUserAndDateAsync(maybeUser.Value.Id, today, cancellationToken);
+            
+            
+            if (attendance.HasValue)
+            {
+                if (attendance.Value.CheckInTime.HasValue && !attendance.Value.CheckOutTime.HasValue)
+                {
+                    finalMenuType = MainMenuType.CheckedIn;
+                }
+                else if (attendance.Value.CheckInTime.HasValue && attendance.Value.CheckOutTime.HasValue)
+                {
+                    finalMenuType = MainMenuType.CheckedOut;
+                }
+                else if (attendance.Value.Status == AttendanceStatus.OnTheWay.Value)
+                {
+                    finalMenuType = MainMenuType.OnTheWay;
+                }
+                else
+                {
+                    finalMenuType = MainMenuType.CheckPrompt;
+                }
+            }
+            else
+            {
+                finalMenuType = MainMenuType.CheckPrompt;
+            }
+        }
+        
         var keyboard = keyboardService.GetMainMenuKeyboard(language,menuType);
         var menuText = language switch
         {
@@ -104,6 +142,6 @@ public class TelegramMessageService(
             "en" => "📋 Main Menu:",
             _ => "📋 Asosiy menyu:"
         };
-        await SendTextMessageAsync(chatId,menuText,replyMarkup:keyboard,cancellationToken:cancellationToken);
+        await SendTextMessageAsync(chatId,menuText,replyMarkup: keyboard,cancellationToken: cancellationToken);
     }
 }
