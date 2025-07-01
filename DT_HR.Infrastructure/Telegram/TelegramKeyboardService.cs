@@ -136,6 +136,10 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
             new[]
             {
                 InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.OtherReason,language), "absent_type:other"),
+            },
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.Cancel, language), "action:cancel"),
             }
         });
     }

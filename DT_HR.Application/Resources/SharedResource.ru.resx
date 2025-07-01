@@ -319,7 +319,7 @@
   <data name="EventReminder" xml:space="preserve">
     <value>Напоминание о событии</value>
   </data>
-  <data name="MyEvents" xml:space="preserve">
+  <data name="events" xml:space="preserve">
     <value>📅 Мои события</value>
   </data>
   <data name="NoEvents" xml:space="preserve">
@@ -364,5 +364,15 @@
   </data>
   <data name="Check" xml:space="preserve">
     <value>✅</value>
+  </data>
+  <data name="OnTheWayAcknowledgement" xml:space="preserve">
+    <value>🚗 Понял! Вы в пути.
+
+            📅 Ожидаемое прибытие: {0}
+            💬 Причина: {1}
+            
+Мы свяжемся с вами около {0}, чтобы подтвердить ваше прибытие.
+Счастливого пути! 🚗💨
+    </value>
   </data>
 </root>

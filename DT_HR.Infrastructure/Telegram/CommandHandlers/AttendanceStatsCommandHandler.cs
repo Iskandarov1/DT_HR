@@ -45,15 +45,22 @@ public class AttendanceStatsCommandHandler(
 
         var report =
             await reportService.GetDailyAttendanceReport(DateOnly.FromDateTime(TimeUtils.Now), cancellationToken);
-
-        var text = $"📊 *Attendance Statistics*\n" +
+        
+        var title = localization.GetString(ResourceKeys.AttendanceStats, language);
+        var totalText = localization.GetString(ResourceKeys.TotalEmployees, language);
+        var presentText = localization.GetString(ResourceKeys.Present, language);
+        var lateText = localization.GetString(ResourceKeys.Late, language);
+        var absentText = localization.GetString(ResourceKeys.Absent, language);
+        var onTheWayText = localization.GetString(ResourceKeys.OnTheWay, language);
+        
+        var text = $"*{title}*\n" +
                    $"📅 *{report.Date.ToString("yyyy-MM-dd")}*\n" +
-                   $"━━━━━━━━━━━━━━━━━━━━━━━━\n\n" +
-                   $"👥 *Total Employees:* `{report.TotalEmployees}`\n\n" +
-                   $"✅ *Present:* `{report.Present}`\n" +
-                   $"⏰ *Late:* `{report.Late}`\n" +
-                   $"❌ *Absent:* `{report.Absent}`\n" +
-                   $"🚗 *On The Way:* `{report.OnTheWay}`\n\n" +
+                   $"━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+                   $"👥 *{totalText}:* `{report.TotalEmployees}`\n\n" +
+                   $"✅ *{presentText}:* `{report.Present}`\n" +
+                   $"⏰ *{lateText}:* `{report.Late}`\n" +
+                   $"❌ *{absentText}:* `{report.Absent}`\n" +
+                   $"🚗 *{onTheWayText}:* `{report.OnTheWay}`\n\n" +
                    $"━━━━━━━━━━━━━━━━━━━━━━━━\n";
 
         await messageService.SendTextMessageAsync(chatId, text, cancellationToken: cancellationToken);

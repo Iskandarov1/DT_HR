@@ -10,6 +10,7 @@ public class EventCommandHandler(
     ITelegramMessageService messageService,
     IUserStateService stateService,
     ILocalizationService localization,
+    ITelegramKeyboardService keyboardService,
     IUserRepository userRepository,
     ILogger<EventCommandHandler> logger) : ITelegramService
 {
@@ -52,8 +53,10 @@ public class EventCommandHandler(
 
         state.Data["step"] = "description";
         await stateService.SetStateAsync(userId, state);
+        
         await messageService.SendTextMessageAsync(chatId,
             localization.GetString(ResourceKeys.EnterEventDescription, state.Language),
+            keyboardService.GetCancelKeyboard(state.Language),
             cancellationToken: cancellationToken);
     }
 }

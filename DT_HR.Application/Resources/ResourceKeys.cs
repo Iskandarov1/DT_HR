@@ -106,7 +106,7 @@ public static class ResourceKeys
     public const string EventCreated = "EventCreated";
     public const string EventReminder = "EventReminder";
 
-    public const string MyEvents = "MyEvents";
+    public const string MyEvents = "events";
     public const string NoEvents = "NoEvents";
     public const string OnlyManagersCanCreateEvents = "OnlyManagersCanCreateEvents";
     
@@ -126,6 +126,9 @@ public static class ResourceKeys
     public const string HolidayGreeting = "HolidayGreeting";
     
     public const string Check = "Check";
+    public const string OnTheWayAcknowledgement = "OnTheWayAcknowledgement";
+
+    
 
 
 

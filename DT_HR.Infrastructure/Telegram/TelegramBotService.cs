@@ -50,7 +50,9 @@ public class TelegramBotService : ITelegramBotService
         {
             serviceProvider.GetRequiredService<LanguageSelectionCallbackHandler>(),
             serviceProvider.GetRequiredService<AbsenceTypeCallbackHandler>(),
-            serviceProvider.GetRequiredService<OversleptETACallbackHandler>()
+            serviceProvider.GetRequiredService<OversleptETACallbackHandler>(),
+            serviceProvider.GetRequiredService<OversleptETACallbackHandler>(),
+            serviceProvider.GetRequiredService<CancelCallbackHandler>()
         };
 
     }

@@ -21,7 +21,7 @@ public class MyEventsCommandHandler (
         var state = await stateService.GetStateAsync(message.From!.Id);
         var language = state?.Language ?? await localization.GetUserLanguage(message.From!.Id);
         var text = message.Text.ToLower();
-        var eventsText = localization.GetString(ResourceKeys.MyEvents, language);
+        var eventsText = localization.GetString(ResourceKeys.MyEvents, language).ToLower();
             return text == "/events" || 
                    text == eventsText || 
                    text.Contains("events");

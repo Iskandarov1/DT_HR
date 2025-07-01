@@ -40,18 +40,8 @@ public class CheckOutCallbacks(
             var state = await stateService.GetStateAsync(data.TelegramUserId);
             var language = state?.Language ?? await localization.GetUserLanguage(data.TelegramUserId);
 
-            var checkOutFailed = language switch
-            {
-                "ru" => "Отметка ухода не удалась",
-                "en" => "Check-out failed",
-                _ => "Ishdan ketishni belgilash amalga oshmadi"
-            };
-            var tryAgain = language switch
-            {
-                "ru" => "Пожалуйста, попробуйте снова или обратитесь в поддержку",
-                "en" => "Please try again or contact support",
-                _ => "Iltimos, qaytadan urinib ko'ring yoki yordam xizmatiga murojaat qiling"
-            };
+            var checkOutFailed =  localization.GetString(ResourceKeys.CheckOutFailed, language);
+            var tryAgain = localization.GetString(ResourceKeys.TryAgain, language); 
             
             var message = $"{checkOutFailed}: {data.ErrorMessage} \n {tryAgain}";
             await botService.SendTextMessageAsync(data.TelegramUserId, message, cancellationToken);

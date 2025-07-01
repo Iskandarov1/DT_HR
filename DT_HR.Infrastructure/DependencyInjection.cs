@@ -61,6 +61,7 @@ public static class DependencyInjection
         services.AddScoped<LanguageSelectionCallbackHandler>();
         services.AddScoped<AbsenceTypeCallbackHandler>();
         services.AddScoped<OversleptETACallbackHandler>();
+        services.AddScoped<CancelCallbackHandler>();
         
         services.AddHostedService<WebhookConfigurationService>();
         services.AddHostedService<TelegramPollingService>();

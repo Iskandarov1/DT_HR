@@ -99,12 +99,25 @@ public class BackgroundTaskJobs(
 
         var report =
             await reportService.GetDailyAttendanceReport(DateOnly.FromDateTime(TimeUtils.Now), cancellationToken);
-        var text = $"*{report.Date:yyyy-MM-dd}*\n" +
-                   $"Total: {report.TotalEmployees}\n" +
-                   $"Present: {report.Present}\nLate: {report.Late}\n" +
-                   $"Absent: {report.Absent}\nOn The Way: {report.OnTheWay}";
+        
         foreach (var manager in managers)
         {
+            var lang = manager.Language;
+            var title = localization.GetString(ResourceKeys.AttendanceStats, lang);
+            var total = localization.GetString(ResourceKeys.TotalEmployees, lang);
+            var present = localization.GetString(ResourceKeys.Present, lang);
+            var late = localization.GetString(ResourceKeys.Late, lang);
+            var absent = localization.GetString(ResourceKeys.Absent, lang);
+            var onTheWay = localization.GetString(ResourceKeys.OnTheWay, lang);
+            
+            var text = $"*{title}*\n" +
+                       $"📅 *{report.Date:yyyy-MM-dd}*\n" +
+                       $"{total}: {report.TotalEmployees}\n" +
+                       $"{present}: {report.Present}\n" +
+                       $"{late}: {report.Late}\n" +
+                       $"{absent}: {report.Absent}\n" +
+                       $"{onTheWay}: {report.OnTheWay}";
+            
             await messageService.SendTextMessageAsync(manager.TelegramUserId, text,
                 cancellationToken: cancellationToken);
         }
@@ -137,9 +150,10 @@ public class BackgroundTaskJobs(
                     var language = await localization.GetUserLanguage(user.TelegramUserId);
                     var localEventTime = eventTime.AddHours(5);
                     
-                    var text = $"🔔 *Event Reminder*\n\n" +
-                              $"📅 Event: {description}\n" +
-                              $"⏰ Time: {localEventTime:yyyy-MM-dd HH:mm}";
+                    var title = localization.GetString(ResourceKeys.EventReminder, language);
+                    var text = $"🔔 *{title}*\n\n" +
+                               $"📅 {description}\n" +
+                               $"⏰ {localEventTime:yyyy-MM-dd HH:mm}";
                     
                     await messageService.SendTextMessageAsync(user.TelegramUserId, text, 
                         cancellationToken: cancellationToken);

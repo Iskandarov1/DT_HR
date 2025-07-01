@@ -169,7 +169,7 @@
     <value>🤒 Kasal/Kelmayman</value>
   </data>
   <data name="OnTheWay" xml:space="preserve">
-    <value>🚗 Yo'ldaman</value>
+    <value>Yo'lda</value>
   </data>
   <data name="Overslept" xml:space="preserve">
     <value>😴 Uxlab qoldim</value>
@@ -319,7 +319,7 @@
   <data name="EventReminder" xml:space="preserve">
     <value>Tadbir eslatmasi</value>
   </data>
-  <data name="MyEvents" xml:space="preserve">
+  <data name="events" xml:space="preserve">
     <value>📅 Tadbirlarim</value>
   </data>
   <data name="NoEvents" xml:space="preserve">
@@ -364,6 +364,17 @@
   
   <data name="Check" xml:space="preserve">
     <value>✅</value>
+  </data>
+  
+  <data name="OnTheWayAcknowledgement" xml:space="preserve">
+    <value>🚗 Qabul qilindi!
+
+            📅 Taxminiy kelish vaqti: {0}
+            💬 Sabab: {1}
+          
+{0} atrofida yetib kelganingizni tasdiqlash uchun siz bilan bog'lanamiz.
+Xavfsiz sayohat! 🚗💨
+    </value>
   </data>
   
   

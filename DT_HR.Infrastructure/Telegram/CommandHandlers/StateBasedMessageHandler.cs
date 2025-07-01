@@ -17,6 +17,7 @@ namespace DT_HR.Infrastructure.Telegram.CommandHandlers;
 public class StateBasedMessageHandler(
     IUserStateService  stateService,
     ITelegramMessageService messageService,
+    ITelegramKeyboardService keyboardService,
     IMediator mediator,
     ILogger<StateBasedMessageHandler> logger,
     ILocalizationService localizationService,
@@ -177,6 +178,17 @@ public class StateBasedMessageHandler(
         }
         
         var text = message.Text?.Trim() ?? string.Empty;
+        
+        if (text.Equals(localizationService.GetString(ResourceKeys.Cancel, language), StringComparison.OrdinalIgnoreCase))
+        {
+            await stateService.RemoveStateAsync(userId);
+            await messageService.ShowMainMenuAsync(chatId,
+                localizationService.GetString(ResourceKeys.Cancel, language),
+                language,
+                cancellationToken: cancellationToken);
+            return;
+        }
+        
         var step = state.Data.TryGetValue("step", out var s) ? s?.ToString() : "description";
 
         if (step == "description")
@@ -186,6 +198,7 @@ public class StateBasedMessageHandler(
             await stateService.SetStateAsync(userId, state);
             await messageService.SendTextMessageAsync(chatId,
                 localizationService.GetString(ResourceKeys.EnterEventTime, language),
+                keyboardService.GetCancelKeyboard(language),
                 cancellationToken: cancellationToken);
             return;
         }
@@ -267,6 +280,16 @@ public class StateBasedMessageHandler(
         var userId = message.From!.Id;
         var chatId = message.Chat.Id;
         var text = message.Text?.Trim() ?? "";
+        
+        if (text.Equals(localizationService.GetString(ResourceKeys.Cancel, language), StringComparison.OrdinalIgnoreCase))
+        {
+            await stateService.RemoveStateAsync(userId);
+            await messageService.ShowMainMenuAsync(chatId,
+                localizationService.GetString(ResourceKeys.Cancel, language),
+                language,
+                cancellationToken: cancellationToken);
+            return;
+        }
 
         DateTime? estimatedArrivalTime = null;
         string reason = text;

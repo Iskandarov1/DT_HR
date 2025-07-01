@@ -35,6 +35,7 @@ public class Attendance : AggregateRoot
         this.CheckInTime = TimeUtils.Now;
         this.CheckInLatitude = latitute;
         this.CheckInLongitude = longtitude;
+        this.IsWithInOfficeRadius = isWithinRadius;
         this.Status = AttendanceStatus.Present.Value;
         return this;
     }

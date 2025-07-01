@@ -1,9 +1,12 @@
 using DT_HR.Application.Core.Abstractions.Common;
 using DT_HR.Application.Core.Abstractions.Data;
 using DT_HR.Application.Core.Abstractions.Messaging;
+using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Application.Resources;
 using DT_HR.Contract.CallbackData.Attendance;
 using DT_HR.Domain.Core;
 using DT_HR.Domain.Core.Errors;
+using DT_HR.Domain.Core.Primitives;
 using DT_HR.Domain.Core.Primitives.Result;
 using DT_HR.Domain.Repositories;
 
@@ -14,6 +17,7 @@ public class CheckInCommandHandler(
     IUserRepository userRepository, 
     IAttendanceRepository attendanceRepository,
     IInputHandler<CheckInCommand> inputHandler,
+    ILocalizationService localizationService,
     ICheckInCallbacks checkInCallbacks) : ICommandHandler<CheckInCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(CheckInCommand request, CancellationToken cancellationToken)
@@ -40,6 +44,18 @@ public class CheckInCommandHandler(
 
         var isWithInRadius =
             await checkInCallbacks.ValidateLocationAsync(request.Latitude, request.Longitude, cancellationToken);
+
+        if (!isWithInRadius)
+        {
+            var lang = await localizationService.GetUserLanguage(request.TelegramUserId);
+            await checkInCallbacks.OnCheckInFailureAsync(new CheckInFailureDate(
+                request.TelegramUserId,
+                "invalid_location",
+                localizationService.GetString(ResourceKeys.OutsideOfficeRadius, lang),
+                TimeUtils.Now),cancellationToken);
+
+            return Result.Failure<Guid>(new Error("invalid_location", "Outside office radius"));
+        }
         
         try
         {

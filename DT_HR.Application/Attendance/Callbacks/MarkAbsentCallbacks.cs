@@ -43,16 +43,15 @@ public class MarkAbsentCallbacks(
                 data.TelegramUserId,
                 followUpTime,
                 cancellationToken);
-    
-            var message = $"""
-                           🚗 **Got it!** You're on your way.
-
-                           📅 Expected arrival: {data.EstimatedArrivalTime:HH:mm}
-                           💬 Reason: {data.AbsenceReason}
-
-                           We'll check with you around {data.EstimatedArrivalTime:HH:mm} to confirm your arrival.
-                           Safe travels! 🚗💨
-                           """;
+            
+            var state = await stateService.GetStateAsync(data.TelegramUserId);
+            var language = state?.Language ?? await localization.GetUserLanguage(data.TelegramUserId);
+            var message = localization.GetString(
+                ResourceKeys.OnTheWayAcknowledgement, 
+                language,
+                data.EstimatedArrivalTime.ToString("HH:mm"),
+                data.AbsenceReason);
+            
             await telegramBotService.SendTextMessageAsync(data.TelegramUserId, message, cancellationToken);
             
             logger.LogInformation("Follow up scheduled for user {TelegramUserId} at {followUpTime}",

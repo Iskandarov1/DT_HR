@@ -69,7 +69,16 @@ public class AttendanceDetailsCommandHandler(
         foreach (var statusGroup in groupedByStatus)
         {
             var statusEmoji = GetStatusEmoji(statusGroup.Key);
-            sb.AppendLine($"{statusEmoji} *{statusGroup.Key.ToUpper()}* ({statusGroup.Count()})");
+            var statusTitle = statusGroup.Key.ToLower() switch
+            {
+                "present" => localization.GetString(ResourceKeys.Present, language),
+                "late" => localization.GetString(ResourceKeys.Late, language),
+                "on the way" => localization.GetString(ResourceKeys.OnTheWay, language),
+                "absent" => localization.GetString(ResourceKeys.Absent, language),
+                _ => statusGroup.Key
+            };
+            
+            sb.AppendLine($"{statusEmoji} *{statusTitle}* ({statusGroup.Count()})");
             sb.AppendLine($"┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈");
             
             foreach (var item in statusGroup.OrderBy(x => x.Name))
@@ -79,7 +88,7 @@ public class AttendanceDetailsCommandHandler(
                 var lateIndicator = item.IsLate == true ? " ⏰" : "";
                 
                 sb.AppendLine($"👤 `{item.Name}`{lateIndicator}");
-                sb.AppendLine($" 🕐 In: `{checkIn}` | Out: `{checkOut}`");
+                sb.AppendLine($"🕐 In: `{checkIn}` | Out: `{checkOut}`");
                 sb.AppendLine();
             }
         }
