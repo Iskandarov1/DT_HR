@@ -97,7 +97,7 @@
     <value>✍️ Ввести номер телефона</value>
   </data>
   <data name="WhatWouldYouLikeToDo" xml:space="preserve">
-    <value>Что бы вы хотели сделать сегодня?</value>
+    <value>что бы вы хотели делать дальше?</value>
   </data>
   
   <data name="PleaseEnterPhoneNumber" xml:space="preserve">

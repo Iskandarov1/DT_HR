@@ -23,8 +23,8 @@ public class User : AggregateRoot
         this.LastName = lastName;
         this.Email = "";
         this.Role = UserRole.Employee.Value;
-        this.WorkStartTime = new TimeOnly(21, 0);
-        this.WorkEndTime = new TimeOnly(23, 0);
+        this.WorkStartTime = new TimeOnly(11, 0);
+        this.WorkEndTime = new TimeOnly(19, 0);
         IsActive = true;
         this.Language = language;
     }

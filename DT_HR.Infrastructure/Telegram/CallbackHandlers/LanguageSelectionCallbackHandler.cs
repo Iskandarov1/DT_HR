@@ -47,6 +47,8 @@ public class LanguageSelectionCallbackHandler(
                 await messageService.EditMessageTextAsync(chatId, messageId,
                     localization.GetString(ResourceKeys.Check, selectedLanguage),
                     cancellationToken: cancellationToken);
+                await messageService.ShowMainMenuAsync(chatId,localization.GetString(ResourceKeys.WhatWouldYouLikeToDo,selectedLanguage),  selectedLanguage, user.IsManager(),
+                    cancellationToken);
 
             }
             else
