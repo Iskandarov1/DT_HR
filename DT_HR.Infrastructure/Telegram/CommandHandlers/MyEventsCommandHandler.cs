@@ -45,7 +45,7 @@ public class MyEventsCommandHandler (
         {
             await messageService.SendTextMessageAsync(chatId, localization.GetString(ResourceKeys.NoEvents, langauge),
                 cancellationToken: cancellationToken);
-            await messageService.ShowMainMenuAsync(chatId, localization.GetString(ResourceKeys.MyEvents, langauge),
+            await messageService.ShowMainMenuAsync(chatId, 
                 langauge,
                 cancellationToken: cancellationToken);
             
@@ -66,7 +66,8 @@ public class MyEventsCommandHandler (
 
         await messageService.SendTextMessageAsync(chatId, sb.ToString(), cancellationToken: cancellationToken);
 
-        await messageService.ShowMainMenuAsync(chatId, localization.GetString(ResourceKeys.MyEvents, langauge),
+        await messageService.ShowMainMenuAsync(
+            chatId, 
             langauge,
             cancellationToken: cancellationToken);
 

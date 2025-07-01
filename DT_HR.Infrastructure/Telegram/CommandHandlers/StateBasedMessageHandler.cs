@@ -64,7 +64,6 @@ public class StateBasedMessageHandler(
                 await stateService.RemoveStateAsync(userId);
                 await messageService.ShowMainMenuAsync(
                     chatId,
-                    localizationService.GetString(ResourceKeys.ErrorOccurred,language), 
                     language,
                     cancellationToken:cancellationToken);
                 break;
@@ -122,7 +121,6 @@ public class StateBasedMessageHandler(
                     cancellationToken: cancellationToken);
                 await messageService.ShowMainMenuAsync(
                     chatId,
-                    localizationService.GetString(ResourceKeys.WhatWouldYouLikeToDo,language), 
                     language,
                     cancellationToken:cancellationToken);
             }
@@ -171,8 +169,8 @@ public class StateBasedMessageHandler(
         if (maybeUser.HasNoValue || !maybeUser.Value.IsManager())
         {
             await stateService.RemoveStateAsync(userId);
-            await messageService.ShowMainMenuAsync(chatId,
-                localizationService.GetString(ResourceKeys.OnlyManagersCanCreateEvents, language), language,
+            await messageService.ShowMainMenuAsync(chatId
+                , language,
                 cancellationToken: cancellationToken);
             return;
         }
@@ -183,7 +181,6 @@ public class StateBasedMessageHandler(
         {
             await stateService.RemoveStateAsync(userId);
             await messageService.ShowMainMenuAsync(chatId,
-                localizationService.GetString(ResourceKeys.Cancel, language),
                 language,
                 cancellationToken: cancellationToken);
             return;
@@ -233,14 +230,12 @@ public class StateBasedMessageHandler(
             }
 
             await messageService.ShowMainMenuAsync(chatId,
-                localizationService.GetString(ResourceKeys.EventCreated, language),
                 language,
                 cancellationToken: cancellationToken);
         }
         else
         {
             await messageService.ShowMainMenuAsync(chatId,
-                localizationService.GetString(ResourceKeys.ErrorOccurred, language),
                 language,
                 cancellationToken: cancellationToken);
         }
@@ -285,7 +280,6 @@ public class StateBasedMessageHandler(
         {
             await stateService.RemoveStateAsync(userId);
             await messageService.ShowMainMenuAsync(chatId,
-                localizationService.GetString(ResourceKeys.Cancel, language),
                 language,
                 cancellationToken: cancellationToken);
             return;
@@ -372,13 +366,13 @@ public class StateBasedMessageHandler(
         {
             await messageService.ShowMainMenuAsync(
                 chatId, 
-                localizationService.GetString(ResourceKeys.AbsenceRecorded ,language),language,
+                language,
                 cancellationToken:cancellationToken);
         }
         else
         {
             await messageService.ShowMainMenuAsync(
-                chatId, $"{localizationService.GetString(ResourceKeys.ErrorOccurred,language)}:{result.Error.Message}",
+                chatId, 
                 language,
                 cancellationToken:cancellationToken);
         }

@@ -146,7 +146,6 @@ public class TelegramBotService : ITelegramBotService
         var language = state?.Language ?? await _localization.GetUserLanguage(userId);
         await _messageService.ShowMainMenuAsync(
             message.Chat.Id,
-            _localization.GetString(ResourceKeys.PleaseSelectFromMenu,language),
             language,
             cancellationToken:cancellationToken);
     }
@@ -187,7 +186,6 @@ public class TelegramBotService : ITelegramBotService
             var language = state?.Language ?? await _localization.GetUserLanguage(chatId);
             await _messageService.ShowMainMenuAsync(
                 chatId, 
-                _localization.GetString(ResourceKeys.ErrorOccurred,language),
                 language,
                 cancellationToken:cancellationToken);
 

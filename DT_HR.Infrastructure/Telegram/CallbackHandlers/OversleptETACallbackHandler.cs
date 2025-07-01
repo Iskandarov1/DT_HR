@@ -71,16 +71,13 @@ public class OversleptETACallbackHandler (
             if (result.IsSuccess)
             {
                 await messageService.ShowMainMenuAsync(
-                    chatId, 
-                    localization.GetString(ResourceKeys.AbsenceRecorded,language),
-                    language,
+                    chatId,language,
                     cancellationToken:cancellationToken);
             }
             else
             {
                 await messageService.ShowMainMenuAsync(
-                    chatId, $"{localization.GetString(ResourceKeys.ErrorOccurred,language)}: {result.Error.Message}",
-                    language, 
+                    chatId, language, 
                     cancellationToken:cancellationToken);
             }
             

@@ -38,7 +38,6 @@ public class EventCommandHandler(
         {
             var language = await localization.GetUserLanguage(userId);
             await messageService.ShowMainMenuAsync(chatId,
-                localization.GetString(ResourceKeys.OnlyManagersCanCreateEvents, language), 
                 language,
                 cancellationToken: cancellationToken);
             return;

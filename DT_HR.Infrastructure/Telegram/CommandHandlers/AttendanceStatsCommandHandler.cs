@@ -68,7 +68,6 @@ public class AttendanceStatsCommandHandler(
 
         await messageService.ShowMainMenuAsync(
             chatId,
-            localization.GetString(ResourceKeys.AttendanceStats, language),
             language, 
             isManager:true,
             cancellationToken : cancellationToken);

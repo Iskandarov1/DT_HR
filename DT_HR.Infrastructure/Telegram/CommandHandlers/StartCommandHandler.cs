@@ -60,11 +60,8 @@ public class StartCommandHandler(
                 chatId,
                 welcomeBack,
                 cancellationToken:cancellationToken);
-            var whatWouldYouLikeToDo =
-                localizationService.GetString(ResourceKeys.WhatWouldYouLikeToDo, language);
-            await messageService.ShowMainMenuAsync(
-                chatId, 
-                whatWouldYouLikeToDo,
+           await messageService.ShowMainMenuAsync(
+                chatId,
                 language,
                 cancellationToken:cancellationToken);
         }

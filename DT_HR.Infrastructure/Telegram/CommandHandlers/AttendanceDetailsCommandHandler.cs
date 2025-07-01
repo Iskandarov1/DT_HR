@@ -103,7 +103,6 @@ public class AttendanceDetailsCommandHandler(
             cancellationToken: cancellationToken);
         await messageService.ShowMainMenuAsync(
             chatId, 
-            localization.GetString(ResourceKeys.AttendanceDetails,language),
             language, 
             isManager:true,
             cancellationToken:cancellationToken);

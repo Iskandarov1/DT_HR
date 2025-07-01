@@ -27,8 +27,7 @@ public class CancelCallbackHandler(
         await userState.RemoveStateAsync(userId);
         await messageService.AnswerCallbackQueryAsync(callbackQuery.Id, cancellationToken: cancellationToken);
         await messageService.ShowMainMenuAsync(
-            chatId, 
-            localization.GetString(ResourceKeys.Cancel, language), 
+            chatId,
             language,
             cancellationToken: cancellationToken);
     }

@@ -90,11 +90,19 @@ public class TelegramMessageService(
         }
     }
 
-    public async Task ShowMainMenuAsync(long chatId, string text,string language,bool? isManager = null, CancellationToken cancellationToken = default)
+ 
+
+    public async Task ShowMainMenuAsync(long chatId,string language,bool? isManager = null, CancellationToken cancellationToken = default)
     {
         var maybeUser = await userRepository.GetByTelegramUserIdAsync(chatId, cancellationToken);
         var managerFlag = isManager ?? (maybeUser.HasValue && maybeUser.Value.IsManager());
         var keyboard = keyboardService.GetMainMenuKeyboard(language,managerFlag);
-        await SendTextMessageAsync(chatId, text,replyMarkup:keyboard,cancellationToken:cancellationToken);
+        var menuText = language switch
+        {
+            "ru" => "📋 Главное меню:",
+            "en" => "📋 Main Menu:",
+            _ => "📋 Asosiy menyu:"
+        };
+        await SendTextMessageAsync(chatId,menuText,replyMarkup:keyboard,cancellationToken:cancellationToken);
     }
 }

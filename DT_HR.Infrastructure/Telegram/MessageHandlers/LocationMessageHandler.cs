@@ -42,16 +42,14 @@ public class LocationMessageHandler(
             if (result.IsSuccess)
             {
                 await messageService.ShowMainMenuAsync(
-                    chatId, 
-                    checkInPrompt,
+                    chatId,
                     language,
                     cancellationToken:cancellationToken);
             }
             else
             {
                 await messageService.ShowMainMenuAsync(
-                    chatId, 
-                    checkInFailPrompt,
+                    chatId,
                     language,
                     cancellationToken:cancellationToken);
             }
