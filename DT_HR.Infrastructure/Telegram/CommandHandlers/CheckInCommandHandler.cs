@@ -1,5 +1,8 @@
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
+using DT_HR.Domain.Core;
+using DT_HR.Domain.Enumeration;
+using DT_HR.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
 
@@ -9,6 +12,8 @@ public class CheckInCommandHandler(
     ITelegramMessageService messageService,
     IUserStateService stateService,
     ILocalizationService localization,
+    IAttendanceRepository attendanceRepository,
+    IUserRepository userRepository,
     ILogger<CheckInCommandHandler> logger) : ITelegramService
 {
     public async Task<bool> CanHandleAsync(Message message, CancellationToken cancellationToken = default)
@@ -31,6 +36,39 @@ public class CheckInCommandHandler(
         var chatId = message.Chat.Id;
         var currentState = await stateService.GetStateAsync(userId);
         var language = currentState?.Language ?? await localization.GetUserLanguage(message.From!.Id);
+
+        var user = await userRepository.GetByTelegramUserIdAsync(userId, cancellationToken);
+        if (user.HasValue)
+        {
+            var today = DateOnly.FromDateTime(TimeUtils.Now);
+            var attendance =
+                await attendanceRepository.GetByUserAndDateAsync(user.Value.Id, today,
+                    cancellationToken);
+
+            if (attendance.HasValue)
+            {
+                if (attendance.Value.CheckInTime.HasValue)
+                {
+                    await messageService.SendTextMessageAsync(chatId,
+                        localization.GetString(ResourceKeys.AlreadyCheckedIn, language),
+                        cancellationToken: cancellationToken);
+                    return;
+
+                }
+
+
+                if (attendance.Value.Status == AttendanceStatus.Absent.Value ||
+                    attendance.Value.Status == AttendanceStatus.OnTheWay.Value)
+                {
+                    await messageService.SendTextMessageAsync(chatId,
+                        localization.GetString(ResourceKeys.AlreadyReportedAbsence, language),
+                        cancellationToken: cancellationToken);
+                    await messageService.ShowMainMenuAsync(chatId, language, cancellationToken: cancellationToken);
+                    return;
+                }
+            }
+
+        }
         
         logger.LogInformation("Processing check-in command  for the user {UserId}",userId);
 

@@ -146,7 +146,7 @@
     <value>Отметка прихода выполнена! Что бы вы хотели сделать дальше?</value>
   </data>
   <data name="CheckInFailed" xml:space="preserve">
-    <value>Отметка прихода не удалась: {0}</value>
+    <value>Отметка прихода не удалась:</value>
   </data>
   <data name="LocationReceived" xml:space="preserve">
     <value>📍 Местоположение получено, но никаких действий не ожидалось. Используйте /checkin для отметки прихода.</value>
@@ -156,7 +156,7 @@
     <value>Отметка ухода выполнена! Хорошего дня!</value>
   </data>
   <data name="CheckOutFailed" xml:space="preserve">
-    <value>Отметка ухода не удалась: {0}</value>
+    <value>Отметка ухода не удалась:</value>
   </data>
   
   <data name="ReportAbsenceTitle" xml:space="preserve">
@@ -374,5 +374,20 @@
 Мы свяжемся с вами около {0}, чтобы подтвердить ваше прибытие.
 Счастливого пути! 🚗💨
     </value>
+  </data>
+  <data name="AlreadyCheckedIn" xml:space="preserve">
+    <value>Вы уже отметились сегодня.</value>
+  </data>
+  <data name="AlreadyReportedAbsence" xml:space="preserve">
+    <value>Вы уже сообщили об отсутствии сегодня.</value>
+  </data>
+  <data name="AlreadyCheckedOut" xml:space="preserve">
+    <value>Вы уже отметились об уходе сегодня.</value>
+  </data>
+  <data name="CheckInFirstBeforeCheckOut" xml:space="preserve">
+    <value>Сначала отметьтесь о приходе, затем об уходе.</value>
+  </data>
+  <data name="PleaseCheckInFirst" xml:space="preserve">
+    <value>Сначала отметьтесь о приходе.</value>
   </data>
 </root>

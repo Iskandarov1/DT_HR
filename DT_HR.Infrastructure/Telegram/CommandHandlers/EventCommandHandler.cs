@@ -53,9 +53,10 @@ public class EventCommandHandler(
         state.Data["step"] = "description";
         await stateService.SetStateAsync(userId, state);
         
-        await messageService.SendTextMessageAsync(chatId,
+        await messageService.SendTextMessageAsync(
+            chatId,
             localization.GetString(ResourceKeys.EnterEventDescription, state.Language),
-            keyboardService.GetCancelKeyboard(state.Language),
+            keyboardService.GetCancelInlineKeyboard(state.Language),
             cancellationToken: cancellationToken);
     }
 }

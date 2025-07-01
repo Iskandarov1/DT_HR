@@ -146,7 +146,7 @@
     <value>Check-in completed! What would you like to do next?</value>
   </data>
   <data name="CheckInFailed" xml:space="preserve">
-    <value>Check-in failed: {0}</value>
+    <value>Check-in failed: </value>
   </data>
   <data name="LocationReceived" xml:space="preserve">
     <value>📍 Location received but no action was pending. Use /checkin to check in.</value>
@@ -156,7 +156,7 @@
     <value>Check-out completed!</value>
   </data>
   <data name="CheckOutFailed" xml:space="preserve">
-    <value>Check-out failed: {0}</value>
+    <value>Check-out failed: </value>
   </data>
   
   <data name="ReportAbsenceTitle" xml:space="preserve">
@@ -378,6 +378,22 @@
 We'll check with you around {0} to confirm your arrival.
 Safe travels! 🚗💨
     </value>
+  </data>
+  
+  <data name="AlreadyCheckedIn" xml:space="preserve">
+    <value>You have already checked in today.</value>
+  </data>
+  <data name="AlreadyReportedAbsence" xml:space="preserve">
+    <value>You have already reported your absence today.</value>
+  </data>
+  <data name="AlreadyCheckedOut" xml:space="preserve">
+    <value>You have already checked out today.</value>
+  </data>
+  <data name="CheckInFirstBeforeCheckOut" xml:space="preserve">
+    <value>You must check in first before checking out.</value>
+  </data>
+  <data name="PleaseCheckInFirst" xml:space="preserve">
+    <value>Please check in first.</value>
   </data>
   
 </root>

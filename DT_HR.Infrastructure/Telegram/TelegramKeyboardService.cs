@@ -199,4 +199,16 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
             OneTimeKeyboard = true
         };
     }
+
+    public InlineKeyboardMarkup GetCancelInlineKeyboard(string language = "uz")
+    {
+        return new InlineKeyboardMarkup(new[]
+        {
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.Cancel, language),
+                    "action:cancel")
+            }
+        });
+    }
 }

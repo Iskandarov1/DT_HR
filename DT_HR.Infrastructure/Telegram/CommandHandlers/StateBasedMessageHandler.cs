@@ -195,7 +195,7 @@ public class StateBasedMessageHandler(
             await stateService.SetStateAsync(userId, state);
             await messageService.SendTextMessageAsync(chatId,
                 localizationService.GetString(ResourceKeys.EnterEventTime, language),
-                keyboardService.GetCancelKeyboard(language),
+                keyboardService.GetCancelInlineKeyboard(language),
                 cancellationToken: cancellationToken);
             return;
         }

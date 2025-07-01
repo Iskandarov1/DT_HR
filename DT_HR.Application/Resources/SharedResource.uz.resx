@@ -146,7 +146,7 @@
     <value>Ishga kelish belgilandi! Keyin nima qilmoqchisiz?</value>
   </data>
   <data name="CheckInFailed" xml:space="preserve">
-    <value>Ishga kelishni belgilash amalga oshmadi: {0}</value>
+    <value>Ishga kelishni belgilash amalga oshmadi:</value>
   </data>
   <data name="LocationReceived" xml:space="preserve">
     <value>📍 Joylashuv qabul qilindi, lekin hech qanday amal kutilmagan. Ishga kelishni belgilash uchun /checkin buyrug'idan foydalaning.</value>
@@ -156,7 +156,7 @@
     <value>Ishdan ketish belgilandi! Yaxshi kun tilaymiz!</value>
   </data>
   <data name="CheckOutFailed" xml:space="preserve">
-    <value>Ishdan ketishni belgilash amalga oshmadi: {0}</value>
+    <value>Ishdan ketishni belgilash amalga oshmadi:</value>
   </data>
   
   <data name="ReportAbsenceTitle" xml:space="preserve">
@@ -169,7 +169,7 @@
     <value>🤒 Kasal/Kelmayman</value>
   </data>
   <data name="OnTheWay" xml:space="preserve">
-    <value>Yo'lda</value>
+    <value>🚗Yo'lda</value>
   </data>
   <data name="Overslept" xml:space="preserve">
     <value>😴 Uxlab qoldim</value>
@@ -376,6 +376,22 @@
 Xavfsiz sayohat! 🚗💨
     </value>
   </data>
+  <data name="AlreadyCheckedIn" xml:space="preserve">
+    <value>Siz bugun allaqachon kelganingizni belgilagansiz.</value>
+  </data>
+  <data name="AlreadyReportedAbsence" xml:space="preserve">
+    <value>Siz bugun allaqachon yo‘qligingizni xabar qilgansiz.</value>
+  </data>
+  <data name="AlreadyCheckedOut" xml:space="preserve">
+    <value>Siz bugun allaqachon ketganingizni belgilagansiz.</value>
+  </data>
+  <data name="CheckInFirstBeforeCheckOut" xml:space="preserve">
+    <value>Avval kelganingizni belgilab, keyin ketganingizni belgilang.</value>
+  </data>
+  <data name="PleaseCheckInFirst" xml:space="preserve">
+    <value>Iltimos, avval kelganingizni belgilang.</value>
+  </data>
+  
   
   
   

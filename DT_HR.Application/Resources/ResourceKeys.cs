@@ -127,6 +127,13 @@ public static class ResourceKeys
     
     public const string Check = "Check";
     public const string OnTheWayAcknowledgement = "OnTheWayAcknowledgement";
+    
+    
+    public const string AlreadyCheckedIn = "AlreadyCheckedIn";
+    public const string AlreadyReportedAbsence = "AlreadyReportedAbsence";
+    public const string AlreadyCheckedOut = "AlreadyCheckedOut";
+    public const string CheckInFirstBeforeCheckOut = "CheckInFirstBeforeCheckOut";
+    public const string PleaseCheckInFirst = "PleaseCheckInFirst";
 
     
 

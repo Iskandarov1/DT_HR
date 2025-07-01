@@ -1,6 +1,8 @@
 using DT_HR.Application.Core.Abstractions.Common;
 using DT_HR.Application.Core.Abstractions.Data;
 using DT_HR.Application.Core.Abstractions.Messaging;
+using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Application.Resources;
 using DT_HR.Contract.CallbackData.Attendance;
 using DT_HR.Domain.Core;
 using DT_HR.Domain.Core.Primitives;
@@ -15,6 +17,7 @@ public class MarkAbsentCommandHandler(
     IAttendanceRepository attendanceRepository,
     IUserRepository userRepository,
     IInputHandler<MarkAbsentCommand> inputHandler,
+    ILocalizationService localization,
     IMarkAbsentCallbacks callbacks) : ICommandHandler<MarkAbsentCommand,Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(MarkAbsentCommand request, CancellationToken cancellationToken)
@@ -50,11 +53,12 @@ public class MarkAbsentCommandHandler(
 
             if (attendance.Value.CheckInTime.HasValue)
             {
+                var lang = await localization.GetUserLanguage(request.TelegramUserId);
                 await callbacks.OnMarkAbsentFailureAsync(
                     new MarkAbsentFailureData(
                         request.TelegramUserId,
                         "Already_Cheked_In",
-                        "You have already checked in today, Cannot mark as absent.",
+                        localization.GetString(ResourceKeys.AlreadyCheckedIn,lang),
                         TimeUtils.Now
                     ),cancellationToken);
 
@@ -65,11 +69,12 @@ public class MarkAbsentCommandHandler(
             if (attendance.Value.Status == AttendanceStatus.Absent.Value ||
                 attendance.Value.Status == AttendanceStatus.OnTheWay.Value)
             {
+                var lang = await localization.GetUserLanguage(request.TelegramUserId);
                 await callbacks.OnMarkAbsentFailureAsync(
                     new MarkAbsentFailureData(
                         request.TelegramUserId,
                         "Already_Marked_Absent",
-                        "You have already reported your absence today",
+                        localization.GetString(ResourceKeys.AlreadyReportedAbsence,lang),
                         TimeUtils.Now), cancellationToken);
 
                 return Result.Failure<Guid>(new Error("Attendance.AlreadyMarkedAbsent",
@@ -107,11 +112,12 @@ public class MarkAbsentCommandHandler(
         }
         catch (Exception e)
         {
+            var lang = await localization.GetUserLanguage(request.TelegramUserId);
             await callbacks.OnMarkAbsentFailureAsync(
                 new MarkAbsentFailureData(
                     request.TelegramUserId,
                     "System_Error",
-                    "A system error occured while marking the absence",
+                    localization.GetString(ResourceKeys.ErrorOccurred,lang),
                     TimeUtils.Now
                 ), cancellationToken);
             throw;

@@ -67,11 +67,12 @@ public class CheckInCommandHandler(
 
             if (attandance.Value.CheckInTime.HasValue)
             {
+                var lang = await localizationService.GetUserLanguage(request.TelegramUserId);
                 await checkInCallbacks.OnCheckInFailureAsync(
                     new CheckInFailureDate(
                         request.TelegramUserId,
                         "Already_Checked_IN",
-                        "You have already checked in today",
+                        localizationService.GetString(ResourceKeys.AlreadyCheckedIn, lang),
                         TimeUtils.Now),cancellationToken);
 
                 return Result.Failure<Guid>(DomainErrors.Attendance.AlreadyChekedIn);
@@ -100,11 +101,12 @@ public class CheckInCommandHandler(
         
         catch (Exception ex)
         {
+            var lang = await localizationService.GetUserLanguage(request.TelegramUserId);
             await checkInCallbacks.OnCheckInFailureAsync(
                 new CheckInFailureDate(
                     request.TelegramUserId,
                     "System_Error",
-                    "A System error occured during check in",
+                    localizationService.GetString(ResourceKeys.ErrorOccurred, lang),
                     TimeUtils.Now),cancellationToken);
             throw;
         }
