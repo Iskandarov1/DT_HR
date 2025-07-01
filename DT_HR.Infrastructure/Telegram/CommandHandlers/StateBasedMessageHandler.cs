@@ -53,7 +53,7 @@ public class StateBasedMessageHandler(
                 await ProcessAbsenceReasonAsync(message, state, language,cancellationToken);
                 break;
             case UserAction.Registering:
-                await ProcessRegistrationAsync(message, language, cancellationToken);
+                await ProcessRegistrationAsync(message, state!, language, cancellationToken);
                 break;
             case UserAction.CreatingEvent:
                 await ProcessEventAsync(message, state, language, cancellationToken);
@@ -71,7 +71,7 @@ public class StateBasedMessageHandler(
 
     }
 
-    private async Task ProcessRegistrationAsync(Message message, string language, CancellationToken cancellationToken)
+    private async Task ProcessRegistrationAsync(Message message, UserState state,string language, CancellationToken cancellationToken)
     {
         var userId = message.From!.Id;
         var chatId = message.Chat.Id;
@@ -87,45 +87,77 @@ public class StateBasedMessageHandler(
             return;
         }
 
-        var phoneNumber = NormalizePhoneNumber(text);
-
-        if (!IsValidPhoneNumber(phoneNumber))
+        var step = state.Data.TryGetValue("step", out var s) ? s?.ToString() : "phone";
+        if (step == "birthday")
         {
-            await messageService.SendTextMessageAsync(chatId,
-                localizationService.GetString(ResourceKeys.InvalidPhoneFormat, language),
-                cancellationToken: cancellationToken);
-        }
+            if (!DateTime.TryParse(text,out var birthDate))
+            {
+                await messageService.SendTextMessageAsync(chatId,
+                    localizationService.GetString(ResourceKeys.InvalidDateFormat, language),
+                    cancellationToken: cancellationToken);
+                return;
+            }
 
-        var command = new RegisterUserCommand(
-            userId,
-            phoneNumber,
-            message.From.FirstName ?? "Unknown",
-            message.From.LastName ?? "",
-            language
-        );
+            var phone = state.Data["phone"]?.ToString() ?? String.Empty;
+            var firstName = state.Data["firstName"]?.ToString() ?? message.From.FirstName ?? "Unknown";
+            var lastName = state.Data["lastName"]?.ToString() ?? message.From.LastName ?? string.Empty;
 
-        var result = await mediator.Send(command, cancellationToken);
+            var command = new RegisterUserCommand(
+                userId,
+                phone,
+                firstName,
+                lastName,
+                DateOnly.FromDateTime(birthDate),
+                language);
 
-        await stateService.RemoveStateAsync(userId);
+            var result = await mediator.Send(command, cancellationToken);
 
-        if (result.IsSuccess)
-        {
-            await messageService.SendTextMessageAsync(chatId,
-                localizationService.GetString(ResourceKeys.RegistrationSuccessful, language),
-                cancellationToken: cancellationToken);
-            await messageService.ShowMainMenuAsync(
-                chatId,
-                localizationService.GetString(ResourceKeys.WhatWouldYouLikeToDo,language), 
-                language,
-                cancellationToken:cancellationToken);
+            await stateService.RemoveStateAsync(userId);
+            
+            if (result.IsSuccess)
+            {
+                await messageService.SendTextMessageAsync(chatId,
+                    localizationService.GetString(ResourceKeys.RegistrationSuccessful, language),
+                    cancellationToken: cancellationToken);
+                await messageService.ShowMainMenuAsync(
+                    chatId,
+                    localizationService.GetString(ResourceKeys.WhatWouldYouLikeToDo,language), 
+                    language,
+                    cancellationToken:cancellationToken);
+            }
+            else
+            {
+                await messageService.SendTextMessageAsync(
+                    chatId,
+                    localizationService.GetString(ResourceKeys.RegistrationFailed, language, result.Error.Message),
+                    cancellationToken: cancellationToken);
+            }
+
         }
         else
         {
-            await messageService.SendTextMessageAsync(
-                chatId,
-                localizationService.GetString(ResourceKeys.RegistrationFailed, language, result.Error.Message),
+            var phoneNumber = NormalizePhoneNumber(text);
+
+            if (!IsValidPhoneNumber(phoneNumber))
+            {
+                await messageService.SendTextMessageAsync(chatId,
+                    localizationService.GetString(ResourceKeys.InvalidPhoneFormat, language),
+                    cancellationToken: cancellationToken);
+            }
+            
+            state.Data["phone"] = phoneNumber;
+            state.Data["firstName"] = message.From.FirstName ?? "Unknown";
+            state.Data["lastName"] = message.From.LastName ?? "";
+            state.Data["step"] = "birthday";
+            await stateService.SetStateAsync(userId, state);
+
+            await messageService.SendTextMessageAsync(chatId,
+                localizationService.GetString(ResourceKeys.EnterBirthDate, language),
                 cancellationToken: cancellationToken);
+            
         }
+        
+       
     }
 
 

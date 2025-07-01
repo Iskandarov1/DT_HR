@@ -8,4 +8,5 @@ public sealed record RegisterUserCommand(
     string PhoneNumber,
     string FirstName,
     string LastName,
+    DateOnly BirthDate,
     string Language) : ICommand<Result<Guid>>;

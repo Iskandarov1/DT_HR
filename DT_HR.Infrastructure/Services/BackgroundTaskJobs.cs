@@ -193,5 +193,20 @@ public class BackgroundTaskJobs(
         logger.LogInformation("Holiday greetings sent for {Holiday}",holidayName);
     }
 
+    public async Task SendBirthdayGreetingsAsync(CancellationToken cancellationToken = default)
+    {
+        var today = DateOnly.FromDateTime(TimeUtils.Now);
+        var users = await userRepository.GetUsersWithBirthdayAsync(today, cancellationToken);
+        foreach (var user in users)
+        {
+            var lang = await localization.GetUserLanguage(user.TelegramUserId);
+            var text = localization.GetString(ResourceKeys.HappyBirthday, lang);
+            await messageService.SendTextMessageAsync(user.TelegramUserId, text, cancellationToken: cancellationToken);
+        }
+        if(users.Count > 0)
+            logger.LogInformation("Birthday greetings sent to {Count} users ",users.Count);
+        
+    }
+
 
 }

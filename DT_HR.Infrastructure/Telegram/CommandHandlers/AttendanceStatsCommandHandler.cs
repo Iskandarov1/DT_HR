@@ -45,7 +45,7 @@ public class AttendanceStatsCommandHandler(
 
         var report =
             await reportService.GetDailyAttendanceReport(DateOnly.FromDateTime(TimeUtils.Now), cancellationToken);
-        
+
         var text = $"📊 *Attendance Statistics*\n" +
                    $"📅 *{report.Date.ToString("yyyy-MM-dd")}*\n" +
                    $"━━━━━━━━━━━━━━━━━━━━━━━━\n\n" +
@@ -54,10 +54,10 @@ public class AttendanceStatsCommandHandler(
                    $"⏰ *Late:* `{report.Late}`\n" +
                    $"❌ *Absent:* `{report.Absent}`\n" +
                    $"🚗 *On The Way:* `{report.OnTheWay}`\n\n" +
-                   $"━━━━━━━━━━━━━━━━━━━━━━━━\n" +
-                   $"📈 *Attendance Rate:* `{(report.TotalEmployees > 0 ? Math.Round((double)(report.Present + report.Late) / report.TotalEmployees * 100, 1) : 0)}%`";
+                   $"━━━━━━━━━━━━━━━━━━━━━━━━\n";
 
         await messageService.SendTextMessageAsync(chatId, text, cancellationToken: cancellationToken);
+//                   $"📈 *Attendance Rate:* `{(report.TotalEmployees > 0 ? Math.Round((double)(report.Present + report.Late) / report.TotalEmployees * 100, 1) : 0)}%`";
 
         await messageService.ShowMainMenuAsync(
             chatId,

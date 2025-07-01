@@ -55,6 +55,7 @@ public class LanguageSelectionCallbackHandler(
             {
                 state.Language = selectedLanguage;
                 state.CurrentAction = UserAction.Registering;
+                state.Data["step"] = "phone";
                 await stateService.SetStateAsync(userId, state);
 
                 var keyboard = keyboardService.GetPhoneNumberOptionsKeyboard(selectedLanguage);
@@ -79,6 +80,7 @@ public class LanguageSelectionCallbackHandler(
             state ??= new UserState();
             state.Language = selectedLanguage;
             state.CurrentAction = UserAction.Registering;
+            state.Data["step"] = "phone";
             await stateService.SetStateAsync(userId, state);
 
 

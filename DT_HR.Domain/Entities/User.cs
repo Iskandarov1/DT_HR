@@ -14,6 +14,7 @@ public class User : AggregateRoot
     string phoneNumber ,
     string firstName,
     string lastName,
+    DateOnly birthday,
     string language = "uz"
     )
     {
@@ -23,10 +24,11 @@ public class User : AggregateRoot
         this.LastName = lastName;
         this.Email = "";
         this.Role = UserRole.Employee.Value;
-        this.WorkStartTime = new TimeOnly(11, 0);
+        this.WorkStartTime = new TimeOnly(13, 0);
         this.WorkEndTime = new TimeOnly(19, 0);
         IsActive = true;
         this.Language = language;
+        this.BirtDate = birthday;
     }
     
     [Column("telegramUser_id")] public long TelegramUserId { get; private set; }
@@ -38,6 +40,7 @@ public class User : AggregateRoot
     [Column("work_start_time")] public TimeOnly WorkStartTime { get;  set; }
     [Column("work_end_time")] public TimeOnly WorkEndTime { get;  set; }
     [Column("is_active")] public bool IsActive { get; private set; }
+    [Column("birth_date")] public DateOnly BirtDate { get; set; }
     [Column("language")] public string Language { get; private set; }
 
     public void Deactivate() => IsActive = false;
@@ -54,6 +57,11 @@ public class User : AggregateRoot
     public void SetLanguage(string language)
     {
         Language = language;
+    }
+
+    public void SetBirthday(DateOnly date)
+    {
+        BirtDate = date;
     }
 
 

@@ -46,6 +46,7 @@ public class RegisterUserCommandHandler(
             phoneNumberResult.Value,
             request.FirstName,
             request.LastName,
+            request.BirthDate,
             request.Language);
         
         userRepository.Insert(user);

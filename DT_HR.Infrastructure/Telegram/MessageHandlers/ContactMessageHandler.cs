@@ -29,35 +29,17 @@ public class ContactMessageHandler(
 
         if (state != null && state.CurrentAction == UserAction.Registering)
         {
-            await stateService.RemoveStateAsync(userId);
+            state.Data["phone"] = message.Contact.PhoneNumber;
+            state.Data["firstName"] = message.Contact.FirstName ?? message.From.FirstName ?? "Unknown";
+            state.Data["lastName"] = message.Contact.LastName ?? message.From.FirstName ?? "";
+            state.Data["step"] = "birthday";
+            await stateService.SetStateAsync(userId, state);
 
-            var command = new RegisterUserCommand(
-                userId,
-                message.Contact.PhoneNumber,
-                message.Contact.FirstName ?? message.From.FirstName ?? "Unknown",
-                message.Contact.LastName ?? message.From.LastName ?? "",
-                language);
+            await messageService.SendTextMessageAsync(chatId,
+                localization.GetString(ResourceKeys.EnterBirthDate, language),
+                cancellationToken: cancellationToken);
 
-            var result = await mediator.Send(command, cancellationToken);
 
-            if (result.IsSuccess)
-            {
-                await messageService.SendTextMessageAsync(
-                    chatId,
-                    localization.GetString(ResourceKeys.RegistrationSuccessful,language), 
-                    cancellationToken: cancellationToken);
-                await messageService.ShowMainMenuAsync(
-                    chatId, 
-                    localization.GetString(ResourceKeys.WhatWouldYouLikeToDo, language),
-                    language,
-                    cancellationToken:cancellationToken);
-            }
-            else
-            {
-                await messageService.SendTextMessageAsync(chatId,
-                    $"{localization.GetString(ResourceKeys.RegistrationFailed,language)}: {result.Error.Message}",
-                    cancellationToken: cancellationToken);
-            }
         }
         else
         {

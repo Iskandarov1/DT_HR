@@ -18,6 +18,11 @@ internal sealed class UserRepository(IDbContext dbContext) : GenericRepository<U
     public Task<List<User>> GetActiveUsersAsync(CancellationToken cancellationToken) =>
         DbContext.Set<User>().Where(u => u.IsActive).ToListAsync(cancellationToken);
 
+    public Task<List<User>> GetUsersWithBirthdayAsync(DateOnly date, CancellationToken cancellation = default) =>
+        DbContext.Set<User>()
+            .Where(u => u.IsActive && u.BirtDate.Month == date.Month && u.BirtDate.Day == date.Day)
+            .ToListAsync(cancellation);
+
     public Task<List<User>> GetManagersAsync(CancellationToken cancellationToken) =>
         DbContext.Set<User>()
             .Where(u => u.IsActive && u.Role == UserRole.Manager.Value)

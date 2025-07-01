@@ -79,7 +79,7 @@ public class AttendanceDetailsCommandHandler(
                 var lateIndicator = item.IsLate == true ? " ⏰" : "";
                 
                 sb.AppendLine($"👤 `{item.Name}`{lateIndicator}");
-                sb.AppendLine($"   🕐 In: `{checkIn}` | Out: `{checkOut}`");
+                sb.AppendLine($" 🕐 In: `{checkIn}` | Out: `{checkOut}`");
                 sb.AppendLine();
             }
         }

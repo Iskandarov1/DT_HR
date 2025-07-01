@@ -9,6 +9,7 @@ public interface IUserRepository
     Task<Maybe<User>> GetByTelegramUserIdAsync(long telegramUserId, CancellationToken cancellationToken);
     Task<Maybe<User>> GetByPhoneNumberAsync(string phoneNumber, CancellationToken cancellationToken);
     Task<List<User>> GetActiveUsersAsync(CancellationToken cancellationToken);
+    Task<List<User>> GetUsersWithBirthdayAsync(DateOnly date, CancellationToken cancellation = default);
     Task<List<User>> GetManagersAsync(CancellationToken cancellationToken);
     void Insert(User user);
     void Update(User user);
