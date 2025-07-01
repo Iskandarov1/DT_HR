@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.RegularExpressions;
 using DT_HR.Application.Attendance.Commands.MarkAbsent;
 using DT_HR.Application.Core.Abstractions.Services;
@@ -90,7 +91,7 @@ public class StateBasedMessageHandler(
         var step = state.Data.TryGetValue("step", out var s) ? s?.ToString() : "phone";
         if (step == "birthday")
         {
-            if (!DateTime.TryParse(text,out var birthDate))
+            if (!DateTime.TryParseExact(text,"dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var birthDate))
             {
                 await messageService.SendTextMessageAsync(chatId,
                     localizationService.GetString(ResourceKeys.InvalidDateFormat, language),
@@ -200,7 +201,7 @@ public class StateBasedMessageHandler(
             return;
         }
 
-        if (!DateTime.TryParse(text, out var localTime))
+        if (!DateTime.TryParseExact(text,"dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out var localTime))
         {
             await messageService.SendTextMessageAsync(chatId,
                 localizationService.GetString(ResourceKeys.InvalidTimeFormat, language),
@@ -225,7 +226,7 @@ public class StateBasedMessageHandler(
                 var displayTime = utcEventTime.AddHours(5);
                 var msg = $"🔔 *New Event Created*\n\n" +
                          $"📅 Event: {description}\n" +
-                         $"⏰ Time: {displayTime:yyyy-MM-dd HH:mm}";
+                         $"⏰ Time: {displayTime:dd-MM-yyyy HH:mm}";
                 await messageService.SendTextMessageAsync(u.TelegramUserId, msg, cancellationToken: cancellationToken);
             }
 

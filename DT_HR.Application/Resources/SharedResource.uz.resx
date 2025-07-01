@@ -311,7 +311,7 @@
     <value>Tadbiringiz haqida ma'lumot kiriting</value>
   </data>
   <data name="EnterEventTime" xml:space="preserve">
-    <value>Tadbir vaqtini kiriting (yyyy-MM-dd HH:mm)</value>
+    <value>Tadbir vaqtini kiriting (dd-MM-yyyy HH:mm)</value>
   </data>
   <data name="EventCreated" xml:space="preserve">
     <value>Tadbir saqlandi</value>
@@ -338,10 +338,10 @@
     <value>⏰ Taxminiy kelish vaqtingiz oʻtdi. Iltimos, kelganingizni tekshiring.</value>
   </data>
   <data name="EnterBirthDate" xml:space="preserve">
-    <value>Tug'ilgan kuningizni kiriting (yyyy-MM-dd)</value>
+    <value>Tug'ilgan kuningizni kiriting (dd-MM-yyyy)</value>
   </data>
   <data name="InvalidDateFormat" xml:space="preserve">
-    <value>❌ Sana formati noto'g'ri. yyyy-MM-dd shaklida kiriting.</value>
+    <value>❌ Sana formati noto'g'ri. dd-MM-yyyy shaklida kiriting.</value>
   </data>
   <data name="HappyBirthday" xml:space="preserve">
     <value>🎉 Tug'ilgan kuningiz muborak!</value>

@@ -311,7 +311,7 @@
     <value>Please enter the event description</value>
   </data>
   <data name="EnterEventTime" xml:space="preserve">
-    <value>Please enter the event time (yyyy-MM-dd HH:mm)</value>
+    <value>Please enter the event time (dd-MM-yyyy HH:mm)</value>
   </data>
   <data name="EventCreated" xml:space="preserve">
     <value>Event scheduled</value>
@@ -339,10 +339,10 @@
   </data>
   
   <data name="EnterBirthDate" xml:space="preserve">
-    <value>Please enter your birth date (yyyy-MM-dd)</value>
+    <value>Please enter your birth date (dd-MM-yyyy)</value>
   </data>
   <data name="InvalidDateFormat" xml:space="preserve">
-    <value>❌ Invalid date format. Please use yyyy-MM-dd.</value>
+    <value>❌ Invalid date format. Please use dd-MM-yyyy.</value>
   </data>
   <data name="HappyBirthday" xml:space="preserve">
     <value>🎉 Happy Birthday!</value>

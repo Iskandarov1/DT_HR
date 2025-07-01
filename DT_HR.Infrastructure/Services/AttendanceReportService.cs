@@ -15,7 +15,7 @@ public class AttendanceReportService(
     public async Task<AttendanceResponse> GetDailyAttendanceReport(DateOnly date, CancellationToken cancellationToken)
     {
         var query = from user in dbContext.Set<User>()
-                    where user.IsActive && !user.IsDelete && !user.IsManager()
+                    where user.IsActive && !user.IsDelete && user.Role != UserRole.Manager.Value
                     join attendance in dbContext.Set<Attendance>() on new { UserId = user.Id, Date = date } equals new
                         { attendance.UserId, attendance.Date } into attendances
                     from att in attendances.DefaultIfEmpty()
@@ -127,7 +127,7 @@ public class AttendanceReportService(
     public async Task<List<EmployeeAttendanceResponse>> GetDetailedAttendance(DateOnly date, CancellationToken cancellationToken)
     {
         var query = from user in dbContext.Set<User>()
-            where user.IsActive && !user.IsDelete && !user.IsManager()
+            where user.IsActive && !user.IsDelete && user.Role != UserRole.Manager.Value
             join attendance in dbContext.Set<Attendance>() on new { UserId = user.Id, Date = date } equals new
                 { attendance.UserId, attendance.Date } into attendances
             from att in attendances.DefaultIfEmpty()

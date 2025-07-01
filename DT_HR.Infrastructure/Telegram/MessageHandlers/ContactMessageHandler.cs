@@ -5,6 +5,7 @@ using DT_HR.Application.Users.Commands.RegisterUser;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace DT_HR.Infrastructure.Telegram.MessageHandlers;
 
@@ -27,19 +28,19 @@ public class ContactMessageHandler(
         var state = await stateService.GetStateAsync(userId);
         var language = state?.Language ?? "uz";
 
-        if (state != null && state.CurrentAction == UserAction.Registering)
+        if (state != null && state.CurrentAction == UserAction.Registering && 
+            state.Data.TryGetValue("step", out var step) && step?.ToString() == "phone")
         {
             state.Data["phone"] = message.Contact.PhoneNumber;
             state.Data["firstName"] = message.Contact.FirstName ?? message.From.FirstName ?? "Unknown";
-            state.Data["lastName"] = message.Contact.LastName ?? message.From.FirstName ?? "";
+            state.Data["lastName"] = message.Contact.LastName ?? message.From.FirstName ?? String.Empty;
             state.Data["step"] = "birthday";
             await stateService.SetStateAsync(userId, state);
 
             await messageService.SendTextMessageAsync(chatId,
                 localization.GetString(ResourceKeys.EnterBirthDate, language),
+                new ReplyKeyboardRemove(),
                 cancellationToken: cancellationToken);
-
-
         }
         else
         {

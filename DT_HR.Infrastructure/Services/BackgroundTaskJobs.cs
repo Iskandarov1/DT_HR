@@ -17,7 +17,6 @@ public class BackgroundTaskJobs(
 {
     public async Task SendCheckInReminderAsync(long telegramUserId, CancellationToken cancellationToken = default)
     {
-
         try
         {
             var maybeUser = await userRepository.GetByTelegramUserIdAsync(telegramUserId, cancellationToken);
@@ -32,12 +31,11 @@ public class BackgroundTaskJobs(
             var attendance = await attendanceRepository.GetByUserAndDateAsync(user.Id, today, cancellationToken);
             var language = await localization.GetUserLanguage(telegramUserId);
 
-            if (attendance?.Value.CheckInTime.HasValue == true)
+            if (attendance.HasValue && attendance.Value.CheckInTime.HasValue)
             {
                 var text = localization.GetString(ResourceKeys.ThankYouCheckIn, language);
                 await messageService.SendTextMessageAsync(telegramUserId, text, cancellationToken: cancellationToken);
                 logger.LogInformation("Thank you message sent to user {UserId} who already checked in", telegramUserId);
-
             }
             else
             {
@@ -49,9 +47,7 @@ public class BackgroundTaskJobs(
         catch (Exception e)
         {
             logger.LogError(e, "Error sending check-in reminder to user {UserId}", telegramUserId);
-
         }
-        
     }
 
     public async Task CheckArrivalAsync(long telegramUserId, DateTime eta,
@@ -153,7 +149,7 @@ public class BackgroundTaskJobs(
                     var title = localization.GetString(ResourceKeys.EventReminder, language);
                     var text = $"🔔 *{title}*\n\n" +
                                $"📅 {description}\n" +
-                               $"⏰ {localEventTime:yyyy-MM-dd HH:mm}";
+                               $"⏰ {localEventTime:dd-MM-yyyy HH:mm}";
                     
                     await messageService.SendTextMessageAsync(user.TelegramUserId, text, 
                         cancellationToken: cancellationToken);

@@ -28,7 +28,7 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
 
     public ReplyKeyboardMarkup GetPhoneNumberOptionsKeyboard(string language = "uz")
     {
-        return new ReplyKeyboardMarkup(new[]
+        var keyboard = new ReplyKeyboardMarkup(new[]
         {
             new[]
             {
@@ -38,7 +38,12 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
             {
                 new KeyboardButton(localization.GetString(ResourceKeys.Cancel, language))
             }
-        });
+        })
+        {
+            ResizeKeyboard = true,
+            OneTimeKeyboard = true
+        };
+        return keyboard;
     }
     public ReplyKeyboardMarkup GetMainMenuKeyboard(string language, bool isManager = false)
     {
