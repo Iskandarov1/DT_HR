@@ -80,15 +80,15 @@ public class StateBasedMessageHandler(
         var chatId = message.Chat.Id;
         var text = message.Text?.Trim() ?? "";
 
-        if (text == localizationService.GetString(ResourceKeys.Cancel, language))
-        {
-            await stateService.RemoveStateAsync(userId);
-            await messageService.SendTextMessageAsync(
-                userId,
-                localizationService.GetString(ResourceKeys.Cancel, language),
-                cancellationToken: cancellationToken);
-            return;
-        }
+        // if (text == localizationService.GetString(ResourceKeys.Cancel, language))
+        // {
+        //     await stateService.RemoveStateAsync(userId);
+        //     await messageService.SendTextMessageAsync(
+        //         userId,
+        //         localizationService.GetString(ResourceKeys.Cancel, language),
+        //         cancellationToken: cancellationToken);
+        //     return;
+        // }
 
         var step = state.Data.TryGetValue("step", out var s) ? s?.ToString() : "phone";
         if (step == "birthday")

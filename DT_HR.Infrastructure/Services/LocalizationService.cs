@@ -1,4 +1,5 @@
 using System.Globalization;
+using DT_HR.Application.Core.Abstractions.Enum;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Domain.Core.Localizations;
 using DT_HR.Domain.Repositories;
@@ -39,12 +40,20 @@ public class LocalizationService(
     public async Task<string> GetUserLanguage(long userId)
     {
         var state = await userStateService.GetStateAsync(userId);
+        
+        if (state?.CurrentAction == UserAction.SelectingLanguage)
+        {
+            var user = await userRepository.GetByTelegramUserIdAsync(userId, CancellationToken.None);
+            if (user.HasValue)
+                return user.Value.Language;
+        }
+        
         if (state != null)
             return state.Language;
 
-        var user = await userRepository.GetByTelegramUserIdAsync(userId, CancellationToken.None);
-        if (user.HasValue)
-            return user.Value.Language;
+        var userRecord = await userRepository.GetByTelegramUserIdAsync(userId, CancellationToken.None);
+        if (userRecord.HasValue)
+            return userRecord.Value.Language;
         return "uz";
     }
 }

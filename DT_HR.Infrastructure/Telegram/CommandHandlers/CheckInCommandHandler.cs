@@ -48,7 +48,7 @@ public class CheckInCommandHandler(
 
             if (attendance.HasValue)
             {
-                if (attendance.Value.CheckInTime.HasValue)
+                if (attendance.Value.CheckInTime.HasValue && !attendance.Value.CheckOutTime.HasValue)
                 {
                     await messageService.SendTextMessageAsync(chatId,
                         localization.GetString(ResourceKeys.AlreadyCheckedIn, language),
@@ -59,6 +59,20 @@ public class CheckInCommandHandler(
                     language, 
                     menuType: MainMenuType.CheckedIn,
                     cancellationToken: cancellationToken);
+                    return;
+
+                }
+                if (attendance.Value.CheckInTime.HasValue && attendance.Value.CheckOutTime.HasValue)
+                {
+                    await messageService.SendTextMessageAsync(chatId,
+                        localization.GetString(ResourceKeys.AlreadyCheckedIn, language) + localization.GetString(ResourceKeys.AlreadyCheckedOut,language),
+                        cancellationToken: cancellationToken);
+                    
+                    await messageService.ShowMainMenuAsync(
+                        chatId,
+                        language, 
+                        menuType: MainMenuType.CheckedOut,
+                        cancellationToken: cancellationToken);
                     return;
 
                 }

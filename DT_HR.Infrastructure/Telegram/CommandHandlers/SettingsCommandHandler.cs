@@ -35,8 +35,10 @@ public class SettingsCommandHandler(
         
         logger.LogInformation("Processing settings command for the user {UserId}",userId);
 
-        var state = await stateService.GetStateAsync(userId) ?? new UserState();
-        var language = state.Language ?? await localization.GetUserLanguage(userId);
+        var state = await stateService.GetStateAsync(userId);
+        var language = state?.Language ?? await localization.GetUserLanguage(userId);
+        state = new UserState { Language = language };
+        
         state.CurrentAction = UserAction.SelectingLanguage;
         state.Language = language;
         

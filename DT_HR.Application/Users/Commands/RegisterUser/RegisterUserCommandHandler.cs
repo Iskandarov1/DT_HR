@@ -30,16 +30,6 @@ public class RegisterUserCommandHandler(
         if (phoneNumberResult.IsFailure)
             return Result.Failure<Guid>(phoneNumberResult.Error);
         
-        /*
-         * var firstNameResult = FirstName.Create(request.FirstName, CaseConverter.PascalToSnakeCase(nameof(CreateUserRequest.FirstName)), sharedViewLocalizer);
-        if (firstNameResult.IsFailure)
-            return Result.Failure<Guid>(phoneNumberResult.Error);
-        
-        var lastNameResult = LastName.Create(request.LastName, CaseConverter.PascalToSnakeCase(nameof(CreateUserRequest.LastName)), sharedViewLocalizer);
-        if (lastNameResult.IsFailure)
-            return Result.Failure<Guid>(phoneNumberResult.Error);
-            */
-        
 
         var user = new User(
             request.TelegramUserId,
