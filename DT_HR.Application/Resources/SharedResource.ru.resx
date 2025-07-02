@@ -405,4 +405,7 @@
   <data name="UpcomingEvents" xml:space="preserve">
     <value>События</value>
   </data>
+  <data name="ETA" xml:space="preserve">
+    <value>Пожалуйста, укажите ваше расчетное время прибытия - ЧЧ:ММ</value>
+  </data>
 </root>

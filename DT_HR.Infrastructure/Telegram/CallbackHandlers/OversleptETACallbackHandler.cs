@@ -47,7 +47,7 @@ public class OversleptETACallbackHandler (
         if (eta == "custom")
         {
             await messageService.SendTextMessageAsync(chatId,
-                localization.GetString(ResourceKeys.PleaseEnterPhoneNumber,language).Replace("phone number", "arrival time"),
+                localization.GetString(ResourceKeys.ETA,language).Replace("ETA", "arrival time"),
                 cancellationToken: cancellationToken);
         }
         else

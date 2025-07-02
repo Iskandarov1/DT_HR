@@ -65,6 +65,8 @@ public static class ResourceKeys
     public const string OtherReasonPrompt = "OtherReasonPrompt";
     public const string InvalidTimeFormat = "InvalidTimeFormat";
     public const string TimeFormatExample = "TimeFormatExample";
+    public const string ETA = "ETA";
+
     
 
     public const string ErrorOccurred = "ErrorOccurred";

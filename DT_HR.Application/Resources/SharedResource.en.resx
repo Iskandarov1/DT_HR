@@ -411,4 +411,7 @@ Safe travels! 🚗💨
   <data name="UpcomingEvents" xml:space="preserve">
     <value>Events</value>
   </data>
+  <data name="ETA" xml:space="preserve">
+    <value>Please provide your ETA - HH:MM</value>
+  </data>
 </root>

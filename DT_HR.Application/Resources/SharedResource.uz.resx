@@ -124,13 +124,13 @@
   </data>
   
   <data name="CheckIn" xml:space="preserve">
-    <value>✅ Ishga kelish</value>
+    <value>✅ Ishga keldim</value>
   </data>
   <data name="CheckOut" xml:space="preserve">
     <value>⏰ Ishdan ketish</value>
   </data>
   <data name="ReportAbsence" xml:space="preserve">
-    <value>🏠 Kelmaslik haqida xabar berish</value>
+    <value>🏠 Ishga Kelmadim</value>
   </data>
   
   <data name="CheckInProcess" xml:space="preserve">
@@ -405,6 +405,9 @@ Xavfsiz sayohat! 🚗💨
   </data>
   <data name="UpcomingEvents" xml:space="preserve">
     <value>Tadbirlar</value>
+  </data>
+  <data name="ETA" xml:space="preserve">
+    <value>Iltimos kelish vaqtingizni belgilang - HH:ММ</value>
   </data>
   
   
