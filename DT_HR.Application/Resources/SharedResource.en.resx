@@ -332,7 +332,7 @@
     <value>✅ Thank you for checking in on time! Have a great day at work.</value>
   </data>
   <data name="CheckInCheck" xml:space="preserve">
-    <value>Please remember to check in</value>
+    <value>📋Good morning, are you at work?</value>
   </data>
   <data name="TimePassed" xml:space="preserve">
     <value>⏰ Your estimated arrival time has passed. Please check in if you have arrived.</value>

@@ -1,4 +1,5 @@
 using System.Text;
+using DT_HR.Application.Core.Abstractions.Enum;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
 using DT_HR.Domain.Core;
@@ -13,6 +14,8 @@ public class MyEventsCommandHandler (
     IUserStateService stateService, 
     ILocalizationService localization, 
     IEventRepository eventRepository,
+    IUserRepository userRepository,
+    IAttendanceRepository attendanceRepository,
     ILogger<MyEventsCommandHandler> logger) : ITelegramService
 {
     public async Task<bool> CanHandleAsync(Message message, CancellationToken cancellationToken = default)
@@ -35,18 +38,49 @@ public class MyEventsCommandHandler (
         var langauge = state?.Language ?? await localization.GetUserLanguage(userId);
         logger.LogInformation("Processing event getting for the user {UserId}",userId);
 
-
         var localNow = TimeUtils.Now;
         var utcNow = localNow.AddHours(-5); 
         
         var events = await eventRepository.GetUpcomingEventsAsync(utcNow, cancellationToken);
 
+
+        var menuType = MainMenuType.Default;
+        var maybeUser = await userRepository.GetByTelegramUserIdAsync(userId, cancellationToken);
+        
+        if (maybeUser.HasValue)
+        {
+            var today = DateOnly.FromDateTime(TimeUtils.Now);
+            var attendance = await attendanceRepository.GetByUserAndDateAsync(maybeUser.Value.Id, today, cancellationToken);
+            
+            if (attendance.HasValue)
+            {
+                if (attendance.Value.CheckInTime.HasValue && !attendance.Value.CheckOutTime.HasValue)
+                {
+                    menuType = MainMenuType.CheckedIn;
+                }
+                else if (attendance.Value.CheckInTime.HasValue && attendance.Value.CheckOutTime.HasValue)
+                {
+                    menuType = MainMenuType.CheckedOut;
+                }
+                else
+                {
+                    menuType = MainMenuType.CheckPrompt;
+                }
+            }
+            else
+            {
+                menuType = MainMenuType.CheckPrompt;
+            }
+        }
+
         if (events.Count == 0)
         {
             await messageService.SendTextMessageAsync(chatId, localization.GetString(ResourceKeys.NoEvents, langauge),
                 cancellationToken: cancellationToken);
-            await messageService.ShowMainMenuAsync(chatId, 
+            await messageService.ShowMainMenuAsync(
+                chatId, 
                 langauge,
+                menuType: menuType,
                 cancellationToken: cancellationToken);
             
             return;
@@ -57,7 +91,6 @@ public class MyEventsCommandHandler (
         
         foreach (var evt in events)
         {
-
             var localEventTime = evt.EventTime.AddHours(5);
             sb.AppendLine($"📝 {evt.Description}");
             sb.AppendLine($"⏰ {localEventTime:dd-MM-yyyy HH:mm}");
@@ -69,7 +102,7 @@ public class MyEventsCommandHandler (
         await messageService.ShowMainMenuAsync(
             chatId, 
             langauge,
+            menuType: menuType,
             cancellationToken: cancellationToken);
-
     }
 }

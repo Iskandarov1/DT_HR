@@ -78,6 +78,10 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
                    new KeyboardButton(localization.GetString(ResourceKeys.CheckOut, language)),
                    new KeyboardButton(localization.GetString(ResourceKeys.MyEvents, language))
                });
+               rows.Add(new []
+               {
+                   new KeyboardButton(localization.GetString(ResourceKeys.Settings,language))
+               });
                break;
            case MainMenuType.CheckedOut:
                rows.Add(new[]
@@ -86,6 +90,13 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
                });
                break;
            case MainMenuType.OnTheWay:
+               rows.Add(new[]
+               {
+                   new KeyboardButton(localization.GetString(ResourceKeys.CheckIn, language)),
+                   new KeyboardButton(localization.GetString(ResourceKeys.ReportAbsence, language))
+               });
+               break;
+           case MainMenuType.Custom:
                rows.Add(new[]
                {
                    new KeyboardButton(localization.GetString(ResourceKeys.CheckIn, language)),
@@ -111,10 +122,7 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
                }
                break;
         }
-        rows.Add(new []
-        {
-            new KeyboardButton(localization.GetString(ResourceKeys.Settings,language))
-        });
+       
         
         return new ReplyKeyboardMarkup(rows)
         {
@@ -174,11 +182,11 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
             new[]
             {
                 InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.OtherReason,language), "absent_type:other"),
-            },
-            new[]
-            {
-                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.Cancel, language), "action:cancel"),
             }
+            // new[]
+            // {
+            //     InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.Cancel, language), "action:cancel"),
+            // }
         });
     }
 

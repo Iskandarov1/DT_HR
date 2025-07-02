@@ -1,4 +1,5 @@
 using DT_HR.Application.Core.Abstractions.Data;
+using DT_HR.Application.Core.Abstractions.Enum;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
 using DT_HR.Domain.Repositories;
@@ -47,7 +48,11 @@ public class LanguageSelectionCallbackHandler(
                 await messageService.EditMessageTextAsync(chatId, messageId,
                     localization.GetString(ResourceKeys.Check, selectedLanguage),
                     cancellationToken: cancellationToken);
-                await messageService.ShowMainMenuAsync(chatId,  selectedLanguage, user.IsManager(),
+                await messageService.ShowMainMenuAsync(
+                    chatId,  
+                    selectedLanguage,
+                    user.IsManager(),
+                    menuType: MainMenuType.CheckedIn,
                     cancellationToken:cancellationToken);
 
             }

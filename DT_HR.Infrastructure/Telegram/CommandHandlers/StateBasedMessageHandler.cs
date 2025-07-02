@@ -173,8 +173,10 @@ public class StateBasedMessageHandler(
         if (maybeUser.HasNoValue || !maybeUser.Value.IsManager())
         {
             await stateService.RemoveStateAsync(userId);
-            await messageService.ShowMainMenuAsync(chatId
-                , language,
+            await messageService.ShowMainMenuAsync(
+                chatId,
+                language,
+                menuType: MainMenuType.CheckPrompt,
                 cancellationToken: cancellationToken);
             return;
         }
@@ -186,6 +188,7 @@ public class StateBasedMessageHandler(
             await stateService.RemoveStateAsync(userId);
             await messageService.ShowMainMenuAsync(chatId,
                 language,
+                menuType: MainMenuType.CheckPrompt,
                 cancellationToken: cancellationToken);
             return;
         }
@@ -233,14 +236,18 @@ public class StateBasedMessageHandler(
                 await messageService.SendTextMessageAsync(u.TelegramUserId, msg, cancellationToken: cancellationToken);
             }
 
-            await messageService.ShowMainMenuAsync(chatId,
+            await messageService.ShowMainMenuAsync(
+                chatId,
                 language,
+                menuType: MainMenuType.Default,
                 cancellationToken: cancellationToken);
         }
         else
         {
-            await messageService.ShowMainMenuAsync(chatId,
+            await messageService.ShowMainMenuAsync(
+                chatId,
                 language,
+                menuType: MainMenuType.Default,
                 cancellationToken: cancellationToken);
         }
 
@@ -283,8 +290,10 @@ public class StateBasedMessageHandler(
         if (text.Equals(localizationService.GetString(ResourceKeys.Cancel, language), StringComparison.OrdinalIgnoreCase))
         {
             await stateService.RemoveStateAsync(userId);
-            await messageService.ShowMainMenuAsync(chatId,
+            await messageService.ShowMainMenuAsync(
+                chatId,
                 language,
+                menuType: MainMenuType.CheckPrompt,
                 cancellationToken: cancellationToken);
             return;
         }
@@ -369,10 +378,9 @@ public class StateBasedMessageHandler(
         if (result.IsSuccess)
         {
             var menu = (state.AbsenceType == AbsenceType.OnTheWay ||
-                        (state.AbsenceType == AbsenceType.Custom ||
-                state.AbsenceType ==AbsenceType.Overslept ||
-                state.AbsenceType ==AbsenceType.Absent && 
-                         estimatedArrivalTime.HasValue))
+                        state.AbsenceType == AbsenceType.Overslept ||
+                        state.AbsenceType == AbsenceType.Absent ||
+                        state.AbsenceType == AbsenceType.Custom)
                 ? MainMenuType.OnTheWay
                 : MainMenuType.Default;
             

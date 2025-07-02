@@ -41,12 +41,12 @@ public class BackgroundTaskJobs(
             else
             {
                 var text = localization.GetString(ResourceKeys.CheckInCheck, language);
-                await messageService.SendTextMessageAsync(telegramUserId, text, cancellationToken: cancellationToken);
+                await messageService.SendTextMessageAsync(telegramUserId, text , cancellationToken: cancellationToken);
                 await messageService.ShowMainMenuAsync(
                     telegramUserId,
                     language,
                     menuType: MainMenuType.CheckPrompt,
-                    cancellationToken: cancellationToken);
+                    cancellationToken:cancellationToken);
                 logger.LogInformation("Check-in reminder sent to user {UserId}", telegramUserId);
             }
         }

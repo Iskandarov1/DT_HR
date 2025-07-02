@@ -62,6 +62,7 @@ public class CheckOutCommandHandler(
             await messageService.ShowMainMenuAsync(
                 chatId, 
                 language,
+                menuType: MainMenuType.CheckedOut,
                 cancellationToken: cancellationToken);
         }
     }

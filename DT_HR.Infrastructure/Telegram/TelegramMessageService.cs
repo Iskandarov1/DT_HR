@@ -138,9 +138,9 @@ public class TelegramMessageService(
         var keyboard = keyboardService.GetMainMenuKeyboard(language,menuType);
         var menuText = language switch
         {
-            "ru" => "📋 Главное меню:",
-            "en" => "📋 Main Menu:",
-            _ => "📋 Asosiy menyu:"
+            "ru" => "меню:",
+            "en" => "Menu:",
+            _ => "menyu:"
         };
         await SendTextMessageAsync(chatId,menuText,replyMarkup: keyboard,cancellationToken: cancellationToken);
     }

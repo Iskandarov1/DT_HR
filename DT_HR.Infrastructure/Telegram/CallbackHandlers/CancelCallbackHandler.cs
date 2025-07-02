@@ -1,3 +1,4 @@
+using DT_HR.Application.Core.Abstractions.Enum;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
 using Microsoft.Extensions.Logging;
@@ -29,6 +30,7 @@ public class CancelCallbackHandler(
         await messageService.ShowMainMenuAsync(
             chatId,
             language,
+            menuType: MainMenuType.CheckPrompt,
             cancellationToken: cancellationToken);
     }
 }
