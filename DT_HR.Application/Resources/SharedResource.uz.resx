@@ -394,6 +394,12 @@ Xavfsiz sayohat! 🚗💨
   <data name="PleaseCheckInFirst" xml:space="preserve">
     <value>Iltimos, avval kelganingizni belgilang.</value>
   </data>
+  <data name="TimeSet" xml:space="preserve">
+    <value>✅Kelish vaqti belgilandi</value>
+  </data>
+  <data name="AbsenceOptionsSelected" xml:space="preserve">
+    <value>✅Yo'qlik opsiyalari muvaffaqiyatli tanlandi</value>
+  </data>
   
   
   

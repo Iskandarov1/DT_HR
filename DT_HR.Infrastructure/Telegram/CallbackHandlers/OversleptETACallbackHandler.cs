@@ -26,6 +26,7 @@ public class OversleptETACallbackHandler (
     {
         var userId = callbackQuery.From.Id;
         var chatId = callbackQuery.Message!.Chat.Id;
+        var messageId = callbackQuery.Message.MessageId;
         var eta = callbackQuery.Data!.Split(':')[1];
         var currentState = await stateService.GetStateAsync(userId);
         var language = currentState?.Language ?? await localization.GetUserLanguage(userId);
@@ -76,6 +77,12 @@ public class OversleptETACallbackHandler (
                     language,
                     menuType: MainMenuType.OnTheWay,
                     cancellationToken:cancellationToken);
+                await messageService.EditMessageTextAsync(
+                    chatId, 
+                    messageId, 
+                    localization.GetString(ResourceKeys.TimeSet,language), 
+                    replyMarkUp: null,
+                    cancellationToken: cancellationToken);
             }
             else
             {

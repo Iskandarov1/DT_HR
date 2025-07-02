@@ -22,6 +22,7 @@ public class AbsenceTypeCallbackHandler(
     {
         var userId = callbackQuery.From.Id;
         var chatId = callbackQuery.Message!.Chat.Id;
+        var messageId = callbackQuery.Message.MessageId;
         var type = callbackQuery.Data!.Split(':')[1];
         var currentState = await stateService.GetStateAsync(userId);
         var language = currentState?.Language ?? await localization.GetUserLanguage(userId);
@@ -32,8 +33,7 @@ public class AbsenceTypeCallbackHandler(
 
         var state = new UserState{ 
             CurrentAction = UserAction.ReportingAbsence,
-            Language = language
-            };
+            Language = language };
 
         switch (type)
         {
@@ -77,5 +77,12 @@ public class AbsenceTypeCallbackHandler(
                     cancellationToken: cancellationToken);
                 break;
         }
+
+        await messageService.EditMessageTextAsync(
+            chatId, 
+            messageId, 
+            localization.GetString(ResourceKeys.AbsenceOptionsSelected,language), 
+            replyMarkUp: null,
+            cancellationToken: cancellationToken);
     }
 }

@@ -398,5 +398,10 @@ Safe travels! 🚗💨
   <data name="PleaseCheckInFirst" xml:space="preserve">
     <value>Please check in first.</value>
   </data>
-  
+  <data name="TimeSet" xml:space="preserve">
+    <value>✅ETA set</value>
+  </data>
+  <data name="AbsenceOptionsSelected" xml:space="preserve">
+    <value>✅Absence options selected successfully</value>
+  </data>
 </root>

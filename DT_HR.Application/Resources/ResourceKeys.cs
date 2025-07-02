@@ -136,7 +136,10 @@ public static class ResourceKeys
     public const string CheckInFirstBeforeCheckOut = "CheckInFirstBeforeCheckOut";
     public const string PleaseCheckInFirst = "PleaseCheckInFirst";
 
-    
+    public const string TimeSet = "TimeSet";
+    public const string AbsenceOptionsSelected = "AbsenceOptionsSelected";
+
+
 
 
 

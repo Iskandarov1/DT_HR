@@ -393,4 +393,10 @@
   <data name="PleaseCheckInFirst" xml:space="preserve">
     <value>Сначала отметьтесь о приходе.</value>
   </data>
+  <data name="TimeSet" xml:space="preserve">
+    <value>✅время установлено</value>
+  </data>
+  <data name="AbsenceOptionsSelected" xml:space="preserve">
+    <value>✅Параметры отсутствия выбраны успешно</value>
+  </data>
 </root>

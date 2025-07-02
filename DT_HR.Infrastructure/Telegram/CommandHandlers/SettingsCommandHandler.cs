@@ -40,7 +40,7 @@ public class SettingsCommandHandler(
         state.CurrentAction = UserAction.SelectingLanguage;
         state.Language = language;
         
-        // Store the current menu type in state for later restoration
+
         var menuType = MainMenuType.Default;
         var maybeUser = await userRepository.GetByTelegramUserIdAsync(userId, cancellationToken);
 

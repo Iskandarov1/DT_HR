@@ -34,10 +34,6 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
             new[]
             {
                 KeyboardButton.WithRequestContact(localization.GetString(ResourceKeys.ShareContactButton, language)),
-            },
-            new[]
-            {
-                new KeyboardButton(localization.GetString(ResourceKeys.Cancel, language))
             }
         })
         {

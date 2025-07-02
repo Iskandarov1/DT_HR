@@ -53,6 +53,12 @@ public class CheckInCommandHandler(
                     await messageService.SendTextMessageAsync(chatId,
                         localization.GetString(ResourceKeys.AlreadyCheckedIn, language),
                         cancellationToken: cancellationToken);
+                    
+                    await messageService.ShowMainMenuAsync(
+                    chatId,
+                    language, 
+                    menuType: MainMenuType.CheckedIn,
+                    cancellationToken: cancellationToken);
                     return;
 
                 }
