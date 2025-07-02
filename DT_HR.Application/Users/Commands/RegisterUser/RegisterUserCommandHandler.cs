@@ -1,5 +1,6 @@
 using DT_HR.Application.Core.Abstractions.Data;
 using DT_HR.Application.Core.Abstractions.Messaging;
+using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Contract.Requests.UserRequest;
 using DT_HR.Domain.Core.Errors;
 using DT_HR.Domain.Core.Localizations;
@@ -14,7 +15,8 @@ namespace DT_HR.Application.Users.Commands.RegisterUser;
 public class RegisterUserCommandHandler(
     IUserRepository userRepository,
     IUnitOfWork unitOfWork,
-    ISharedViewLocalizer sharedViewLocalizer) : ICommandHandler<RegisterUserCommand , Result<Guid>>
+    ISharedViewLocalizer sharedViewLocalizer,
+    IUserBackgroundJobService userBackgroundJobService) : ICommandHandler<RegisterUserCommand , Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
@@ -41,6 +43,8 @@ public class RegisterUserCommandHandler(
         
         userRepository.Insert(user);
         await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        await userBackgroundJobService.InitializeBackgroundJobsForUserAsync(user, cancellationToken);
 
         return Result.Success(user.Id);
 

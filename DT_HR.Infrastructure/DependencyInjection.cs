@@ -31,6 +31,7 @@ public static class DependencyInjection
         services.AddScoped<ILocationService, LocationService>();
         services.AddScoped<IAttendanceReportService, AttendanceReportService>();
         services.AddScoped<IBackgroundTaskService, HangfireBackgroundTaskService>();
+        services.AddScoped<IUserBackgroundJobService, UserBackgroundJobService>();
 
 
         
