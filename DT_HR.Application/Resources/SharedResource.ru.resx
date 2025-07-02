@@ -399,4 +399,10 @@
   <data name="AbsenceOptionsSelected" xml:space="preserve">
     <value>✅Параметры отсутствия выбраны успешно</value>
   </data>
+  <data name="Event" xml:space="preserve">
+    <value>Событие</value>
+  </data>
+  <data name="UpcomingEvents" xml:space="preserve">
+    <value>События</value>
+  </data>
 </root>

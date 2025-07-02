@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
 using DT_HR.Application.Users.Commands;
@@ -16,6 +17,7 @@ public class ContactMessageHandler(
     IMediator mediator, 
     ILogger<ContactMessageHandler> logger)
 {
+    private static readonly Regex PhoneNumberRegex = new Regex(@"^(\+?998)?([3781]{2}|(9[013-57-9]))\d{7}$", RegexOptions.Compiled);
     public async Task HandlerAsync(Message message, CancellationToken cancellationToken)
     {
         if(message.Contact == null || message.From == null) return;
@@ -31,7 +33,17 @@ public class ContactMessageHandler(
         if (state != null && state.CurrentAction == UserAction.Registering && 
             state.Data.TryGetValue("step", out var step) && step?.ToString() == "phone")
         {
-            state.Data["phone"] = message.Contact.PhoneNumber;
+            var phoneNumber = NormalizePhoneNumber(message.Contact.PhoneNumber);
+            
+            if (!IsValidPhoneNumber(phoneNumber))
+            {
+                await messageService.SendTextMessageAsync(chatId,
+                    localization.GetString(ResourceKeys.InvalidPhoneFormat, language),
+                    cancellationToken: cancellationToken);
+                return;
+            }
+            
+            state.Data["phone"] = phoneNumber;
             state.Data["firstName"] = message.Contact.FirstName ?? message.From.FirstName ?? "Unknown";
             state.Data["lastName"] = message.Contact.LastName ?? message.From.FirstName ?? String.Empty;
             state.Data["step"] = "birthday";
@@ -49,5 +61,33 @@ public class ContactMessageHandler(
                 localization.GetString(ResourceKeys.ContactReceived,language),
                 cancellationToken: cancellationToken);
         }
+    }
+    
+    private string NormalizePhoneNumber(string input)
+    {
+        var numbers = Regex.Replace(input, @"\D", "");
+        if (numbers.StartsWith("998"))
+        {
+            return $"+{numbers}";
+        }
+
+        // If it's 9 digits and starts with valid prefixes, add +998
+        if (numbers.Length == 9 && Regex.IsMatch(numbers, @"^([3781]{2}|(9[013-57-9]))\d{7}$"))
+        {
+            return $"+998{numbers}";
+        }
+
+        // If already has +, return as is
+        if (input.StartsWith("+"))
+        {
+            return $"+{numbers}";
+        }
+
+        return numbers;
+    }
+
+    private bool IsValidPhoneNumber(string phoneNumber)
+    {
+        return PhoneNumberRegex.IsMatch(phoneNumber);
     }
 }

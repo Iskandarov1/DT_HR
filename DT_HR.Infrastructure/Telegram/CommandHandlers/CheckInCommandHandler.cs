@@ -39,7 +39,7 @@ public class CheckInCommandHandler(
         var language = currentState?.Language ?? await localization.GetUserLanguage(message.From!.Id);
 
         var user = await userRepository.GetByTelegramUserIdAsync(userId, cancellationToken);
-        if (user.HasValue)
+        if (user.HasValue && !user.Value.IsManager())
         {
             var today = DateOnly.FromDateTime(TimeUtils.Now);
             var attendance =
@@ -53,68 +53,54 @@ public class CheckInCommandHandler(
                     await messageService.SendTextMessageAsync(chatId,
                         localization.GetString(ResourceKeys.AlreadyCheckedIn, language),
                         cancellationToken: cancellationToken);
-                    
+
                     await messageService.ShowMainMenuAsync(
-                    chatId,
-                    language, 
-                    menuType: MainMenuType.CheckedIn,
-                    cancellationToken: cancellationToken);
+                        chatId,
+                        language,
+                        menuType: MainMenuType.CheckedIn,
+                        cancellationToken: cancellationToken);
                     return;
 
                 }
+
                 if (attendance.Value.CheckInTime.HasValue && attendance.Value.CheckOutTime.HasValue)
                 {
                     await messageService.SendTextMessageAsync(chatId,
-                        localization.GetString(ResourceKeys.AlreadyCheckedIn, language) + localization.GetString(ResourceKeys.AlreadyCheckedOut,language),
+                        localization.GetString(ResourceKeys.AlreadyCheckedIn, language) +
+                        localization.GetString(ResourceKeys.AlreadyCheckedOut, language),
                         cancellationToken: cancellationToken);
-                    
+
                     await messageService.ShowMainMenuAsync(
                         chatId,
-                        language, 
+                        language,
                         menuType: MainMenuType.CheckedOut,
                         cancellationToken: cancellationToken);
                     return;
 
                 }
 
-
-                // if (attendance.Value.Status == AttendanceStatus.Absent.Value ||
-                //     attendance.Value.Status == AttendanceStatus.OnTheWay.Value)
-                // {
-                //     await messageService.SendTextMessageAsync(chatId,
-                //         localization.GetString(ResourceKeys.AlreadyReportedAbsence, language),
-                //         cancellationToken: cancellationToken);
-                //     var menu = attendance.Value.Status == AttendanceStatus.OnTheWay.Value
-                //         ? MainMenuType.OnTheWay
-                //         : MainMenuType.CheckPrompt;
-                //     await messageService.ShowMainMenuAsync(
-                //         chatId,
-                //         language, 
-                //         menuType:menu,
-                //         cancellationToken: cancellationToken);
-                //     return;
-                // }
             }
+        
+            logger.LogInformation("Processing check-in command  for the user {UserId}", userId);
 
+            var state = new UserState
+            {
+                CurrentAction = UserAction.CheckingIn,
+                Language = language
+            };
+            await stateService.SetStateAsync(userId, state);
+
+            var checkInProgress = localization.GetString(ResourceKeys.CheckInProcess, language);
+            var shareLocationPrompt = localization.GetString(ResourceKeys.ShareLocationPrompt, language);
+
+
+            await messageService.SendLocationRequestAsync(
+                chatId,
+                $"{checkInProgress}\n\n{shareLocationPrompt}",
+                language,
+                cancellationToken);
         }
-        
-        logger.LogInformation("Processing check-in command  for the user {UserId}",userId);
-
-        var state = new UserState
-        {
-            CurrentAction = UserAction.CheckingIn,
-            Language = language
-        };
-        await stateService.SetStateAsync(userId, state);
-
-        var checkInProgress = localization.GetString(ResourceKeys.CheckInProcess, language);
-        var shareLocationPrompt = localization.GetString(ResourceKeys.ShareLocationPrompt, language);
-        
-        
-        await messageService.SendLocationRequestAsync(
-            chatId,
-            $"{checkInProgress}\n\n{shareLocationPrompt}",
-            language,
-            cancellationToken);
     }
+
+
 }

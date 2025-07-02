@@ -48,6 +48,7 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
         
         if (isManager)
         {
+            // Manager-specific menu
             rows.Add(new[]
             {
                 new KeyboardButton(localization.GetString(ResourceKeys.AttendanceStats, language).Trim()),
@@ -55,73 +56,65 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
             });
             rows.Add(new []
             {
-                new KeyboardButton(localization.GetString(ResourceKeys.CreateEvent,language).Trim())
+                new KeyboardButton(localization.GetString(ResourceKeys.CreateEvent,language).Trim()),
+                new KeyboardButton(localization.GetString(ResourceKeys.MyEvents, language))
+            });
+            rows.Add(new []
+            {
+                new KeyboardButton(localization.GetString(ResourceKeys.Settings,language))
             });
         }
-
-        switch (menuType)
+        else
         {
-           case MainMenuType.CheckPrompt :
-               rows.Add(new []
-               {
-                   new KeyboardButton(localization.GetString(ResourceKeys.CheckIn,language)),
-                   new KeyboardButton(localization.GetString(ResourceKeys.ReportAbsence,language))
-               });
-               break;
-           case MainMenuType.CheckedIn:
-               rows.Add(new[]
-               {
-                   new KeyboardButton(localization.GetString(ResourceKeys.CheckOut, language)),
-                   new KeyboardButton(localization.GetString(ResourceKeys.MyEvents, language))
-               });
-               rows.Add(new []
-               {
-                   new KeyboardButton(localization.GetString(ResourceKeys.Settings,language))
-               });
-               break;
-           case MainMenuType.CheckedOut:
-               rows.Add(new[]
-               {
-                   new KeyboardButton(localization.GetString(ResourceKeys.MyEvents, language)),
-                   new KeyboardButton(localization.GetString(ResourceKeys.Settings,language))
-               });
-               break;
-           case MainMenuType.OnTheWay:
-               rows.Add(new[]
-               {
-                   new KeyboardButton(localization.GetString(ResourceKeys.CheckIn, language)),
-                   new KeyboardButton(localization.GetString(ResourceKeys.ReportAbsence, language))
-               });
-               break;
-           case MainMenuType.Custom:
-               rows.Add(new[]
-               {
-                   new KeyboardButton(localization.GetString(ResourceKeys.CheckIn, language)),
-                   new KeyboardButton(localization.GetString(ResourceKeys.ReportAbsence, language))
-               });
-               break;
-           default:
-               if (!isManager)
-               {
-                   rows.Add(new[]
+            // Employee-specific menu based on current status
+            switch (menuType)
+            {
+               case MainMenuType.CheckPrompt :
+                   rows.Add(new []
                    {
-                       new KeyboardButton(localization.GetString(ResourceKeys.CheckIn, language)),
-                       new KeyboardButton(localization.GetString(ResourceKeys.CheckOut, language))
+                       new KeyboardButton(localization.GetString(ResourceKeys.CheckIn,language)),
+                       new KeyboardButton(localization.GetString(ResourceKeys.ReportAbsence,language))
                    });
+                   break;
+               case MainMenuType.CheckedIn:
                    rows.Add(new[]
                    {
-                       new KeyboardButton(localization.GetString(ResourceKeys.ReportAbsence, language))
-                   });
-                   rows.Add(new[]
-                   {
+                       new KeyboardButton(localization.GetString(ResourceKeys.CheckOut, language)),
                        new KeyboardButton(localization.GetString(ResourceKeys.MyEvents, language))
                    });
                    rows.Add(new []
                    {
                        new KeyboardButton(localization.GetString(ResourceKeys.Settings,language))
                    });
-               }
-               break;
+                   break;
+               case MainMenuType.CheckedOut:
+                   rows.Add(new[]
+                   {
+                       new KeyboardButton(localization.GetString(ResourceKeys.MyEvents, language)),
+                       new KeyboardButton(localization.GetString(ResourceKeys.Settings,language))
+                   });
+                   break;
+               case MainMenuType.OnTheWay:
+                   rows.Add(new[]
+                   {
+                       new KeyboardButton(localization.GetString(ResourceKeys.CheckIn, language)),
+                       new KeyboardButton(localization.GetString(ResourceKeys.ReportAbsence, language))
+                   });
+                   break;
+               case MainMenuType.Custom:
+                   rows.Add(new[]
+                   {
+                       new KeyboardButton(localization.GetString(ResourceKeys.CheckIn, language)),
+                       new KeyboardButton(localization.GetString(ResourceKeys.ReportAbsence, language))
+                   });
+                   break;
+               default:
+                   rows.Add(new[]
+                   {
+                       new KeyboardButton("/start")
+                   });
+                   break;
+            }
         }
        
         

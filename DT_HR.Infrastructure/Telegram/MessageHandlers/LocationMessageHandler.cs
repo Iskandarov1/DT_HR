@@ -63,6 +63,7 @@ public class LocationMessageHandler(
                 localization.GetString(ResourceKeys.LocationReceived,language),
                 cancellationToken: cancellationToken
             );
+            return;
         }
     }
 }

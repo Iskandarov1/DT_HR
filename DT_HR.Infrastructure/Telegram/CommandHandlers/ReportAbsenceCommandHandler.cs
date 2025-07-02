@@ -1,5 +1,6 @@
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
+using DT_HR.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
 
@@ -10,6 +11,7 @@ public class ReportAbsenceCommandHandler(
     ITelegramKeyboardService keyboardService,
     ILocalizationService localization,
     IUserStateService stateService,
+    IUserRepository userRepository,
     ILogger<ReportAbsenceCommandHandler> logger) : ITelegramService
 {
     public async Task<bool> CanHandleAsync(Message message, CancellationToken cancellationToken = default)
@@ -33,6 +35,21 @@ public class ReportAbsenceCommandHandler(
         var language = state?.Language ?? await localization.GetUserLanguage(userId);
         
         logger.LogInformation("Processing report absence command for the user {UserId}", userId);
+        
+
+        var user = await userRepository.GetByTelegramUserIdAsync(userId, cancellationToken);
+        if (user.HasValue && user.Value.IsManager())
+        {
+            await messageService.SendTextMessageAsync(
+                chatId,
+                localization.GetString(ResourceKeys.OptionNotAvailable, language),
+                cancellationToken: cancellationToken);
+            await messageService.ShowMainMenuAsync(
+                chatId,
+                language,
+                cancellationToken: cancellationToken);
+            return;
+        }
 
         var keyboard = keyboardService.GetAbsenceTypeKeyboard(language);
 

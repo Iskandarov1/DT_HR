@@ -74,7 +74,7 @@ public class MarkAbsentCommandHandler(
                     new MarkAbsentFailureData(
                         request.TelegramUserId,
                         "Already_Marked_Absent",
-                        localization.GetString(ResourceKeys.AlreadyReportedAbsence,lang),
+                        localization.GetString(ResourceKeys.AlreadyReportedAbsence,lang) + "\n"+localization.GetString(ResourceKeys.PleaseCheckInFirst,lang),
                         TimeUtils.Now), cancellationToken);
 
                 return Result.Failure<Guid>(new Error("Attendance.AlreadyMarkedAbsent",

@@ -79,16 +79,7 @@ public class StateBasedMessageHandler(
         var userId = message.From!.Id;
         var chatId = message.Chat.Id;
         var text = message.Text?.Trim() ?? "";
-
-        // if (text == localizationService.GetString(ResourceKeys.Cancel, language))
-        // {
-        //     await stateService.RemoveStateAsync(userId);
-        //     await messageService.SendTextMessageAsync(
-        //         userId,
-        //         localizationService.GetString(ResourceKeys.Cancel, language),
-        //         cancellationToken: cancellationToken);
-        //     return;
-        // }
+        
 
         var step = state.Data.TryGetValue("step", out var s) ? s?.ToString() : "phone";
         if (step == "birthday")
@@ -146,6 +137,7 @@ public class StateBasedMessageHandler(
                 await messageService.SendTextMessageAsync(chatId,
                     localizationService.GetString(ResourceKeys.InvalidPhoneFormat, language),
                     cancellationToken: cancellationToken);
+                return;
             }
             
             state.Data["phone"] = phoneNumber;
@@ -228,11 +220,14 @@ public class StateBasedMessageHandler(
             foreach (var u in users)
             {
                 var lang = await localizationService.GetUserLanguage(u.TelegramUserId);
+                var eventCreated = localizationService.GetString(ResourceKeys.EventCreated, language);
+                var date = localizationService.GetString(ResourceKeys.Date, language);
+                var eventTime = localizationService.GetString(ResourceKeys.Event, language);
                 // Display in local time (UTC+5)
                 var displayTime = utcEventTime.AddHours(5);
-                var msg = $"🔔 *New Event Created*\n\n" +
-                         $"📅 Event: {description}\n" +
-                         $"⏰ Time: {displayTime:dd-MM-yyyy HH:mm}";
+                var msg = $"🔔 *{eventCreated}*\n\n" +
+                         $"📅 {eventTime}: {description}\n" +
+                         $"⏰ {date}: {displayTime:dd-MM-yyyy HH:mm}";
                 await messageService.SendTextMessageAsync(u.TelegramUserId, msg, cancellationToken: cancellationToken);
             }
 

@@ -144,6 +144,41 @@ public class TelegramBotService : ITelegramBotService
         var userId = message.From!.Id;
         var state = await _stateService.GetStateAsync(userId);
         var language = state?.Language ?? await _localization.GetUserLanguage(userId);
+        
+        // Check if user is in a critical state that requires specific action
+        if (state?.CurrentAction == UserAction.SelectingLanguage)
+        {
+            await _messageService.SendTextMessageAsync(
+                message.Chat.Id,
+                """
+                Please select your language from the buttons above.
+                Пожалуйста, выберите язык из кнопок выше.
+                Iltimos, yuqoridagi tugmalardan tilni tanlang.
+                """,
+                cancellationToken: cancellationToken);
+            return;
+        }
+        
+        if (state?.CurrentAction == UserAction.Registering)
+        {
+            var step = state.Data.TryGetValue("step", out var s) ? s?.ToString() : "phone";
+            if (step == "phone")
+            {
+                await _messageService.SendTextMessageAsync(
+                    message.Chat.Id,
+                    _localization.GetString(ResourceKeys.PleaseEnterPhoneNumber, language),
+                    cancellationToken: cancellationToken);
+            }
+            else if (step == "birthday")
+            {
+                await _messageService.SendTextMessageAsync(
+                    message.Chat.Id,
+                    _localization.GetString(ResourceKeys.EnterBirthDate, language),
+                    cancellationToken: cancellationToken);
+            }
+            return;
+        }
+        
         await _messageService.ShowMainMenuAsync(
             message.Chat.Id,
             language,

@@ -2,6 +2,7 @@ using DT_HR.Application.Attendance.Commands.CheckOut;
 using DT_HR.Application.Core.Abstractions.Enum;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
+using DT_HR.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
@@ -11,7 +12,8 @@ namespace DT_HR.Infrastructure.Telegram.CommandHandlers;
 public class CheckOutCommandHandler(
     ITelegramMessageService messageService,
     ILocalizationService localization,
-    IUserStateService stateService, 
+    IUserStateService stateService,
+    IUserRepository userRepository,
     ILogger<CheckOutCommandHandler> logger,
     IMediator mediator) : ITelegramService
 {
@@ -37,6 +39,21 @@ public class CheckOutCommandHandler(
         var language = currestState?.Language ?? await localization.GetUserLanguage(userId);
 
         logger.LogInformation("Processing check out command for the user {UserId}",userId);
+        
+        // Check if user is a manager - managers cannot check out
+        var user = await userRepository.GetByTelegramUserIdAsync(userId, cancellationToken);
+        if (user.HasValue && user.Value.IsManager())
+        {
+            await messageService.SendTextMessageAsync(
+                chatId,
+                localization.GetString(ResourceKeys.OptionNotAvailable, language),
+                cancellationToken: cancellationToken);
+            await messageService.ShowMainMenuAsync(
+                chatId,
+                language,
+                cancellationToken: cancellationToken);
+            return;
+        }
 
         var state = new UserState
         {

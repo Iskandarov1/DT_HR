@@ -100,14 +100,17 @@ public static class ResourceKeys
     public const string Thanks = "Thanks";
     public const string Settings = "Settings";
     public const string LanguageChanged = "LanguageChanged";
-    
     public const string CreateEvent = "CreateEvent";
+    public const string UpcomingEvents = "UpcomingEvents";
+
     public const string EnterEventDescription = "EnterEventDescription";
     public const string EnterEventTime = "EnterEventTime";
     public const string EventCreated = "EventCreated";
     public const string EventReminder = "EventReminder";
 
     public const string MyEvents = "events";
+    public const string Event = "Event";
+
     public const string NoEvents = "NoEvents";
     public const string OnlyManagersCanCreateEvents = "OnlyManagersCanCreateEvents";
     
@@ -138,6 +141,7 @@ public static class ResourceKeys
 
     public const string TimeSet = "TimeSet";
     public const string AbsenceOptionsSelected = "AbsenceOptionsSelected";
+
 
 
 

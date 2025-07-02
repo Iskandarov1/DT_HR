@@ -86,11 +86,14 @@ public class MyEventsCommandHandler (
             return;
         }
 
+        var upcomingEvent = localization.GetString(ResourceKeys.UpcomingEvents, langauge);
         var sb = new StringBuilder();
-        sb.AppendLine("📅 *Upcoming Events:*\n");
+        sb.AppendLine($"📅 *{upcomingEvent}:*\n");
         
         foreach (var evt in events)
         {
+            // var date = localization.GetString(ResourceKeys.Date, langauge);
+            // var eventTime = localization.GetString(ResourceKeys.Event, langauge);
             var localEventTime = evt.EventTime.AddHours(5);
             sb.AppendLine($"📝 {evt.Description}");
             sb.AppendLine($"⏰ {localEventTime:dd-MM-yyyy HH:mm}");

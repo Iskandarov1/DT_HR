@@ -25,7 +25,7 @@ public class EventCommandHandler(
         var language = state?.Language ?? await localization.GetUserLanguage(message.From!.Id);
         var text = message.Text.ToLower();
         var eventText = localization.GetString(ResourceKeys.CreateEvent, language).ToLower();
-        return text == "/event" || text == eventText || text.Contains("event");
+        return text == "/createEvent" || text == eventText || text.Contains("createEvents");
     }
 
     public async Task HandleAsync(Message message, CancellationToken cancellationToken = default)

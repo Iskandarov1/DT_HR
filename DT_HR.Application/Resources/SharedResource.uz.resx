@@ -400,6 +400,12 @@ Xavfsiz sayohat! 🚗💨
   <data name="AbsenceOptionsSelected" xml:space="preserve">
     <value>✅Yo'qlik opsiyalari muvaffaqiyatli tanlandi</value>
   </data>
+  <data name="Event" xml:space="preserve">
+    <value>Tadbir</value>
+  </data>
+  <data name="UpcomingEvents" xml:space="preserve">
+    <value>Tadbirlar</value>
+  </data>
   
   
   
