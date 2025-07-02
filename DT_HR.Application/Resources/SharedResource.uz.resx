@@ -304,6 +304,9 @@
   <data name="Settings" xml:space="preserve">
     <value>⚙️Sozlamalar</value>
   </data>
+  <data name="LanguageChanged" xml:space="preserve">
+    <value>✅ Til muvaffaqiyatli o'zgartirildi!</value>
+  </data>
   <data name="CreateEvent" xml:space="preserve">
     <value>📅 Tadbir yaratish</value>
   </data>

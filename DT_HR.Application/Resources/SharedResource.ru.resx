@@ -304,6 +304,9 @@
   <data name="Settings" xml:space="preserve">
     <value>⚙️Настройки</value>
   </data>
+  <data name="LanguageChanged" xml:space="preserve">
+    <value>✅ Язык успешно изменен!</value>
+  </data>
   <data name="CreateEvent" xml:space="preserve">
     <value>📅 Создать событие</value>
   </data>

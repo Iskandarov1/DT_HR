@@ -43,18 +43,31 @@ public class LanguageSelectionCallbackHandler(
                 user.SetLanguage(selectedLanguage);
                 userRepository.Update(user);
                 await unitOfWork.SaveChangesAsync(cancellationToken);
+                
+                var previousMenuTypeString = state?.Data.GetValueOrDefault("previousMenuType")?.ToString();
+                var menuType = MainMenuType.Default;
+                if (!string.IsNullOrEmpty(previousMenuTypeString) && Enum.TryParse<MainMenuType>(previousMenuTypeString, out var parsedMenuType))
+                {
+                    menuType = parsedMenuType;
+                }
 
                 await stateService.RemoveStateAsync(userId);
-                await messageService.EditMessageTextAsync(chatId, messageId,
-                    localization.GetString(ResourceKeys.Check, selectedLanguage),
+                
+                // removing the keyboard and showing language confirmation
+                var confirmationMessage = localization.GetString(ResourceKeys.LanguageChanged, selectedLanguage);
+                await messageService.EditMessageTextAsync(
+                    chatId,
+                    messageId,
+                    confirmationMessage,
+                    replyMarkUp: null,
                     cancellationToken: cancellationToken);
+                //---
+                
                 await messageService.ShowMainMenuAsync(
-                    chatId,  
+                    chatId,
                     selectedLanguage,
-                    user.IsManager(),
-                    menuType: MainMenuType.CheckedIn,
-                    cancellationToken:cancellationToken);
-
+                    menuType: menuType,
+                    cancellationToken: cancellationToken);
             }
             else
             {
@@ -72,6 +85,7 @@ public class LanguageSelectionCallbackHandler(
                     chatId,
                     messageId,
                     message,
+                    replyMarkUp: null,
                     cancellationToken: cancellationToken);
                 await messageService.SendTextMessageAsync(
                     chatId, 
@@ -100,6 +114,7 @@ public class LanguageSelectionCallbackHandler(
                 chatId,
                 messageId,
                 message,
+                replyMarkUp: null,
                 cancellationToken: cancellationToken);
          
             await messageService.SendTextMessageAsync(

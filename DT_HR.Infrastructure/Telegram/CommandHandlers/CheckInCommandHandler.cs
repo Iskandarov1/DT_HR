@@ -58,22 +58,22 @@ public class CheckInCommandHandler(
                 }
 
 
-                if (attendance.Value.Status == AttendanceStatus.Absent.Value ||
-                    attendance.Value.Status == AttendanceStatus.OnTheWay.Value)
-                {
-                    await messageService.SendTextMessageAsync(chatId,
-                        localization.GetString(ResourceKeys.AlreadyReportedAbsence, language),
-                        cancellationToken: cancellationToken);
-                    var menu = attendance.Value.Status == AttendanceStatus.OnTheWay.Value
-                        ? MainMenuType.OnTheWay
-                        : MainMenuType.CheckPrompt;
-                    await messageService.ShowMainMenuAsync(
-                        chatId,
-                        language, 
-                        menuType:menu,
-                        cancellationToken: cancellationToken);
-                    return;
-                }
+                // if (attendance.Value.Status == AttendanceStatus.Absent.Value ||
+                //     attendance.Value.Status == AttendanceStatus.OnTheWay.Value)
+                // {
+                //     await messageService.SendTextMessageAsync(chatId,
+                //         localization.GetString(ResourceKeys.AlreadyReportedAbsence, language),
+                //         cancellationToken: cancellationToken);
+                //     var menu = attendance.Value.Status == AttendanceStatus.OnTheWay.Value
+                //         ? MainMenuType.OnTheWay
+                //         : MainMenuType.CheckPrompt;
+                //     await messageService.ShowMainMenuAsync(
+                //         chatId,
+                //         language, 
+                //         menuType:menu,
+                //         cancellationToken: cancellationToken);
+                //     return;
+                // }
             }
 
         }

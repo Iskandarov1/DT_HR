@@ -86,7 +86,8 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
            case MainMenuType.CheckedOut:
                rows.Add(new[]
                {
-                   new KeyboardButton(localization.GetString(ResourceKeys.MyEvents, language))
+                   new KeyboardButton(localization.GetString(ResourceKeys.MyEvents, language)),
+                   new KeyboardButton(localization.GetString(ResourceKeys.Settings,language))
                });
                break;
            case MainMenuType.OnTheWay:
@@ -118,6 +119,10 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
                    rows.Add(new[]
                    {
                        new KeyboardButton(localization.GetString(ResourceKeys.MyEvents, language))
+                   });
+                   rows.Add(new []
+                   {
+                       new KeyboardButton(localization.GetString(ResourceKeys.Settings,language))
                    });
                }
                break;

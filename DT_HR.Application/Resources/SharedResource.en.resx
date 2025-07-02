@@ -304,6 +304,9 @@
   <data name="Settings" xml:space="preserve">
     <value>⚙️Settings</value>
   </data>
+  <data name="LanguageChanged" xml:space="preserve">
+    <value>✅ Language changed successfully!</value>
+  </data>
   <data name="CreateEvent" xml:space="preserve">
     <value>📅 Create Event</value>
   </data>

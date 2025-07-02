@@ -135,7 +135,7 @@ public class TelegramMessageService(
             }
         }
         
-        var keyboard = keyboardService.GetMainMenuKeyboard(language,menuType);
+        var keyboard = keyboardService.GetMainMenuKeyboard(language, finalMenuType, managerFlag);
         var menuText = language switch
         {
             "ru" => "меню:",
