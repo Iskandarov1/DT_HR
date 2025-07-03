@@ -1,5 +1,8 @@
+using DT_HR.Application.Core.Abstractions.Data;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
+using DT_HR.Domain.Entities;
+using DT_HR.Domain.Repositories;
 using DT_HR.Infrastructure.Telegram.CallbackHandlers;
 using DT_HR.Infrastructure.Telegram.CommandHandlers;
 using DT_HR.Infrastructure.Telegram.MessageHandlers;
@@ -16,22 +19,35 @@ public class TelegramBotService : ITelegramBotService
     private readonly ITelegramMessageService _messageService;
     private readonly ILocalizationService _localization;
     private readonly IUserStateService _stateService;
-    
     private readonly ILogger<TelegramBotService> _logger;
     private readonly List<ITelegramService> _command;
     private readonly List<ITelegramCallbackQuery> _callbackHandlers;
+    private readonly IGroupRepository _groupRepository;
+    private readonly IGroupMembershipRepository _groupMembership;
+    private readonly IUserRepository _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
     public TelegramBotService(
         IServiceProvider serviceProvider,
         ITelegramMessageService messageService,
         ILocalizationService localization,
+        IGroupRepository groupRepository,
+        IGroupMembershipRepository groupMembership,
+        IUserRepository userRepository,
         IUserStateService stateService,
+        IUnitOfWork unitOfWork,
         ILogger<TelegramBotService> logger)
     {
         _serviceProvider = serviceProvider;
         _messageService = messageService;
         _localization = localization;
         _stateService = stateService;
+        _groupRepository = groupRepository;
+        _groupMembership = groupMembership;
+        _userRepository = userRepository;
+        _unitOfWork = unitOfWork;
+
+        
         _logger = logger;
 
         _command = new List<ITelegramService>
@@ -81,6 +97,13 @@ public class TelegramBotService : ITelegramBotService
                 case UpdateType.CallbackQuery:
                     await ProcessCallbackQueryAsync(update.CallbackQuery, cancellationToken);
                     break;
+                case UpdateType.MyChatMember:
+                    await ProcessMyChatMemberAsync(update.MyChatMember, cancellationToken);
+                    break;
+                case UpdateType.ChatMember:
+                    await ProcessChatMemberAsync(update.ChatMember, cancellationToken);
+                    break;
+
             }
         }
         catch (Exception e)
@@ -93,6 +116,133 @@ public class TelegramBotService : ITelegramBotService
                 await TrySendErrorMessageAsync(chatId.Value, cancellationToken);
             }
 
+        }
+    }
+
+    private async Task ProcessChatMemberAsync(ChatMemberUpdated? chatMember, CancellationToken cancellationToken)
+    {
+        if(chatMember.Chat.Type == ChatType.Private) return;
+
+        try
+        {
+            var userId = chatMember.From.Id;
+            var chatId = chatMember.Chat.Id;
+
+            var user = await _userRepository.GetByTelegramUserIdAsync(userId, cancellationToken);
+            if (user.HasNoValue)
+            {
+                _logger.LogDebug("User {UserId} not registered in system, skipping membership tracking", userId);
+                return;
+            }
+
+            var group = await _groupRepository.GetByChatIdAsync(chatId, cancellationToken);
+            if (group.HasNoValue)
+            {
+                _logger.LogDebug("Group {ChatId} not tracked in system, skipping membership update", chatId);
+                return;
+            }
+
+            var existingMembership = await _groupMembership.GetByUserAndGroupAsync(user.Value.Id, group.Value.Id,cancellationToken);
+
+            if (chatMember.NewChatMember.Status == ChatMemberStatus.Member ||
+                chatMember.NewChatMember.Status == ChatMemberStatus.Administrator)
+            {
+                var isAdmin = chatMember.NewChatMember.Status == ChatMemberStatus.Administrator;
+                if (existingMembership.HasNoValue)
+                {
+                    var membership = new GroupMembership(user.Value.Id, group.Value.Id, isAdmin);
+                    _groupMembership.Insert(membership);
+                    _logger.LogInformation("User {UserId} joined group {GroupTitle} as {Role}",
+                        userId, group.Value.Title, isAdmin ? "admin" : "member");
+                    await _unitOfWork.SaveChangesAsync(cancellationToken);
+                }
+                else
+                {
+                    existingMembership.Value.Activate();
+                    if(isAdmin) existingMembership.Value.MakeAdmin();
+                    else existingMembership.Value.RemoveAdmin();
+                    _groupMembership.Update(existingMembership.Value);
+                    _logger.LogInformation("User {UserId} status updated in group {GroupTitle} as {Role}",
+                        userId, group.Value.Title, isAdmin ? "admin" : "member");
+                    await _unitOfWork.SaveChangesAsync(cancellationToken);
+                }
+            }
+            else if (chatMember.NewChatMember.Status == ChatMemberStatus.Kicked || 
+                     chatMember.NewChatMember.Status == ChatMemberStatus.Left)
+            {
+                if (existingMembership.HasValue)
+                {
+                    existingMembership.Value.Deactivate();
+                    _groupMembership.Update(existingMembership.Value);
+                    _logger.LogInformation("User {UserId} left group {GroupTitle}", userId, group.Value.Title);
+                    await _unitOfWork.SaveChangesAsync(cancellationToken);
+                }
+                
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error processing chat member change for user {UserId} in chat {ChatId}",
+                chatMember.From.Id, chatMember.Chat.Id);
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    }
+
+    private async Task ProcessMyChatMemberAsync(ChatMemberUpdated myChatMember, CancellationToken cancellationToken)
+    {
+        if(myChatMember.Chat.Type == ChatType.Private) return;
+        
+        try
+        {
+            var chatId = myChatMember.Chat.Id;
+            var chatTitle = myChatMember.Chat.Title ?? "Unknown group";
+            if (myChatMember.NewChatMember.Status == ChatMemberStatus.Member ||
+                myChatMember.NewChatMember.Status == ChatMemberStatus.Administrator )
+            {
+                var existingGroup = await _groupRepository.GetByChatIdAsync(chatId, cancellationToken);
+                if (existingGroup.HasNoValue)
+                {
+                    var group = new TelegramGroup(chatId, chatTitle);
+                    _groupRepository.Insert(group);
+                    _logger.LogInformation("Bot added to the new group: {GroupTitle} (ID: {ChatId} )",chatTitle,chatId);
+                    await _unitOfWork.SaveChangesAsync(cancellationToken);
+                }
+                else
+                {
+                    existingGroup.Value.Activate();
+                    _groupRepository.Update(existingGroup.Value);
+                    _logger.LogInformation("Bot re-added to existing group: {GroupTitle} (ID: {ChatId})",chatTitle,chatId);
+                    await _unitOfWork.SaveChangesAsync(cancellationToken);
+                }
+            }
+            else if(myChatMember.NewChatMember.Status == ChatMemberStatus.Left ||
+                    myChatMember.NewChatMember.Status == ChatMemberStatus.Kicked)
+            {
+                var existingGroup = await _groupRepository.GetByChatIdAsync(chatId, cancellationToken);
+                if (existingGroup.HasValue)
+                {
+                    existingGroup.Value.DeActivate();
+                    _groupRepository.Update(existingGroup.Value);
+                    _logger.LogInformation("Bot removed from group: {GroupTitle} (ID: {ChatId})", chatTitle, chatId);
+                    await _unitOfWork.SaveChangesAsync(cancellationToken);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error processing bot membership change in chat {ChatId}", myChatMember.Chat.Id);
         }
     }
 

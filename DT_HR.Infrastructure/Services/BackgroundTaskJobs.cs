@@ -15,6 +15,7 @@ public class BackgroundTaskJobs(
     IAttendanceRepository attendanceRepository,
     IAttendanceReportService reportService,
     IGroupRepository groupRepository,
+    IGroupMembershipRepository membershipRepository,
     ILogger<BackgroundTaskJobs> logger)
 {
     public async Task SendCheckInReminderAsync(long telegramUserId, CancellationToken cancellationToken = default)
@@ -128,24 +129,45 @@ public class BackgroundTaskJobs(
         var groups = await groupRepository.GetActiveSubscribersAsync(cancellationToken);
         foreach (var group in groups)
         {
+            try
+            {
+                var groupUsers = await membershipRepository.GetActiveGroupMembersAsync(group.Id, cancellationToken);
+                if (!groupUsers.Any())
+                {
+                    logger.LogInformation("Group {GroupId} has no active members, skipping attendance stats",group.Id);
+                    continue;
+                }
+
+                var groupUserIds = groupUsers
+                                                .Select(u => u.User.Id)
+                                                .ToList();
+                var groupReport = await reportService.GetGroupAttendanceReport(DateOnly.FromDateTime(TimeUtils.Now),
+                    groupUserIds, cancellationToken);
+                var lang = "uz";
+                var title = localization.GetString(ResourceKeys.AttendanceStats, lang);
+                var total = localization.GetString(ResourceKeys.TotalEmployees, lang);
+                var present = localization.GetString(ResourceKeys.Present, lang);
+                var late = localization.GetString(ResourceKeys.Late, lang);
+                var absent = localization.GetString(ResourceKeys.Absent, lang);
+                var onTheWay = localization.GetString(ResourceKeys.OnTheWay, lang);
             
-            
-            var lang = "uz";
-            var title = localization.GetString(ResourceKeys.AttendanceStats, lang);
-            var total = localization.GetString(ResourceKeys.TotalEmployees, lang);
-            var present = localization.GetString(ResourceKeys.Present, lang);
-            var late = localization.GetString(ResourceKeys.Late, lang);
-            var absent = localization.GetString(ResourceKeys.Absent, lang);
-            var onTheWay = localization.GetString(ResourceKeys.OnTheWay, lang);
-            
-            var text = $"*{title}*\n" +
-                       $"📅 *{report.Date:yyyy-MM-dd}*\n" +
-                       $"{total}: {report.TotalEmployees}\n" +
-                       $"{present}: {report.Present}\n" +
-                       $"{late}: {report.Late}\n" +
-                       $"{absent}: {report.Absent}\n" +
-                       $"{onTheWay}: {report.OnTheWay}";
-            await messageService.SendTextMessageAsync(group.ChatId, text, cancellationToken: cancellationToken);
+                var text =
+                                  $"*{title}* - {group.Title}\n" +
+                                  $"📅 *{groupReport.Date:yyyy-MM-dd}*\n" +
+                                  $"{total}: {groupReport.TotalEmployees}\n" +
+                                  $"{present}: {groupReport.Present}\n" +
+                                  $"{late}: {groupReport.Late}\n" +
+                                  $"{absent}: {groupReport.Absent}\n" +
+                                  $"{onTheWay}: {groupReport.OnTheWay}";
+                
+                await messageService.SendTextMessageAsync(group.ChatId, text, cancellationToken: cancellationToken);
+                
+                logger.LogInformation("Group attendance sent to group {GroupId} with {MemberCount} members",group.Id,groupUsers.Count());
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to send attendance stats to the group {GroupId}",group.Id);
+            }   
         }
         
         logger.LogInformation("Attendance stats sent to managers");
@@ -231,6 +253,14 @@ public class BackgroundTaskJobs(
             var text = localization.GetString(ResourceKeys.HolidayGreeting, language, holidayName);
             await messageService.SendTextMessageAsync(user.TelegramUserId, text, cancellationToken: cancellationToken);
         }
+
+        var groups = await groupRepository.GetActiveSubscribersAsync(cancellationToken);
+        foreach (var group in groups)
+        {
+            var lang = "uz";
+            var text = localization.GetString(ResourceKeys.HolidayGreeting, lang);
+            await messageService.SendTextMessageAsync(group.ChatId, text, cancellationToken: cancellationToken);
+        }
         logger.LogInformation("Holiday greetings sent for {Holiday}",holidayName);
     }
 
@@ -238,15 +268,51 @@ public class BackgroundTaskJobs(
     {
         var today = DateOnly.FromDateTime(TimeUtils.Now);
         var users = await userRepository.GetUsersWithBirthdayAsync(today, cancellationToken);
+        if (users.Count == 0)
+        {
+            logger.LogInformation("No birthdays today");
+        }
         foreach (var user in users)
         {
             var lang = await localization.GetUserLanguage(user.TelegramUserId);
             var text = localization.GetString(ResourceKeys.HappyBirthday, lang);
             await messageService.SendTextMessageAsync(user.TelegramUserId, text, cancellationToken: cancellationToken);
         }
-        if(users.Count > 0)
-            logger.LogInformation("Birthday greetings sent to {Count} users ",users.Count);
-        
+
+        var groups = await groupRepository.GetActiveSubscribersAsync(cancellationToken);
+        foreach (var group in groups)
+        {
+            try
+            {
+                var groupMembers = await membershipRepository.GetActiveGroupMembersAsync(group.Id, cancellationToken);
+
+                var groupBirthdayUsers = users
+                    .Where(bu => groupMembers
+                        .Any(gm => gm.User.Id == bu.Id))
+                        .ToList();
+
+                if (groupBirthdayUsers.Count == 0)
+                {
+                    continue;
+                }
+
+                var lang = "uz";
+                var birthdayMsg = localization.GetString(ResourceKeys.HappyBirthday, lang);
+                var names = string.Join(", ", groupBirthdayUsers.Select(u => $"{u.FirstName}{u.LastName}"));
+
+                var text = $"🎉 {birthdayMsg}\n\n" +
+                           $"🎂 {names}\n\n";
+
+                await messageService.SendTextMessageAsync(group.ChatId, text, cancellationToken: cancellationToken);
+                
+                logger.LogInformation("Birthday announcements sent to group {GroupId} for {Count} users",group.Id,groupBirthdayUsers.Count);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Failed to send birthday announcement to group {GroupId}", group.Id);
+            }
+        }
+        logger.LogInformation("Birthday greetings sent to {Count} users", users.Count);
     }
 
 
