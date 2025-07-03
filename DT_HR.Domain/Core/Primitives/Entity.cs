@@ -96,4 +96,5 @@ public abstract class Entity : IEquatable<Entity>, IAuditableEntity,ISoftDeletab
 	
 	[Column("deleted_at")] public DateTime? DeletedAt { get; }
 	[Column("is_deleted")] public bool IsDelete { get; set; }
+	
 }

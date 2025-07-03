@@ -14,6 +14,7 @@ public class BackgroundTaskJobs(
     IUserRepository userRepository,
     IAttendanceRepository attendanceRepository,
     IAttendanceReportService reportService,
+    IGroupRepository groupRepository,
     ILogger<BackgroundTaskJobs> logger)
 {
     public async Task SendCheckInReminderAsync(long telegramUserId, CancellationToken cancellationToken = default)
@@ -123,6 +124,30 @@ public class BackgroundTaskJobs(
             await messageService.SendTextMessageAsync(manager.TelegramUserId, text,
                 cancellationToken: cancellationToken);
         }
+
+        var groups = await groupRepository.GetActiveSubscribersAsync(cancellationToken);
+        foreach (var group in groups)
+        {
+            
+            
+            var lang = "uz";
+            var title = localization.GetString(ResourceKeys.AttendanceStats, lang);
+            var total = localization.GetString(ResourceKeys.TotalEmployees, lang);
+            var present = localization.GetString(ResourceKeys.Present, lang);
+            var late = localization.GetString(ResourceKeys.Late, lang);
+            var absent = localization.GetString(ResourceKeys.Absent, lang);
+            var onTheWay = localization.GetString(ResourceKeys.OnTheWay, lang);
+            
+            var text = $"*{title}*\n" +
+                       $"📅 *{report.Date:yyyy-MM-dd}*\n" +
+                       $"{total}: {report.TotalEmployees}\n" +
+                       $"{present}: {report.Present}\n" +
+                       $"{late}: {report.Late}\n" +
+                       $"{absent}: {report.Absent}\n" +
+                       $"{onTheWay}: {report.OnTheWay}";
+            await messageService.SendTextMessageAsync(group.ChatId, text, cancellationToken: cancellationToken);
+        }
+        
         logger.LogInformation("Attendance stats sent to managers");
     }
 

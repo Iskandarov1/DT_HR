@@ -16,6 +16,7 @@ public class TelegramBotService : ITelegramBotService
     private readonly ITelegramMessageService _messageService;
     private readonly ILocalizationService _localization;
     private readonly IUserStateService _stateService;
+    
     private readonly ILogger<TelegramBotService> _logger;
     private readonly List<ITelegramService> _command;
     private readonly List<ITelegramCallbackQuery> _callbackHandlers;

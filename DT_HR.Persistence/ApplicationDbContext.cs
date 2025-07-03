@@ -32,6 +32,7 @@ public sealed class ApplicationDbContext(
 	public DbSet<Attendance> AttendanceRSet => Set<Attendance>();
 	public DbSet<Event> Events => Set<Event>();
 	public DbSet<TelegramGroup> TelegramGroups => Set<TelegramGroup>();
+	public DbSet<GroupMembership> GroupMemberships => Set<GroupMembership>();
 
 	/// <inheritdoc />
 	public new DbSet<TEntity> Set<TEntity>()
