@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Check-In</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 id="app-title">HR Check-In</h1>
+            <p id="app-subtitle">Verify your location to check in</p>
+        </div>
+        
+        <div class="content">
+            <div id="status-display" class="status-waiting">
+                <div class="status-icon">📍</div>
+                <div id="status-text">Ready to verify location</div>
+            </div>
+            
+            <button id="verify-button" class="verify-btn">
+                <span class="btn-icon">📍</span>
+                <span id="btn-text">Verify I'm at Office</span>
+            </button>
+            
+            <div id="error-message" class="error-message hidden">
+                <div class="error-icon">❌</div>
+                <div id="error-text"></div>
+            </div>
+            
+            <div id="success-message" class="success-message hidden">
+                <div class="success-icon">✅</div>
+                <div id="success-text"></div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p id="footer-text">Secure location verification</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

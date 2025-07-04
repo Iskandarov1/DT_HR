@@ -20,8 +20,8 @@ public class LocationService : ILocationService
         _logger = logger;
 
 
-        _defaultOfficeLatitude = configuration.GetValue<double>("Office:Latitude", 41.332073);
-        _defaultOfficeLangitude = configuration.GetValue<double>("Office:Longitude", 69.340047);
+        _defaultOfficeLatitude = configuration.GetValue<double>("Office:Latitude", 41.331971);
+        _defaultOfficeLangitude = configuration.GetValue<double>("Office:Longitude", 69.340092);
         _officeRadiusInMeters = configuration.GetValue<double>("Office:RadiusInMeters", 200);
     }
     public async Task<bool> IsWithInOfficeRadiusAsync(double latitude, double longitute)

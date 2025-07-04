@@ -15,6 +15,7 @@ public class CheckInCommandHandler(
     ILocalizationService localization,
     IAttendanceRepository attendanceRepository,
     IUserRepository userRepository,
+    ITelegramKeyboardService keyboardService,
     ILogger<CheckInCommandHandler> logger) : ITelegramService
 {
     public async Task<bool> CanHandleAsync(Message message, CancellationToken cancellationToken = default)
@@ -91,14 +92,21 @@ public class CheckInCommandHandler(
             await stateService.SetStateAsync(userId, state);
 
             var checkInProgress = localization.GetString(ResourceKeys.CheckInProcess, language);
-            var shareLocationPrompt = localization.GetString(ResourceKeys.ShareLocationPrompt, language);
+            
+            var optionsMessage = language switch
+            {
+                "ru" => "Выберите способ подтверждения местоположения:",
+                "en" => "Choose how to verify your location:",
+                _ => "Joylashuvingizni tasdiqlash usulini tanlang:"
+            };
 
+            var keyboard = keyboardService.GetCheckInOptionsKeyboard(language);
 
-            await messageService.SendLocationRequestAsync(
+            await messageService.SendTextMessageAsync(
                 chatId,
-                $"{checkInProgress}\n\n{shareLocationPrompt}",
-                language,
-                cancellationToken);
+                $"{checkInProgress}\n\n{optionsMessage}",
+                replyMarkup: keyboard,
+                cancellationToken: cancellationToken);
         }
     }
 

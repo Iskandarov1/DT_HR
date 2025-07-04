@@ -2,11 +2,13 @@ using System.Diagnostics;
 using DT_HR.Application.Core.Abstractions.Enum;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
+using Microsoft.Extensions.Configuration;
 using Telegram.Bot.Types.ReplyMarkups;
+using Telegram.Bot.Types;
 
 namespace DT_HR.Infrastructure.Telegram;
 
-public class TelegramKeyboardService(ILocalizationService localization) : ITelegramKeyboardService
+public class TelegramKeyboardService(ILocalizationService localization, IConfiguration configuration) : ITelegramKeyboardService
 {
     public InlineKeyboardMarkup GetLanguageSelectionKeyboard()
     {
@@ -248,6 +250,37 @@ public class TelegramKeyboardService(ILocalizationService localization) : ITeleg
             {
                 InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.Cancel, language),
                     "action:cancel")
+            }
+        });
+    }
+
+    public InlineKeyboardMarkup GetCheckInOptionsKeyboard(string language = "uz")
+    {
+        var miniAppText = language switch
+        {
+            "ru" => "🚀 Открыть приложение",
+            "en" => "🚀 Open App",
+            _ => "🚀 Ilovani ochish"
+        };
+
+        var locationText = language switch
+        {
+            "ru" => "📍 Поделиться местоположением",
+            "en" => "📍 Share Location",
+            _ => "📍 Joylashuvni baham ko'rish"
+        };
+
+        var miniAppUrl = configuration["Telegram:MiniAppUrl"] ?? "https://localhost:7000/miniapp/";
+
+        return new InlineKeyboardMarkup(new[]
+        {
+            new[]
+            {
+                InlineKeyboardButton.WithWebApp(miniAppText, new WebAppInfo { Url = miniAppUrl })
+            },
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData(locationText, "action:share_location")
             }
         });
     }

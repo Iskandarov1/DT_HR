@@ -43,6 +43,8 @@ var app = builder.Build();
 
 app.UseCors();
 app.UseRequestLocalization();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 
 app.Use(async (context, next) =>

@@ -100,9 +100,7 @@ public class TelegramBotService : ITelegramBotService
                 case UpdateType.MyChatMember:
                     await ProcessMyChatMemberAsync(update.MyChatMember, cancellationToken);
                     break;
-                case UpdateType.ChatMember:
-                    await ProcessChatMemberAsync(update.ChatMember, cancellationToken);
-                    break;
+                // ChatMember tracking disabled - not needed for simple group notifications
 
             }
         }
@@ -348,22 +346,9 @@ public class TelegramBotService : ITelegramBotService
     {
         if(message == null || message.From == null) return;
         
-        // Handle group membership events (NewChatMembers, LeftChatMember)
+
         if (message.Chat.Type != ChatType.Private)
         {
-            if (message.Type == MessageType.NewChatMembers)
-            {
-                await ProcessNewChatMembersAsync(message, cancellationToken);
-                return;
-            }
-            
-            if (message.Type == MessageType.LeftChatMember)
-            {
-                await ProcessLeftChatMemberAsync(message, cancellationToken);
-                return;
-            }
-            
-            // IGNORE all other messages in groups
             _logger.LogDebug("Ignoring message type {MessageType} from group chat {ChatId} ({ChatTitle})", 
                 message.Type, message.Chat.Id, message.Chat.Title);
             return;

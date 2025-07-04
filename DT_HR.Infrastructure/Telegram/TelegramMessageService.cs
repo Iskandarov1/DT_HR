@@ -36,6 +36,23 @@ public class TelegramMessageService(
         }
     }
 
+    public async Task SendPlainTextMessageAsync(long chatId, string text, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            await botClient.SendMessage(
+                chatId: chatId,
+                text: text,
+                parseMode: ParseMode.None, // No parsing - plain text only
+                cancellationToken: cancellationToken);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Error sending plain text message to chat {ChatId}", chatId);
+            throw;
+        }
+    }
+
     public async Task SendLocationRequestAsync(long chatId, string text,string language, CancellationToken cancellationToken = default)
     {
         try
