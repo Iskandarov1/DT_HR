@@ -49,7 +49,9 @@ public class WebhookConfigurationService(
                 allowedUpdates: new[]
                 {
                     UpdateType.Message,
-                    UpdateType.CallbackQuery
+                    UpdateType.CallbackQuery,
+                    UpdateType.MyChatMember,
+                    UpdateType.ChatMember
                 },
                 dropPendingUpdates: true,
                 cancellationToken: cancellationToken);

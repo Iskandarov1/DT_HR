@@ -25,7 +25,27 @@ public class TelegramWebhookController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("Received update {UpdateId}", update.Id);
+            _logger.LogInformation("Received update {UpdateId} of type {UpdateType}", update.Id, update.Type);
+            
+            // Log detailed info for group membership updates
+            if (update.Type == Telegram.Bot.Types.Enums.UpdateType.MyChatMember)
+            {
+                _logger.LogInformation("Bot membership update: Chat {ChatId} ({ChatTitle}), Status: {OldStatus} -> {NewStatus}",
+                    update.MyChatMember.Chat.Id,
+                    update.MyChatMember.Chat.Title,
+                    update.MyChatMember.OldChatMember.Status,
+                    update.MyChatMember.NewChatMember.Status);
+            }
+            
+            if (update.Type == Telegram.Bot.Types.Enums.UpdateType.ChatMember)
+            {
+                _logger.LogInformation("User membership update: User {UserId} in Chat {ChatId}, Status: {OldStatus} -> {NewStatus}",
+                    update.ChatMember.From.Id,
+                    update.ChatMember.Chat.Id,
+                    update.ChatMember.OldChatMember.Status,
+                    update.ChatMember.NewChatMember.Status);
+            }
+            
             await _telegramBotService.ProcessUpdateAsync(update);
             return Ok();
         }

@@ -46,7 +46,9 @@ public class TelegramPollingService : BackgroundService
             AllowedUpdates = new[]
             {
                 UpdateType.Message,
-                UpdateType.CallbackQuery
+                UpdateType.CallbackQuery,
+                UpdateType.MyChatMember,
+                UpdateType.ChatMember
             },
             DropPendingUpdates = true
         };

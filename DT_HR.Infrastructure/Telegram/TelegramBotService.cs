@@ -121,7 +121,7 @@ public class TelegramBotService : ITelegramBotService
 
     private async Task ProcessChatMemberAsync(ChatMemberUpdated? chatMember, CancellationToken cancellationToken)
     {
-        if(chatMember.Chat.Type == ChatType.Private) return;
+        if (chatMember == null || chatMember.Chat.Type == ChatType.Private) return;
 
         try
         {
@@ -246,10 +246,128 @@ public class TelegramBotService : ITelegramBotService
         }
     }
 
+    private async Task ProcessNewChatMembersAsync(Message message, CancellationToken cancellationToken)
+    {
+        if (message.NewChatMembers == null) return;
+        
+        try
+        {
+            var group = await _groupRepository.GetByChatIdAsync(message.Chat.Id, cancellationToken);
+            if (group.HasNoValue)
+            {
+                _logger.LogDebug("Group {ChatId} not tracked in system, skipping new member processing", message.Chat.Id);
+                return;
+            }
+            
+            foreach (var newMember in message.NewChatMembers)
+            {
+                // Skip if it's the bot itself (already handled by MyChatMember)
+                if (newMember.IsBot) continue;
+                
+                // Check if this user is registered in our system
+                var user = await _userRepository.GetByTelegramUserIdAsync(newMember.Id, cancellationToken);
+                if (user.HasNoValue)
+                {
+                    _logger.LogDebug("User {UserId} ({Username}) not registered in system, skipping membership tracking", 
+                        newMember.Id, newMember.Username);
+                    continue;
+                }
+                
+                // Check if membership already exists
+                var existingMembership = await _groupMembership.GetByUserAndGroupAsync(user.Value.Id, group.Value.Id, cancellationToken);
+                
+                if (existingMembership.HasNoValue)
+                {
+                    // Create new membership
+                    var membership = new GroupMembership(user.Value.Id, group.Value.Id, false);
+                    _groupMembership.Insert(membership);
+                    _logger.LogInformation("User {UserId} ({FirstName} {LastName}) joined group {GroupTitle}", 
+                        newMember.Id, user.Value.FirstName, user.Value.LastName, group.Value.Title);
+                }
+                else
+                {
+                    // Reactivate existing membership
+                    existingMembership.Value.Activate();
+                    _groupMembership.Update(existingMembership.Value);
+                    _logger.LogInformation("User {UserId} ({FirstName} {LastName}) rejoined group {GroupTitle}", 
+                        newMember.Id, user.Value.FirstName, user.Value.LastName, group.Value.Title);
+                }
+                
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error processing new chat members in group {ChatId}", message.Chat.Id);
+        }
+    }
+    
+    private async Task ProcessLeftChatMemberAsync(Message message, CancellationToken cancellationToken)
+    {
+        if (message.LeftChatMember == null) return;
+        
+        try
+        {
+            var leftMember = message.LeftChatMember;
+            
+            // Skip if it's the bot itself (already handled by MyChatMember)
+            if (leftMember.IsBot) return;
+            
+            var group = await _groupRepository.GetByChatIdAsync(message.Chat.Id, cancellationToken);
+            if (group.HasNoValue)
+            {
+                _logger.LogDebug("Group {ChatId} not tracked in system, skipping left member processing", message.Chat.Id);
+                return;
+            }
+            
+            var user = await _userRepository.GetByTelegramUserIdAsync(leftMember.Id, cancellationToken);
+            if (user.HasNoValue)
+            {
+                _logger.LogDebug("User {UserId} not registered in system, skipping membership deactivation", leftMember.Id);
+                return;
+            }
+            
+            var existingMembership = await _groupMembership.GetByUserAndGroupAsync(user.Value.Id, group.Value.Id, cancellationToken);
+            if (existingMembership.HasValue)
+            {
+                existingMembership.Value.Deactivate();
+                _groupMembership.Update(existingMembership.Value);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+                
+                _logger.LogInformation("User {UserId} ({FirstName} {LastName}) left group {GroupTitle}", 
+                    leftMember.Id, user.Value.FirstName, user.Value.LastName, group.Value.Title);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error processing left chat member in group {ChatId}", message.Chat.Id);
+        }
+    }
 
     public async Task ProcessMessageAsync(Message message, CancellationToken cancellationToken)
     {
         if(message == null || message.From == null) return;
+        
+        // Handle group membership events (NewChatMembers, LeftChatMember)
+        if (message.Chat.Type != ChatType.Private)
+        {
+            if (message.Type == MessageType.NewChatMembers)
+            {
+                await ProcessNewChatMembersAsync(message, cancellationToken);
+                return;
+            }
+            
+            if (message.Type == MessageType.LeftChatMember)
+            {
+                await ProcessLeftChatMemberAsync(message, cancellationToken);
+                return;
+            }
+            
+            // IGNORE all other messages in groups
+            _logger.LogDebug("Ignoring message type {MessageType} from group chat {ChatId} ({ChatTitle})", 
+                message.Type, message.Chat.Id, message.Chat.Title);
+            return;
+        }
         
         var userId = message.From.Id;
         
@@ -339,6 +457,14 @@ public class TelegramBotService : ITelegramBotService
     public async Task ProcessCallbackQueryAsync(CallbackQuery? callbackQuery, CancellationToken cancellationToken)
     {
         if(callbackQuery == null || callbackQuery.From == null || callbackQuery.Message == null) return;
+
+        // IGNORE callback queries in groups - bot should only respond in private chats
+        if (callbackQuery.Message.Chat.Type != ChatType.Private)
+        {
+            _logger.LogDebug("Ignoring callback query from group chat {ChatId} ({ChatTitle})", 
+                callbackQuery.Message.Chat.Id, callbackQuery.Message.Chat.Title);
+            return;
+        }
 
         var userId = callbackQuery.From.Id;
         var data = callbackQuery.Data;

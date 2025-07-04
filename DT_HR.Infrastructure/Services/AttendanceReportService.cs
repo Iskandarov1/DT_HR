@@ -61,7 +61,7 @@ public class AttendanceReportService(
                     {
                         onTime++;
                     }
-
+                    
                     if (att.CheckInTime.HasValue && att.CheckOutTime.HasValue)
                     {
                         workDuration = att.GetWorkDuration();
@@ -124,6 +124,122 @@ public class AttendanceReportService(
             totalAbsent,
             employees);
     }
+
+    public async Task<AttendanceResponse> GetGroupAttendanceReport(DateOnly date, List<Guid> userIds, CancellationToken cancellation = default)
+    {
+        var query = from user in dbContext.Set<User>()
+            where user.IsActive && !user.IsDelete && user.Role != UserRole.Manager.Value
+                  && userIds.Contains(user.Id) 
+            join attendance in dbContext.Set<Attendance>() on new { UserId = user.Id, Date = date } equals new
+                { attendance.UserId, attendance.Date } into attendances
+            from att in attendances.DefaultIfEmpty()
+            select new { User = user, Attendance = att };
+
+        var data = await query.ToListAsync(cancellation);
+        var employee = new List<EmployeeAttendanceResponse>();
+        
+        int present = 0, onTime = 0, late = 0, absent = 0, onTheWay = 0, notChecked = 0, worked = 0, fullDay = 0, earlyDeparture = 0, totalAbsent = 0;
+        
+        TimeSpan totalWork = TimeSpan.Zero;
+
+        foreach (var item in data)
+        {
+            var att = item.Attendance;
+
+            string status;
+            bool isLate = false;
+            bool isEarly = false;
+            TimeSpan? workDuration = null;
+            
+            if (att == null)
+            {
+                status = "NoRecord";
+                notChecked++;
+                totalAbsent++;
+            }
+            else
+            {
+                var statusEnum = AttendanceStatus.FromValue(att.Status).Value;
+                status = statusEnum.Name;
+
+                if (att.Status == AttendanceStatus.Present.Value || att.Status == AttendanceStatus.OnTheWay.Value )
+                {
+                    present++;
+
+                    if (att.IsLateArrival(item.User.WorkStartTime))
+                    {
+                        late++;
+                        isLate = true;
+                    }
+                    else
+                    {
+                        onTime ++ ;
+                    }
+
+                    if (att.CheckInTime.HasValue && att.CheckOutTime.HasValue)
+                    {
+                        workDuration = att.GetWorkDuration();
+                        if (workDuration.HasValue)
+                        {
+                            totalWork += workDuration.Value;
+                            worked++;
+                            if (workDuration.Value >= item.User.WorkEndTime - item.User.WorkStartTime) fullDay++;
+                        }
+                    }
+
+                    if (att.IsEarlyDeparture(item.User.WorkEndTime))
+                    {
+                        earlyDeparture++;
+                        isEarly = true;
+                    }
+                }
+                else
+                {
+                    absent++;
+                    if (att.Status == AttendanceStatus.OnTheWay.Value)
+                    {
+                        onTheWay++;
+                        totalAbsent++;
+                    }
+                }
+                employee.Add(new EmployeeAttendanceResponse(
+                    item.User.Id,
+                    $"{item.User.FirstName}",
+                    item.User.PhoneNumber,
+                    status,
+                    att?.CheckInTime,
+                    att?.CheckOutTime,
+                    isLate,
+                    isLate && att?.CheckInTime != null ? (TimeOnly.FromDateTime(att!.CheckInTime.Value) - item.User.WorkStartTime).ToString(@"hh\:mm") : null,
+                    isEarly,
+                    att?.AbsenceReason,
+                    att?.EstimatedArrivalTime,
+                    att?.IsWithInOfficeRadius ?? false,
+                    workDuration));
+            }
+        }
+
+        var avgWork = worked > 0 ? TimeSpan.FromTicks(totalWork.Ticks / worked) : TimeSpan.Zero;
+
+        return new AttendanceResponse(
+            date,
+            data.Count,
+            present,
+            onTime,
+            late,
+            absent,
+            onTheWay,
+            notChecked,
+            worked,
+            fullDay,
+            avgWork,
+            earlyDeparture,
+            totalAbsent,
+            employee
+            );
+
+    }
+
     public async Task<List<EmployeeAttendanceResponse>> GetDetailedAttendance(DateOnly date, CancellationToken cancellationToken)
     {
         var query = from user in dbContext.Set<User>()
