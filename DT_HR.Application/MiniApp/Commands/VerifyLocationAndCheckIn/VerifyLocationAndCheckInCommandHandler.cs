@@ -1,5 +1,5 @@
 using DT_HR.Application.Attendance.Commands.CheckIn;
-using DT_HR.Application.Core.Abstractions.Data;
+using DT_HR.Application.Core.Abstractions.Enum;
 using DT_HR.Application.Core.Abstractions.Messaging;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Contract.Responses.MiniApp;
@@ -12,10 +12,11 @@ using Microsoft.Extensions.Logging;
 namespace DT_HR.Application.MiniApp.Commands.VerifyLocationAndCheckIn;
 
 public sealed class VerifyLocationAndCheckInCommandHandler(
-    IUnitOfWork unitOfWork,
     IUserRepository userRepository,
     ILocationService locationService,
     IMediator mediator,
+    ITelegramMessageService telegramMessageService,
+    ILocalizationService localizationService,
     ILogger<VerifyLocationAndCheckInCommandHandler> logger)
     : ICommandHandler<VerifyLocationAndCheckInCommand, Result<MiniAppCheckInResponse>>
 {
@@ -72,6 +73,15 @@ public sealed class VerifyLocationAndCheckInCommandHandler(
             if (result.IsSuccess)
             {
                 logger.LogInformation("Successful Mini App check-in for user {UserId}", request.TelegramUserId);
+                
+                // Update Telegram main menu to show checked-in status
+                var language = await localizationService.GetUserLanguage(request.TelegramUserId);
+                await telegramMessageService.ShowMainMenuAsync(
+                    request.TelegramUserId,
+                    language,
+                    menuType: MainMenuType.CheckedIn,
+                    cancellationToken: cancellationToken);
+                
                 return Result.Success(new MiniAppCheckInResponse(
                     Success: true,
                     Message: GetLocalizedMessage("CheckInSuccess", request.LanguageCode)

@@ -54,10 +54,7 @@ public static class DependencyInjection
         services.AddScoped<StateBasedMessageHandler>();
         services.AddScoped<EventCommandHandler>();
         services.AddScoped<MyEventsCommandHandler>();
-
-
-
-        services.AddScoped<LocationMessageHandler>();
+        
         services.AddScoped<ContactMessageHandler>();
 
         services.AddScoped<LanguageSelectionCallbackHandler>();

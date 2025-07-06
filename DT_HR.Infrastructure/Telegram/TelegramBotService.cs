@@ -77,11 +77,7 @@ public class TelegramBotService : ITelegramBotService
     {
         return _messageService.SendTextMessageAsync(chatId, text, cancellationToken: cancellationToken);
     }
-
-    public Task SendLocationRequestAsync(long chatId, string text, CancellationToken cancellationToken = default)
-    {
-        return _messageService.SendLocationRequestAsync(chatId, text,  "uz", cancellationToken);
-    }
+    
 
     public async Task ProcessUpdateAsync(Update update, CancellationToken cancellationToken = default)
     {
@@ -362,10 +358,6 @@ public class TelegramBotService : ITelegramBotService
         {
             case MessageType.Text:
                 await ProcessTextMessageAsync(message, cancellationToken);
-                break;
-            case MessageType.Location :
-                var locationHandler = _serviceProvider.GetRequiredService<LocationMessageHandler>();
-                await locationHandler.HandleAsync(message, cancellationToken);
                 break;
             case MessageType.Contact:
                 var contactHandler = _serviceProvider.GetRequiredService<ContactMessageHandler>();

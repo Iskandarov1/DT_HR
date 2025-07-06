@@ -127,24 +127,6 @@ public class TelegramKeyboardService(ILocalizationService localization, IConfigu
         };
     }
 
-    public ReplyKeyboardMarkup GetLocationRequestKeyboard(string language)
-    {
-        return new ReplyKeyboardMarkup(new[]
-        {
-            new[]
-            {
-                KeyboardButton.WithRequestLocation(localization.GetString(ResourceKeys.ShareLocation,language))
-            },
-            new[]
-            {
-                new KeyboardButton(localization.GetString(ResourceKeys.Cancel,language))
-            }
-        })
-        {
-            ResizeKeyboard = true,
-            OneTimeKeyboard = true
-        };
-    }
 
     public ReplyKeyboardMarkup GetContactRequestKeyboard(string language)
     {
@@ -263,13 +245,6 @@ public class TelegramKeyboardService(ILocalizationService localization, IConfigu
             _ => "🚀 Ilovani ochish"
         };
 
-        var locationText = language switch
-        {
-            "ru" => "📍 Поделиться местоположением",
-            "en" => "📍 Share Location",
-            _ => "📍 Joylashuvni baham ko'rish"
-        };
-
         var miniAppUrl = configuration["Telegram:MiniAppUrl"] ?? "https://localhost:7000/miniapp/";
 
         return new InlineKeyboardMarkup(new[]
@@ -277,10 +252,6 @@ public class TelegramKeyboardService(ILocalizationService localization, IConfigu
             new[]
             {
                 InlineKeyboardButton.WithWebApp(miniAppText, new WebAppInfo { Url = miniAppUrl })
-            },
-            new[]
-            {
-                InlineKeyboardButton.WithCallbackData(locationText, "action:share_location")
             }
         });
     }

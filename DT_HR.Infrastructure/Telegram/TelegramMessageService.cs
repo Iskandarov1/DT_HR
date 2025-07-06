@@ -53,25 +53,6 @@ public class TelegramMessageService(
         }
     }
 
-    public async Task SendLocationRequestAsync(long chatId, string text,string language, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            var keyboard = keyboardService.GetLocationRequestKeyboard(language);
-
-            await botClient.SendMessage(
-            chatId: chatId,
-            text: text,
-            parseMode:ParseMode.Markdown,
-            replyMarkup:keyboard,
-            cancellationToken:cancellationToken);
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e,"Error sending location request to chat {ChatId}",chatId);
-            throw;
-        }
-    }
 
     public async Task EditMessageTextAsync(long chatId, int messageId, string text, InlineKeyboardMarkup? replyMarkup = null,
         CancellationToken cancellationToken = default)
