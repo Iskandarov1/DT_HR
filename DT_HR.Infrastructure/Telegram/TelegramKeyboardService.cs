@@ -63,6 +63,10 @@ public class TelegramKeyboardService(ILocalizationService localization, IConfigu
             });
             rows.Add(new []
             {
+                new KeyboardButton(localization.GetString(ResourceKeys.ExportAttendance,language).Trim())
+            });
+            rows.Add(new []
+            {
                 new KeyboardButton(localization.GetString(ResourceKeys.Settings,language))
             });
         }
@@ -252,6 +256,33 @@ public class TelegramKeyboardService(ILocalizationService localization, IConfigu
             new[]
             {
                 InlineKeyboardButton.WithWebApp(miniAppText, new WebAppInfo { Url = miniAppUrl })
+            }
+        });
+    }
+
+    public InlineKeyboardMarkup CreateDateRangeSelectionKeyboard(string language = "uz")
+    {
+        return new InlineKeyboardMarkup(new[]
+        {
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.Today, language), "export_date_today")
+            },
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.ThisWeek, language), "export_date_week")
+            },
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.ThisMonth, language), "export_date_month")
+            },
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.CustomRange, language), "export_date_custom")
+            },
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.Cancel, language), "cancel")
             }
         });
     }

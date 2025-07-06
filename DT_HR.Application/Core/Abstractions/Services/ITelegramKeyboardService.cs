@@ -15,5 +15,6 @@ public interface ITelegramKeyboardService
     ReplyKeyboardMarkup GetCancelKeyboard(string language = "uz");
     InlineKeyboardMarkup GetCancelInlineKeyboard(string language = "uz");
     InlineKeyboardMarkup GetCheckInOptionsKeyboard(string language = "uz");
+    InlineKeyboardMarkup CreateDateRangeSelectionKeyboard(string language = "uz");
 
 }

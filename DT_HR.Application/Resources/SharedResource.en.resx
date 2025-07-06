@@ -414,4 +414,75 @@ Safe travels! 🚗💨
   <data name="ETA" xml:space="preserve">
     <value>Please provide your ETA - HH:MM</value>
   </data>
+  
+  <!-- Export feature translations -->
+  <data name="ExportAttendance" xml:space="preserve">
+    <value>📊 Export Attendance</value>
+  </data>
+  <data name="SelectDateRange" xml:space="preserve">
+    <value>📅 Select date range for export:</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>📅 Today</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>📅 This Week</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>📅 This Month</value>
+  </data>
+  <data name="CustomRange" xml:space="preserve">
+    <value>📅 Custom Range</value>
+  </data>
+  <data name="EnterStartDate" xml:space="preserve">
+    <value>📅 Enter start date (YYYY-MM-DD):</value>
+  </data>
+  <data name="EnterEndDate" xml:space="preserve">
+    <value>📅 Enter end date (YYYY-MM-DD):</value>
+  </data>
+  <data name="StartDateMustBeBeforeEndDate" xml:space="preserve">
+    <value>❌ Start date must be before end date</value>
+  </data>
+  <data name="GeneratingReport" xml:space="preserve">
+    <value>⏳ Generating attendance report...</value>
+  </data>
+  <data name="ExportFailed" xml:space="preserve">
+    <value>❌ Failed to export attendance data</value>
+  </data>
+  <data name="AttendanceReportGenerated" xml:space="preserve">
+    <value>✅ Attendance report generated successfully</value>
+  </data>
+  <data name="AttendanceReport" xml:space="preserve">
+    <value>Attendance Report</value>
+  </data>
+  <data name="EmployeeName" xml:space="preserve">
+    <value>Employee Name</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="CheckInTime" xml:space="preserve">
+    <value>Check In Time</value>
+  </data>
+  <data name="CheckOutTime" xml:space="preserve">
+    <value>Check Out Time</value>
+  </data>
+  <data name="IsLate" xml:space="preserve">
+    <value>Is Late</value>
+  </data>
+  <data name="LateBy" xml:space="preserve">
+    <value>Late By</value>
+  </data>
+  <data name="EarlyDeparture" xml:space="preserve">
+    <value>Early Departure</value>
+  </data>
+  <data name="AbsenceReason" xml:space="preserve">
+    <value>Absence Reason</value>
+  </data>
+  <data name="WithinOfficeRadius" xml:space="preserve">
+    <value>Within Office Radius</value>
+  </data>
+  <data name="NoRecord" xml:space="preserve">
+    <value>No Record</value>
+  </data>
 </root>

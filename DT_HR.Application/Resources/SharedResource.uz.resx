@@ -410,7 +410,74 @@ Xavfsiz sayohat! 🚗💨
     <value>Iltimos kelish vaqtingizni belgilang - HH:ММ</value>
   </data>
   
-  
-  
-  
+  <!-- Export feature translations -->
+  <data name="ExportAttendance" xml:space="preserve">
+    <value>📊 Davomat hisobotini eksport qilish</value>
+  </data>
+  <data name="SelectDateRange" xml:space="preserve">
+    <value>📅 Eksport uchun sana oralig'ini tanlang:</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>📅 Bugun</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>📅 Shu hafta</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>📅 Shu oy</value>
+  </data>
+  <data name="CustomRange" xml:space="preserve">
+    <value>📅 Maxsus oraliq</value>
+  </data>
+  <data name="EnterStartDate" xml:space="preserve">
+    <value>📅 Boshlash sanasini kiriting (YYYY-MM-DD):</value>
+  </data>
+  <data name="EnterEndDate" xml:space="preserve">
+    <value>📅 Tugash sanasini kiriting (YYYY-MM-DD):</value>
+  </data>
+  <data name="StartDateMustBeBeforeEndDate" xml:space="preserve">
+    <value>❌ Boshlash sanasi tugash sanasidan oldin bo'lishi kerak</value>
+  </data>
+  <data name="GeneratingReport" xml:space="preserve">
+    <value>⏳ Davomat hisoboti tayyorlanmoqda...</value>
+  </data>
+  <data name="ExportFailed" xml:space="preserve">
+    <value>❌ Davomat ma'lumotlarini eksport qilib bo'lmadi</value>
+  </data>
+  <data name="AttendanceReportGenerated" xml:space="preserve">
+    <value>✅ Davomat hisoboti muvaffaqiyatli yaratildi</value>
+  </data>
+  <data name="AttendanceReport" xml:space="preserve">
+    <value>Davomat hisoboti</value>
+  </data>
+  <data name="EmployeeName" xml:space="preserve">
+    <value>Xodim ismi</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Telefon raqami</value>
+  </data>
+  <data name="CheckInTime" xml:space="preserve">
+    <value>Kelish vaqti</value>
+  </data>
+  <data name="CheckOutTime" xml:space="preserve">
+    <value>Ketish vaqti</value>
+  </data>
+  <data name="IsLate" xml:space="preserve">
+    <value>Kechikish</value>
+  </data>
+  <data name="LateBy" xml:space="preserve">
+    <value>Kechikish miqdori</value>
+  </data>
+  <data name="EarlyDeparture" xml:space="preserve">
+    <value>Erta ketish</value>
+  </data>
+  <data name="AbsenceReason" xml:space="preserve">
+    <value>Yo'qliq sababi</value>
+  </data>
+  <data name="WithinOfficeRadius" xml:space="preserve">
+    <value>Ofis radiusida</value>
+  </data>
+  <data name="NoRecord" xml:space="preserve">
+    <value>Ma'lumot yo'q</value>
+  </data>
 </root>

@@ -408,4 +408,75 @@
   <data name="ETA" xml:space="preserve">
     <value>Пожалуйста, укажите ваше расчетное время прибытия - ЧЧ:ММ</value>
   </data>
+  
+  <!-- Export feature translations -->
+  <data name="ExportAttendance" xml:space="preserve">
+    <value>📊 Экспорт посещаемости</value>
+  </data>
+  <data name="SelectDateRange" xml:space="preserve">
+    <value>📅 Выберите диапазон дат для экспорта:</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>📅 Сегодня</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>📅 Эта неделя</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>📅 Этот месяц</value>
+  </data>
+  <data name="CustomRange" xml:space="preserve">
+    <value>📅 Выборочный период</value>
+  </data>
+  <data name="EnterStartDate" xml:space="preserve">
+    <value>📅 Введите дату начала (ГГГГ-ММ-ДД):</value>
+  </data>
+  <data name="EnterEndDate" xml:space="preserve">
+    <value>📅 Введите дату окончания (ГГГГ-ММ-ДД):</value>
+  </data>
+  <data name="StartDateMustBeBeforeEndDate" xml:space="preserve">
+    <value>❌ Дата начала должна быть раньше даты окончания</value>
+  </data>
+  <data name="GeneratingReport" xml:space="preserve">
+    <value>⏳ Генерируется отчет посещаемости...</value>
+  </data>
+  <data name="ExportFailed" xml:space="preserve">
+    <value>❌ Не удалось экспортировать данные посещаемости</value>
+  </data>
+  <data name="AttendanceReportGenerated" xml:space="preserve">
+    <value>✅ Отчет посещаемости успешно сгенерирован</value>
+  </data>
+  <data name="AttendanceReport" xml:space="preserve">
+    <value>Отчет посещаемости</value>
+  </data>
+  <data name="EmployeeName" xml:space="preserve">
+    <value>Имя сотрудника</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Номер телефона</value>
+  </data>
+  <data name="CheckInTime" xml:space="preserve">
+    <value>Время прихода</value>
+  </data>
+  <data name="CheckOutTime" xml:space="preserve">
+    <value>Время ухода</value>
+  </data>
+  <data name="IsLate" xml:space="preserve">
+    <value>Опоздание</value>
+  </data>
+  <data name="LateBy" xml:space="preserve">
+    <value>Опоздал на</value>
+  </data>
+  <data name="EarlyDeparture" xml:space="preserve">
+    <value>Ранний уход</value>
+  </data>
+  <data name="AbsenceReason" xml:space="preserve">
+    <value>Причина отсутствия</value>
+  </data>
+  <data name="WithinOfficeRadius" xml:space="preserve">
+    <value>В радиусе офиса</value>
+  </data>
+  <data name="NoRecord" xml:space="preserve">
+    <value>Нет записи</value>
+  </data>
 </root>

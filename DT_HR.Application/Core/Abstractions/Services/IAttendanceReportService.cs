@@ -11,4 +11,6 @@ public interface IAttendanceReportService
     Task<AttendanceResponse> GetWeeklyAttendanceReport(DateOnly startDate, CancellationToken cancellationToken);
     Task<AttendanceResponse> GetYearlyAttendanceReport(int year, int month, CancellationToken cancellationToken);
    Task<List<EmployeeAttendanceResponse>> GetDetailedAttendance(DateOnly date, CancellationToken cancellationToken);
+
+   //Task<List<EmployeeAttendanceResponse>> GetAttendanceForDateRange(DateOnly startDate, DateOnly endDate,CancellationToken cancellationToken);
 }

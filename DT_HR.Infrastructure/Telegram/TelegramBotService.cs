@@ -61,7 +61,9 @@ public class TelegramBotService : ITelegramBotService
             serviceProvider.GetRequiredService<AttendanceStatsCommandHandler>(),
             serviceProvider.GetRequiredService<AttendanceDetailsCommandHandler>(),
             serviceProvider.GetRequiredService<EventCommandHandler>(),
-            serviceProvider.GetRequiredService<MyEventsCommandHandler>()
+            serviceProvider.GetRequiredService<MyEventsCommandHandler>(),
+            serviceProvider.GetRequiredService<ExportAttendanceCommandHandler>(),
+            serviceProvider.GetRequiredService<ExportDateInputHandler>()
         };
         _callbackHandlers = new List<ITelegramCallbackQuery>
         {
@@ -69,7 +71,8 @@ public class TelegramBotService : ITelegramBotService
             serviceProvider.GetRequiredService<AbsenceTypeCallbackHandler>(),
             serviceProvider.GetRequiredService<OversleptETACallbackHandler>(),
             serviceProvider.GetRequiredService<OversleptETACallbackHandler>(),
-            serviceProvider.GetRequiredService<CancelCallbackHandler>()
+            serviceProvider.GetRequiredService<CancelCallbackHandler>(),
+            serviceProvider.GetRequiredService<ExportDateRangeCallbackHandler>()
         };
 
     }

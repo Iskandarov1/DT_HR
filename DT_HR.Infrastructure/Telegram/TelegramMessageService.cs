@@ -6,6 +6,7 @@ using DT_HR.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Requests;
+using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
@@ -141,5 +142,22 @@ public class TelegramMessageService(
             _ => "menyu:"
         };
         await SendTextMessageAsync(chatId,menuText,replyMarkup: keyboard,cancellationToken: cancellationToken);
+    }
+
+    public async Task SendDocumentAsync(long chatId, InputFile document, string? caption = null, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            await botClient.SendDocument(
+                chatId: chatId,
+                document: document,
+                caption: caption,
+                cancellationToken: cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error sending document to chat {ChatId}", chatId);
+            throw;
+        }
     }
 }

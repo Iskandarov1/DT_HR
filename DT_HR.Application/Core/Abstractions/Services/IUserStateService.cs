@@ -29,7 +29,8 @@ public enum UserAction
     CheckingOut,
     ReportingAbsence,
     CreatingEvent,
-    SelectingLanguage
-    
-    
+    SelectingLanguage,
+    ExportDateSelection,
+    ExportCustomStartDate,
+    ExportCustomEndDate
 }

@@ -33,6 +33,7 @@ public static class DependencyInjection
         services.AddScoped<IBackgroundTaskService, HangfireBackgroundTaskService>();
         services.AddScoped<IUserBackgroundJobService, UserBackgroundJobService>();
         services.AddScoped<ITelegramMiniAppService, TelegramMiniAppService>();
+        services.AddScoped<IExcelExportService, ExcelExportService>();
 
 
         
@@ -54,13 +55,16 @@ public static class DependencyInjection
         services.AddScoped<StateBasedMessageHandler>();
         services.AddScoped<EventCommandHandler>();
         services.AddScoped<MyEventsCommandHandler>();
+        services.AddScoped<ExportAttendanceCommandHandler>();
         
         services.AddScoped<ContactMessageHandler>();
+        services.AddScoped<ExportDateInputHandler>();
 
         services.AddScoped<LanguageSelectionCallbackHandler>();
         services.AddScoped<AbsenceTypeCallbackHandler>();
         services.AddScoped<OversleptETACallbackHandler>();
         services.AddScoped<CancelCallbackHandler>();
+        services.AddScoped<ExportDateRangeCallbackHandler>();
         
         services.AddHostedService<WebhookConfigurationService>();
         services.AddHostedService<TelegramPollingService>();

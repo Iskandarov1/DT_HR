@@ -144,9 +144,28 @@ public static class ResourceKeys
     public const string TimeSet = "TimeSet";
     public const string AbsenceOptionsSelected = "AbsenceOptionsSelected";
 
-
-
-
-
-
+    
+    // Export feature keys
+    public const string ExportAttendance = "ExportAttendance";
+    public const string SelectDateRange = "SelectDateRange";
+    public const string Today = "Today";
+    public const string ThisWeek = "ThisWeek";
+    public const string ThisMonth = "ThisMonth";
+    public const string CustomRange = "CustomRange";
+    public const string EnterStartDate = "EnterStartDate";
+    public const string EnterEndDate = "EnterEndDate";
+    public const string StartDateMustBeBeforeEndDate = "StartDateMustBeBeforeEndDate";
+    public const string GeneratingReport = "GeneratingReport";
+    public const string ExportFailed = "ExportFailed";
+    public const string AttendanceReportGenerated = "AttendanceReportGenerated";
+    public const string AttendanceReport = "AttendanceReport";
+    public const string EmployeeName = "EmployeeName";
+    public const string PhoneNumber = "PhoneNumber";
+    public const string CheckInTime = "CheckInTime";
+    public const string CheckOutTime = "CheckOutTime";
+    public const string IsLate = "IsLate";
+    public const string LateBy = "LateBy";
+    public const string AbsenceReason = "AbsenceReason";
+    public const string WithinOfficeRadius = "WithinOfficeRadius";
+    public const string NoRecord = "NoRecord";
 }
