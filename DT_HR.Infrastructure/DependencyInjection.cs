@@ -32,6 +32,7 @@ public static class DependencyInjection
         services.AddScoped<IAttendanceReportService, AttendanceReportService>();
         services.AddScoped<IBackgroundTaskService, HangfireBackgroundTaskService>();
         services.AddScoped<IUserBackgroundJobService, UserBackgroundJobService>();
+        services.AddScoped<ITelegramMiniAppService, TelegramMiniAppService>();
 
 
         
