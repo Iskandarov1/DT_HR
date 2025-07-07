@@ -435,10 +435,10 @@ Safe travels! 🚗💨
     <value>📅 Custom Range</value>
   </data>
   <data name="EnterStartDate" xml:space="preserve">
-    <value>📅 Enter start date (YYYY-MM-DD):</value>
+    <value>📅 Enter start date (dd-MM-yyyy):</value>
   </data>
   <data name="EnterEndDate" xml:space="preserve">
-    <value>📅 Enter end date (YYYY-MM-DD):</value>
+    <value>📅 Enter end date (dd-MM-yyyy):</value>
   </data>
   <data name="StartDateMustBeBeforeEndDate" xml:space="preserve">
     <value>❌ Start date must be before end date</value>

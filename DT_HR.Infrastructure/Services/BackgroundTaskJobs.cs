@@ -114,7 +114,7 @@ public class BackgroundTaskJobs(
             var onTheWay = localization.GetString(ResourceKeys.OnTheWay, lang);
             
             var text = $"*{title}*\n" +
-                       $"📅 *{report.Date:yyyy-MM-dd}*\n" +
+                       $"📅 *{report.Date:dd-MM-yyyy}*\n" +
                        $"{total}: {report.TotalEmployees}\n" +
                        $"{present}: {report.Present}\n" +
                        $"{late}: {report.Late}\n" +
@@ -141,7 +141,7 @@ public class BackgroundTaskJobs(
                 var onTheWay = localization.GetString(ResourceKeys.OnTheWay, lang);
                 
                 var text = $"{title} - {group.Title}\n" +
-                           $"📅 {report.Date:yyyy-MM-dd}\n" +
+                           $"📅 {report.Date:dd-MM-yyyy}\n" +
                            $"{total}: {report.TotalEmployees}\n" +
                            $"{present}: {report.Present}\n" +
                            $"{late}: {report.Late}\n" +

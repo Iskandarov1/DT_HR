@@ -54,7 +54,7 @@ public class AttendanceStatsCommandHandler(
         var onTheWayText = localization.GetString(ResourceKeys.OnTheWay, language);
         
         var text = $"*{title}*\n" +
-                   $"📅 *{report.Date.ToString("yyyy-MM-dd")}*\n" +
+                   $"📅 *{report.Date.ToString("dd-MM-yyyy")}*\n" +
                    $"━━━━━━━━━━━━━━━━━━━━━━━━\n" +
                    $"👥 *{totalText}:* `{report.TotalEmployees}`\n\n" +
                    $"✅ *{presentText}:* `{report.Present}`\n" +

@@ -429,10 +429,10 @@
     <value>📅 Выборочный период</value>
   </data>
   <data name="EnterStartDate" xml:space="preserve">
-    <value>📅 Введите дату начала (ГГГГ-ММ-ДД):</value>
+    <value>📅 Введите дату начала (ДД-ММ-ГГГГ):</value>
   </data>
   <data name="EnterEndDate" xml:space="preserve">
-    <value>📅 Введите дату окончания (ГГГГ-ММ-ДД):</value>
+    <value>📅 Введите дату окончания (ДД-ММ-ГГГГ):</value>
   </data>
   <data name="StartDateMustBeBeforeEndDate" xml:space="preserve">
     <value>❌ Дата начала должна быть раньше даты окончания</value>

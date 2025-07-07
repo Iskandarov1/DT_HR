@@ -38,7 +38,7 @@ public class ExcelExportService(
                 worksheet.Cells[rowIndex, 1].Value = row.Name;
                 worksheet.Cells[rowIndex, 2].Value = row.PhoneNumber;
                 worksheet.Cells[rowIndex, 3].Value = GetLocalizedStatus(row.Status, language);
-                worksheet.Cells[rowIndex, 4].Value = row.CheckInTime?.ToString("yyyy-MM-dd");
+                worksheet.Cells[rowIndex, 4].Value = row.CheckInTime?.ToString("dd-MM-yyyy");
                 worksheet.Cells[rowIndex, 5].Value = row.CheckInTime?.ToString("HH:mm");
                 worksheet.Cells[rowIndex, 6].Value = row.CheckOutTime?.ToString("HH:mm");
                 worksheet.Cells[rowIndex, 7].Value = row.WorkDuration?.ToString(@"hh\:mm");
@@ -87,7 +87,7 @@ public class ExcelExportService(
     {
         // Set title
         worksheet.InsertRow(1, 1);
-        worksheet.Cells[1, 1].Value = $"{localizationService.GetString("AttendanceReport", language)} ({startDate:yyyy-MM-dd} - {endDate:yyyy-MM-dd})";
+        worksheet.Cells[1, 1].Value = $"{localizationService.GetString("AttendanceReport", language)} ({startDate:dd-MM-yyyy} - {endDate:dd-MM-yyyy})";
         worksheet.Cells[1, 1, 1, 12].Merge = true;
         worksheet.Cells[1, 1].Style.Font.Bold = true;
         worksheet.Cells[1, 1].Style.Font.Size = 16;

@@ -91,8 +91,7 @@ public class ExportDateRangeCallbackHandler(
                 chatId,
                 localization.GetString("GeneratingReport", language),
                 cancellationToken: cancellationToken);
-
-            // Execute the query
+            
             var query = new ExportAttendanceQuery(userId, startDate, endDate, language);
             var result = await mediator.Send(query, cancellationToken);
 
@@ -106,7 +105,7 @@ public class ExportDateRangeCallbackHandler(
             }
 
             // Send Excel file
-            var fileName = $"Attendance_Report_{startDate:yyyy-MM-dd}_to_{endDate:yyyy-MM-dd}.xlsx";
+            var fileName = $"Attendance_Report_{startDate:dd-MM-yyyy}_to_{endDate:dd-MM-yyyy}.xlsx";
             
             using var stream = new MemoryStream(result.Value);
             var inputFile = InputFile.FromStream(stream, fileName);

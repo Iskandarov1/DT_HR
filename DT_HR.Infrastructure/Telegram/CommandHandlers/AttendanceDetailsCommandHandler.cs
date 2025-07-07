@@ -57,7 +57,7 @@ public class AttendanceDetailsCommandHandler(
         var sb = new StringBuilder();
 
         sb.AppendLine($"📊 *{attendanceDetailsText}*");
-        sb.AppendLine($"📅 *{TimeUtils.Now:yyyy-MM-dd}*");
+        sb.AppendLine($"📅 *{TimeUtils.Now:dd-MM-yyyy}*");
         sb.AppendLine($"━━━━━━━━━━━━━━━━━━━━━━━━");
         sb.AppendLine();
 

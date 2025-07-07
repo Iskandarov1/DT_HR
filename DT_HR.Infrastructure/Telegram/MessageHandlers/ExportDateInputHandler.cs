@@ -21,7 +21,8 @@ public class ExportDateInputHandler(
         if (message.Text == null) return false;
         
         var state = await stateService.GetStateAsync(message.From!.Id);
-        return state?.CurrentAction == UserAction.ExportCustomStartDate || state?.CurrentAction == UserAction.ExportCustomEndDate;
+        return state?.CurrentAction == UserAction.ExportCustomStartDate || 
+               state?.CurrentAction == UserAction.ExportCustomEndDate;
     }
 
     public async Task HandleAsync(Message message, CancellationToken cancellationToken = default)
@@ -35,7 +36,7 @@ public class ExportDateInputHandler(
 
         try
         {
-            if (!DateOnly.TryParseExact(text, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
+            if (!DateOnly.TryParseExact(text, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
             {
                 await messageService.SendTextMessageAsync(
                     chatId,
@@ -111,7 +112,7 @@ public class ExportDateInputHandler(
             }
 
             // Send Excel file
-            var fileName = $"Attendance_Report_{startDate:yyyy-MM-dd}_to_{endDate:yyyy-MM-dd}.xlsx";
+            var fileName = $"Attendance_Report_{startDate:dd-MM-yyyy}_to_{endDate:dd-MM-yyyy}.xlsx";
             
             using var stream = new MemoryStream(result.Value);
             var inputFile = InputFile.FromStream(stream, fileName);

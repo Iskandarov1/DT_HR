@@ -430,10 +430,10 @@ Xavfsiz sayohat! 🚗💨
     <value>📅 Maxsus oraliq</value>
   </data>
   <data name="EnterStartDate" xml:space="preserve">
-    <value>📅 Boshlash sanasini kiriting (YYYY-MM-DD):</value>
+    <value>📅 Boshlash sanasini kiriting (dd-MM-yyyy):</value>
   </data>
   <data name="EnterEndDate" xml:space="preserve">
-    <value>📅 Tugash sanasini kiriting (YYYY-MM-DD):</value>
+    <value>📅 Tugash sanasini kiriting (dd-MM-yyyy):</value>
   </data>
   <data name="StartDateMustBeBeforeEndDate" xml:space="preserve">
     <value>❌ Boshlash sanasi tugash sanasidan oldin bo'lishi kerak</value>

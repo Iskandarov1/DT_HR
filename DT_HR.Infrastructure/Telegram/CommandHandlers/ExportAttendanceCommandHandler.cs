@@ -45,16 +45,14 @@ public class ExportAttendanceCommandHandler(
                 cancellationToken: cancellationToken);
             return;
         }
-
-        // Set user state for export flow
+        
         await stateService.SetStateAsync(userId, new UserState
         {
             Language = language,
             CurrentAction = UserAction.ExportDateSelection,
             Data = new Dictionary<string, object>()
         });
-
-        // Show date range selection options
+        
         var keyboard = keyboardService.CreateDateRangeSelectionKeyboard(language);
         
         await messageService.SendTextMessageAsync(
