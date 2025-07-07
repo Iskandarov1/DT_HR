@@ -1,10 +1,11 @@
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
-using DT_HR.Application.Users.Commands.UpdateWorkHours;
+using DT_HR.Application.Company.Commands.UpdateCompanyWorkHours;
 using DT_HR.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
+using DT_HR.Domain.Entities;
 using Telegram.Bot.Types;
 
 namespace DT_HR.Infrastructure.Telegram.MessageHandlers;
@@ -12,6 +13,7 @@ namespace DT_HR.Infrastructure.Telegram.MessageHandlers;
 public class WorkTimeInputMessageHandler(
     ITelegramMessageService messageService,
     ITelegramKeyboardService keyboardService,
+    ICompanyRepository companyRepository,
     IUserStateService stateService,
     IUserRepository userRepository,
     ILocalizationService localization,
@@ -53,6 +55,11 @@ public class WorkTimeInputMessageHandler(
             }
 
             var user = maybeUser.Value;
+            
+            var companyMaybe = await companyRepository.GetAsync(cancellationToken);
+            if (companyMaybe.HasNoValue) return; // or handle error
+
+            var company = companyMaybe.Value;
 
             // Validate time format (HH:mm)
             if (!TimeOnly.TryParseExact(text, "HH:mm", CultureInfo.InvariantCulture,DateTimeStyles.None, out var newTime))
@@ -67,11 +74,11 @@ public class WorkTimeInputMessageHandler(
             // Process based on current action
             if (state!.CurrentAction == UserAction.SettingWorkStartTime)
             {
-                await HandleWorkStartTimeInput(user, newTime, chatId, language, cancellationToken);
+                await HandleWorkStartTimeInput(company, newTime, chatId, language, cancellationToken);
             }
             else if (state.CurrentAction == UserAction.SettingWorkEndTime)
             {
-                await HandleWorkEndTimeInput(user, newTime, chatId, language, cancellationToken);
+                await HandleWorkEndTimeInput(company, newTime, chatId, language, cancellationToken);
             }
 
             // Clear state after successful processing
@@ -90,10 +97,10 @@ public class WorkTimeInputMessageHandler(
         }
     }
 
-    private async Task HandleWorkStartTimeInput(Domain.Entities.User user, TimeOnly newStartTime, long chatId, string language, CancellationToken cancellationToken)
+    private async Task HandleWorkStartTimeInput(Company company, TimeOnly newStartTime, long chatId, string language, CancellationToken cancellationToken)
     {
         // Create command to update work hours
-        var command = new UpdateWorkHoursCommand(user.Id, newStartTime, user.WorkEndTime);
+        var command = new UpdateCompanyWorkHoursCommand(newStartTime, company.DefaultWorkEndTime);
         var result = await mediator.Send(command, cancellationToken);
 
         if (result.IsFailure)
@@ -130,10 +137,10 @@ public class WorkTimeInputMessageHandler(
        // await ShowWorkTimeSettings(chatId, user.Id, language, cancellationToken);
     }
 
-    private async Task HandleWorkEndTimeInput(Domain.Entities.User user, TimeOnly newEndTime, long chatId, string language, CancellationToken cancellationToken)
+    private async Task HandleWorkEndTimeInput(Company company, TimeOnly newEndTime, long chatId, string language, CancellationToken cancellationToken)
     {
         // Create command to update work hours
-        var command = new UpdateWorkHoursCommand(user.Id, user.WorkStartTime, newEndTime);
+        var command = new UpdateCompanyWorkHoursCommand(company.DefaultWorkStartTime, newEndTime);
         var result = await mediator.Send(command, cancellationToken);
 
         if (result.IsFailure)

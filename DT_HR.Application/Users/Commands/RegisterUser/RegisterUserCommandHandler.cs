@@ -14,6 +14,7 @@ namespace DT_HR.Application.Users.Commands.RegisterUser;
 
 public class RegisterUserCommandHandler(
     IUserRepository userRepository,
+    ICompanyRepository companyRepository,
     IUnitOfWork unitOfWork,
     ISharedViewLocalizer sharedViewLocalizer,
     IUserBackgroundJobService userBackgroundJobService) : ICommandHandler<RegisterUserCommand , Result<Guid>>
@@ -32,6 +33,16 @@ public class RegisterUserCommandHandler(
         if (phoneNumberResult.IsFailure)
             return Result.Failure<Guid>(phoneNumberResult.Error);
         
+        // Get company's default work hours
+        var companyMaybe = await companyRepository.GetAsync(cancellationToken);
+        TimeOnly workStartTime = new TimeOnly(21, 05); // Default fallback
+        TimeOnly workEndTime = new TimeOnly(23, 0);    // Default fallback
+        
+        if (companyMaybe.HasValue)
+        {
+            workStartTime = companyMaybe.Value.DefaultWorkStartTime;
+            workEndTime = companyMaybe.Value.DefaultWorkEndTime;
+        }
 
         var user = new User(
             request.TelegramUserId,
@@ -39,6 +50,8 @@ public class RegisterUserCommandHandler(
             request.FirstName,
             request.LastName,
             request.BirthDate,
+            workStartTime,
+            workEndTime,
             request.Language);
         
         userRepository.Insert(user);

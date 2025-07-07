@@ -1,5 +1,6 @@
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
+using DT_HR.Domain.Entities;
 using DT_HR.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
@@ -12,6 +13,7 @@ public class WorkTimeSettingsCallbackHandler(
     IUserStateService stateService,
     IUserRepository userRepository,
     ILocalizationService localization,
+    ICompanyRepository companyRepository,
     ILogger<WorkTimeSettingsCallbackHandler> logger) : ITelegramCallbackQuery
 {
     public Task<bool> CanHandleAsync(CallbackQuery callbackQuery, CancellationToken cancellationToken = default)
@@ -39,7 +41,16 @@ public class WorkTimeSettingsCallbackHandler(
             await messageService.EditMessageTextAsync(chatId, messageId, errorMessage, cancellationToken: cancellationToken);
             return;
         }
+        var companyMaybe = await companyRepository.GetAsync(cancellationToken);
+        if (companyMaybe.HasNoValue)
+        {
+            var errorMessage = "Company settings not found. Please contact administrator.";
+            await messageService.EditMessageTextAsync(chatId, messageId, errorMessage, cancellationToken: cancellationToken);
+            return;
+        }
 
+        var company = companyMaybe.Value;
+        
         var user = maybeUser.Value;
         var language = user.Language;
 
@@ -50,7 +61,7 @@ public class WorkTimeSettingsCallbackHandler(
                 break;
                 
             case "work_time_settings":
-                await HandleWorkTimeSettingsAsync(chatId, messageId, user, language, cancellationToken);
+                await HandleWorkTimeSettingsAsync(chatId, messageId, company, language, cancellationToken);
                 break;
                 
             case "work_time_start":
@@ -80,13 +91,13 @@ public class WorkTimeSettingsCallbackHandler(
             cancellationToken);
     }
 
-    private async Task HandleWorkTimeSettingsAsync(long chatId, int messageId, Domain.Entities.User user, string language, CancellationToken cancellationToken)
+    private async Task HandleWorkTimeSettingsAsync(long chatId, int messageId, Domain.Entities.Company company, string language, CancellationToken cancellationToken)
     {
         var keyboard = keyboardService.GetWorkTimeSettingsKeyboard(language);
         var currentHoursText = localization.GetString(ResourceKeys.CurrentWorkHours, language);
         var message = string.Format(currentHoursText, 
-            user.WorkStartTime.ToString("HH:mm"), 
-            user.WorkEndTime.ToString("HH:mm"));
+            company.DefaultWorkStartTime.ToString("HH:mm"), 
+            company.DefaultWorkEndTime.ToString("HH:mm"));
         
         await messageService.EditMessageTextAsync(
             chatId, 

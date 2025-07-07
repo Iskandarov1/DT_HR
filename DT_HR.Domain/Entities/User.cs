@@ -8,13 +8,15 @@ public class User : AggregateRoot
 {
     private User(){}
     
-    
+
     public User( 
     long telegramUserId,
     string phoneNumber ,
     string firstName,
     string lastName,
     DateOnly birthday,
+    TimeOnly workStartTime,
+    TimeOnly workEndTime,
     string language = "uz"
     )
     {
@@ -24,8 +26,8 @@ public class User : AggregateRoot
         this.LastName = lastName;
         this.Email = "";
         this.Role = UserRole.Employee.Value;
-        this.WorkStartTime = new TimeOnly(21, 05);
-        this.WorkEndTime = new TimeOnly(23, 0);
+        this.WorkStartTime = workStartTime;
+        this.WorkEndTime = workEndTime;
         IsActive = true;
         this.Language = language;
         this.BirtDate = birthday;

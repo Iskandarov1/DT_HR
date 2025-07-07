@@ -1,5 +1,6 @@
 using DT_HR.Application.Core.Abstractions.Common;
 using DT_HR.Application.Core.Abstractions.Services;
+using DT_HR.Domain.Repositories;
 using DT_HR.Infrastructure.Services;
 using DT_HR.Infrastructure.Telegram;
 using DT_HR.Infrastructure.Telegram.CallbackHandlers;
@@ -34,6 +35,7 @@ public static class DependencyInjection
         services.AddScoped<IUserBackgroundJobService, UserBackgroundJobService>();
         services.AddScoped<ITelegramMiniAppService, TelegramMiniAppService>();
         services.AddScoped<IExcelExportService, ExcelExportService>();
+        
 
 
         
@@ -71,6 +73,7 @@ public static class DependencyInjection
         services.AddHostedService<WebhookConfigurationService>();
         services.AddHostedService<TelegramPollingService>();
         services.AddHostedService<BackgroundTaskInitializer>();
+        services.AddHostedService<CompanySeedingService>();
 
         
         return services;

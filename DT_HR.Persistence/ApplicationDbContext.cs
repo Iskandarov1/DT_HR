@@ -33,6 +33,7 @@ public sealed class ApplicationDbContext(
 	public DbSet<Event> Events => Set<Event>();
 	public DbSet<TelegramGroup> TelegramGroups => Set<TelegramGroup>();
 	public DbSet<GroupMembership> GroupMemberships => Set<GroupMembership>();
+	public DbSet<Company> Companies => Set<Company>();
 
 	/// <inheritdoc />
 	public new DbSet<TEntity> Set<TEntity>()
