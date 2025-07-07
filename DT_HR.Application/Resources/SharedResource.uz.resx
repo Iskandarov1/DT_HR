@@ -480,4 +480,7 @@ Xavfsiz sayohat! 🚗💨
   <data name="NoRecord" xml:space="preserve">
     <value>Ma'lumot yo'q</value>
   </data>
+  <data name="DateSelected" xml:space="preserve">
+    <value>✅ Sana muvaffaqiyatli tanlandi</value>
+  </data>
 </root>

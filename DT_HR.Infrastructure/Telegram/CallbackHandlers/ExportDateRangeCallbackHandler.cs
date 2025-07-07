@@ -36,23 +36,23 @@ public class ExportDateRangeCallbackHandler(
             if (data == "export_date_today")
             {
                 var today = DateOnly.FromDateTime(TimeUtils.Now);
-                await ExportAttendanceData(userId, today, today, language, chatId, cancellationToken);
+                await ExportAttendanceData(userId, today, today, language, chatId,messageId, cancellationToken);
             }
             else if (data == "export_date_week")
             {
                 var today = DateOnly.FromDateTime(TimeUtils.Now);
                 var startOfWeek = today.AddDays(-7);
-                await ExportAttendanceData(userId, startOfWeek, today, language, chatId, cancellationToken);
+                await ExportAttendanceData(userId, startOfWeek, today, language, chatId,messageId, cancellationToken);
             }
             else if (data == "export_date_month")
             {
                 var today = DateOnly.FromDateTime(TimeUtils.Now);
                 var startOfMonth = new DateOnly(today.Year, today.Month, 1);
-                await ExportAttendanceData(userId, startOfMonth, today, language, chatId, cancellationToken);
+                await ExportAttendanceData(userId, startOfMonth, today, language, chatId,messageId, cancellationToken);
             }
             else if (data == "export_date_custom")
             {
-                // Set state for custom date range selection
+
                 await stateService.SetStateAsync(userId, new UserState
                 {
                     Language = language,
@@ -67,11 +67,9 @@ public class ExportDateRangeCallbackHandler(
                     cancellationToken: cancellationToken);
                 return;
             }
-
-            // Clear user state
+            
             await stateService.RemoveStateAsync(userId);
-
-            // Answer callback query and delete the original message
+            
             await messageService.AnswerCallbackQueryAsync(callbackQuery.Id, cancellationToken: cancellationToken);
         }
         catch (Exception ex)
@@ -84,7 +82,7 @@ public class ExportDateRangeCallbackHandler(
         }
     }
 
-    private async Task ExportAttendanceData(long userId, DateOnly startDate, DateOnly endDate, string language, long chatId, CancellationToken cancellationToken)
+    private async Task ExportAttendanceData(long userId, DateOnly startDate, DateOnly endDate, string language, long chatId,int messageId, CancellationToken cancellationToken)
     {
         try
         {
@@ -112,14 +110,20 @@ public class ExportDateRangeCallbackHandler(
             
             using var stream = new MemoryStream(result.Value);
             var inputFile = InputFile.FromStream(stream, fileName);
+            var dateSelected = localization.GetString(ResourceKeys.DateSelected, language);
             
             await messageService.SendDocumentAsync(
                 chatId,
                 inputFile,
                 caption: localization.GetString("AttendanceReportGenerated", language),
                 cancellationToken: cancellationToken);
-
-            // Show main menu
+            await messageService.EditMessageTextAsync(
+                chatId,
+                messageId,
+                dateSelected,
+                replyMarkUp: null,
+                cancellationToken: cancellationToken);
+            
             await messageService.ShowMainMenuAsync(
                 chatId,
                 language,

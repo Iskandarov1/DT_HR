@@ -479,4 +479,7 @@
   <data name="NoRecord" xml:space="preserve">
     <value>Нет записи</value>
   </data>
+  <data name="DateSelected" xml:space="preserve">
+    <value>✅ Дата выбрана успешно</value>
+  </data>
 </root>

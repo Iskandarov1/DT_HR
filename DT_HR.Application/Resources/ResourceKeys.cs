@@ -168,4 +168,6 @@ public static class ResourceKeys
     public const string AbsenceReason = "AbsenceReason";
     public const string WithinOfficeRadius = "WithinOfficeRadius";
     public const string NoRecord = "NoRecord";
+    public const string DateSelected = "DateSelected";
+
 }

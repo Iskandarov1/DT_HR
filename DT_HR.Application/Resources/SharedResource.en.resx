@@ -485,4 +485,7 @@ Safe travels! 🚗💨
   <data name="NoRecord" xml:space="preserve">
     <value>No Record</value>
   </data>
+  <data name="DateSelected" xml:space="preserve">
+    <value>✅Date selected successfully</value>
+  </data>
 </root>
