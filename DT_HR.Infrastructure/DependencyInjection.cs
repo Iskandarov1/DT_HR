@@ -59,12 +59,14 @@ public static class DependencyInjection
         
         services.AddScoped<ContactMessageHandler>();
         services.AddScoped<ExportDateInputHandler>();
+        services.AddScoped<WorkTimeInputMessageHandler>();
 
         services.AddScoped<LanguageSelectionCallbackHandler>();
         services.AddScoped<AbsenceTypeCallbackHandler>();
         services.AddScoped<OversleptETACallbackHandler>();
         services.AddScoped<CancelCallbackHandler>();
         services.AddScoped<ExportDateRangeCallbackHandler>();
+        services.AddScoped<WorkTimeSettingsCallbackHandler>();
         
         services.AddHostedService<WebhookConfigurationService>();
         services.AddHostedService<TelegramPollingService>();

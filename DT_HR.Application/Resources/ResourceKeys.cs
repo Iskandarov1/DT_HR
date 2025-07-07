@@ -129,6 +129,7 @@ public static class ResourceKeys
     public const string EnterBirthDate = "EnterBirthDate";
     public const string InvalidDateFormat = "InvalidDateFormat";
     public const string HappyBirthday = "HappyBirthday";
+    public const string Birthdays = "Birthdays";
     public const string HolidayGreeting = "HolidayGreeting";
     
     public const string Check = "Check";
@@ -169,5 +170,19 @@ public static class ResourceKeys
     public const string WithinOfficeRadius = "WithinOfficeRadius";
     public const string NoRecord = "NoRecord";
     public const string DateSelected = "DateSelected";
+    
+    // Work time management keys
+    public const string WorkTimeSettings = "WorkTimeSettings";
+    public const string SetWorkStartTime = "SetWorkStartTime";
+    public const string SetWorkEndTime = "SetWorkEndTime";
+    public const string WorkStartTime = "WorkStartTime";
+    public const string WorkEndTime = "WorkEndTime";
+    public const string CurrentWorkHours = "CurrentWorkHours";
+    public const string WorkHoursUpdated = "WorkHoursUpdated";
+    public const string EnterWorkStartTime = "EnterWorkStartTime";
+    public const string EnterWorkEndTime = "EnterWorkEndTime";
+    public const string WorkStartTimeSet = "WorkStartTimeSet";
+    public const string WorkEndTimeSet = "WorkEndTimeSet";
+    public const string InvalidWorkTimeRange = "InvalidWorkTimeRange";
 
 }

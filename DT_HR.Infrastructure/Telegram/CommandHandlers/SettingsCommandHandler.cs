@@ -73,13 +73,23 @@ public class SettingsCommandHandler(
             }
         }
         
-        //storing teh menu type for restoration after language selection
+        //storing the menu type for restoration after language selection
         state.Data["previousMenuType"] = menuType.ToString();
         await stateService.SetStateAsync(userId, state);
-        
-        var keyboard = keyboardService.GetLanguageSelectionKeyboard();
-        var prompt = localization.GetString(ResourceKeys.PleaseSelectLanguage, language);
-        await messageService.SendTextMessageAsync(chatId, prompt, keyboard, cancellationToken);
+
+        if (maybeUser.HasValue && maybeUser.Value.IsManager())
+        {
+            var keyboard = keyboardService.GetManagerSettingsKeyboard(language);
+            var prompt = localization.GetString(ResourceKeys.Settings, language);
+            await messageService.SendTextMessageAsync(chatId, prompt, keyboard, cancellationToken);
+        }
+        else
+        {
+            var keyboard = keyboardService.GetLanguageSelectionKeyboard();
+            var prompt = localization.GetString(ResourceKeys.SelectLanguage, language);
+            await messageService.SendTextMessageAsync(chatId, prompt, keyboard, cancellationToken);
+        }
+    
         
     }
 }

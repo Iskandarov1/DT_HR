@@ -224,7 +224,7 @@ public class BackgroundTaskJobs(
         {(6,  1),  "Xalqaro bolalar kuni"},                
         {(6, 27),  "Matbuot va OAV xodimlari kuni"},      
         {(6, 30),  "Yoshlar kuni"},                        
-        {(8, 31),  "Qatag'on qurbonlari xotirasi kuni"},   
+        {(7, 07),  "Qatag'on qurbonlari xotirasi kuni"},   
         {(9,  1),  "Mustaqillik kuni"},                    
         {(10, 1),  "Ustoz va murabbiylar kuni"},           
         {(10, 21), "O'zbek tili kuni"},                   

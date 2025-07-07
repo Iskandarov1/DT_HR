@@ -32,5 +32,7 @@ public enum UserAction
     SelectingLanguage,
     ExportDateSelection,
     ExportCustomStartDate,
-    ExportCustomEndDate
+    ExportCustomEndDate,
+    SettingWorkStartTime,
+    SettingWorkEndTime
 }

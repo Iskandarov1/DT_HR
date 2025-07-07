@@ -63,7 +63,7 @@
     <value>Welcome</value>
   </data>
   <data name="SelectLanguage" xml:space="preserve">
-    <value>Select Language</value>
+    <value>🌐Select Language</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
@@ -487,5 +487,49 @@ Safe travels! 🚗💨
   </data>
   <data name="DateSelected" xml:space="preserve">
     <value>✅Date selected successfully</value>
+  </data>
+  <data name="Birthdays" xml:space="preserve">
+    <value>Birthdays</value>
+  </data>
+  <data name="WorkTimeSettings" xml:space="preserve">
+    <value>⏰ Work Time Settings</value>
+  </data>
+  <data name="SetWorkStartTime" xml:space="preserve">
+    <value>🕘 Set Start Time</value>
+  </data>
+  <data name="SetWorkEndTime" xml:space="preserve">
+    <value>🕐 Set End Time</value>
+  </data>
+  <data name="WorkStartTime" xml:space="preserve">
+    <value>Start Time</value>
+  </data>
+  <data name="WorkEndTime" xml:space="preserve">
+    <value>End Time</value>
+  </data>
+  <data name="CurrentWorkHours" xml:space="preserve">
+    <value>📅 Current Work Hours:
+Start: {0}
+End: {1}
+</value>
+  </data>
+  <data name="WorkHoursUpdated" xml:space="preserve">
+    <value>✅ Work hours updated successfully!</value>
+  </data>
+  <data name="EnterWorkStartTime" xml:space="preserve">
+    <value>🕘 Please enter your new work start time (HH:MM format):
+Example: 09:00</value>
+  </data>
+  <data name="EnterWorkEndTime" xml:space="preserve">
+    <value>🕐 Please enter your new work end time (HH:MM format):
+Example: 18:00</value>
+  </data>
+  <data name="WorkStartTimeSet" xml:space="preserve">
+    <value>✅ Work start time set to {0}</value>
+  </data>
+  <data name="WorkEndTimeSet" xml:space="preserve">
+    <value>✅ Work end time set to {0}</value>
+  </data>
+  <data name="InvalidWorkTimeRange" xml:space="preserve">
+    <value>❌ Invalid time range! Start time must be earlier than end time.</value>
   </data>
 </root>

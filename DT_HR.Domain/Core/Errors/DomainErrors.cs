@@ -94,6 +94,9 @@ public static class DomainErrors
         public static Error CannotChangePassword => new Error(
             "User.CannotChangePassword",
             "The password cannot be changed to the specified password.");
+
+        public static Error InvalidWorkTimeRange =>
+            new Error("invalid_work_time_range", "the start time should be earlier than end time");
     }
 
     public static class Email

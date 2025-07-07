@@ -63,7 +63,7 @@
     <value>Добро пожаловать</value>
   </data>
   <data name="SelectLanguage" xml:space="preserve">
-    <value>Выберите язык</value>
+    <value>🌐Выберите язык</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
@@ -481,5 +481,48 @@
   </data>
   <data name="DateSelected" xml:space="preserve">
     <value>✅ Дата выбрана успешно</value>
+  </data>
+  <data name="Birthdays" xml:space="preserve">
+    <value>дни рождения</value>
+  </data>
+  <data name="WorkTimeSettings" xml:space="preserve">
+    <value>⏰ Настройки рабочего времени</value>
+  </data>
+  <data name="SetWorkStartTime" xml:space="preserve">
+    <value>🕘 Установить время начала</value>
+  </data>
+  <data name="SetWorkEndTime" xml:space="preserve">
+    <value>🕐 Установить время окончания</value>
+  </data>
+  <data name="WorkStartTime" xml:space="preserve">
+    <value>Время начала</value>
+  </data>
+  <data name="WorkEndTime" xml:space="preserve">
+    <value>Время окончания</value>
+  </data>
+  <data name="CurrentWorkHours" xml:space="preserve">
+    <value>📅 Текущее рабочее время:
+Начало: {0}
+Окончание: {1}</value>
+  </data>
+  <data name="WorkHoursUpdated" xml:space="preserve">
+    <value>✅ Рабочее время успешно обновлено!</value>
+  </data>
+  <data name="EnterWorkStartTime" xml:space="preserve">
+    <value>🕘 Пожалуйста, введите новое время начала работы (формат ЧЧ:ММ):
+Пример: 09:00</value>
+  </data>
+  <data name="EnterWorkEndTime" xml:space="preserve">
+    <value>🕐 Пожалуйста, введите новое время окончания работы (формат ЧЧ:ММ):
+Пример: 18:00</value>
+  </data>
+  <data name="WorkStartTimeSet" xml:space="preserve">
+    <value>✅ Время начала работы установлено на {0}</value>
+  </data>
+  <data name="WorkEndTimeSet" xml:space="preserve">
+    <value>✅ Время окончания работы установлено на {0}</value>
+  </data>
+  <data name="InvalidWorkTimeRange" xml:space="preserve">
+    <value>❌ Неверный диапазон времени! Время начала должно быть раньше времени окончания.</value>
   </data>
 </root>

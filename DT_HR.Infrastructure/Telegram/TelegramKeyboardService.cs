@@ -286,4 +286,42 @@ public class TelegramKeyboardService(ILocalizationService localization, IConfigu
             }
         });
     }
+
+    public InlineKeyboardMarkup GetManagerSettingsKeyboard(string language = "uz")
+    {
+        return new InlineKeyboardMarkup(new[]
+        {
+           new[]
+           {
+               InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.SelectLanguage, language), "lang_select") 
+           },
+           new[]
+           {
+               InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.WorkTimeSettings, language), "work_time_settings") 
+           },
+           new[]
+           {
+               InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.Cancel, language), "cancel") 
+           }
+        }); 
+    }
+
+    public InlineKeyboardMarkup GetWorkTimeSettingsKeyboard(string language = "uz")
+    {
+        return new InlineKeyboardMarkup(new[]
+        {
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.SetWorkStartTime, language), "work_time_start")
+            },
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.SetWorkEndTime, language), "work_time_end") 
+            },
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.Back, language), "back_to_settings") 
+            }
+        });
+    }
 }

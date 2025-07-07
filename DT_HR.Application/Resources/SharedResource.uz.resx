@@ -63,7 +63,7 @@
     <value>Xush kelibsiz</value>
   </data>
   <data name="SelectLanguage" xml:space="preserve">
-    <value>Tilni tanlang</value>
+    <value>🌐Tilni tanlang</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Bekor qilish</value>
@@ -482,5 +482,48 @@ Xavfsiz sayohat! 🚗💨
   </data>
   <data name="DateSelected" xml:space="preserve">
     <value>✅ Sana muvaffaqiyatli tanlandi</value>
+  </data>
+  <data name="Birthdays" xml:space="preserve">
+    <value>Tugilgan Kunlar</value>
+  </data>
+  <data name="WorkTimeSettings" xml:space="preserve">
+    <value>⏰ Ish vaqti sozlamalari</value>
+  </data>
+  <data name="SetWorkStartTime" xml:space="preserve">
+    <value>🕘 Boshlanish vaqtini belgilash</value>
+  </data>
+  <data name="SetWorkEndTime" xml:space="preserve">
+    <value>🕐 Tugash vaqtini belgilash</value>
+  </data>
+  <data name="WorkStartTime" xml:space="preserve">
+    <value>Boshlanish vaqti</value>
+  </data>
+  <data name="WorkEndTime" xml:space="preserve">
+    <value>Tugash vaqti</value>
+  </data>
+  <data name="CurrentWorkHours" xml:space="preserve">
+    <value>📅 Hozirgi ish vaqti:
+Boshlash: {0}
+Tugash: {1}</value>
+  </data>
+  <data name="WorkHoursUpdated" xml:space="preserve">
+    <value>✅ Ish vaqti muvaffaqiyatli yangilandi!</value>
+  </data>
+  <data name="EnterWorkStartTime" xml:space="preserve">
+    <value>🕘 Yangi ish boshlanish vaqtini kiriting (SS:DD format):
+Masalan: 09:00</value>
+  </data>
+  <data name="EnterWorkEndTime" xml:space="preserve">
+    <value>🕐 Yangi ish tugash vaqtini kiriting (SS:DD format):
+Masalan: 18:00</value>
+  </data>
+  <data name="WorkStartTimeSet" xml:space="preserve">
+    <value>✅ Ish boshlanish vaqti {0} ga o'rnatildi</value>
+  </data>
+  <data name="WorkEndTimeSet" xml:space="preserve">
+    <value>✅ Ish tugash vaqti {0} ga o'rnatildi</value>
+  </data>
+  <data name="InvalidWorkTimeRange" xml:space="preserve">
+    <value>❌ Noto'g'ri vaqt oralig'i! Boshlanish vaqti tugash vaqtidan oldin bo'lishi kerak.</value>
   </data>
 </root>
