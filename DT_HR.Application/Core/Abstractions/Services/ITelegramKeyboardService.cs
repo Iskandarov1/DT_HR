@@ -6,6 +6,8 @@ namespace DT_HR.Application.Core.Abstractions.Services;
 public interface ITelegramKeyboardService
 {
     InlineKeyboardMarkup GetLanguageSelectionKeyboard();
+    ReplyKeyboardMarkup GetManagerSettingsReplyKeyboard(string language = "uz");
+
     ReplyKeyboardMarkup GetPhoneNumberOptionsKeyboard(string language = "uz");
 
     ReplyKeyboardMarkup GetMainMenuKeyboard(string language = "uz",MainMenuType menuType = MainMenuType.Default, bool isManager = false);

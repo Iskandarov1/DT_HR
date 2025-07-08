@@ -324,4 +324,26 @@ public class TelegramKeyboardService(ILocalizationService localization, IConfigu
             }
         });
     }
+    public ReplyKeyboardMarkup GetManagerSettingsReplyKeyboard(string language = "uz")
+    {
+        return new ReplyKeyboardMarkup(new[]
+        {
+            new[]
+            {
+                new KeyboardButton(localization.GetString(ResourceKeys.SelectLanguage, language))
+            },
+            new[]
+            {
+                new KeyboardButton(localization.GetString(ResourceKeys.WorkTimeSettings, language))
+            },
+            new[]
+            {
+                new KeyboardButton(localization.GetString(ResourceKeys.Back, language))
+            }
+        })
+        {
+            ResizeKeyboard = true,
+            OneTimeKeyboard = false
+        };
+    }
 }

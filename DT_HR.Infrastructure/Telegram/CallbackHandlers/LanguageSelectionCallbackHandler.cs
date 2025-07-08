@@ -33,94 +33,67 @@ public class LanguageSelectionCallbackHandler(
 
         await messageService.AnswerCallbackQueryAsync(callbackQuery.Id, cancellationToken: cancellationToken);
         
-        var state = await stateService.GetStateAsync(userId) ?? new UserState();
-        if (state != null && state.CurrentAction == UserAction.SelectingLanguage)
+        var maybeUser = await userRepository.GetByTelegramUserIdAsync(userId, cancellationToken);
+        if (maybeUser.HasValue)
         {
-            var maybeUser = await userRepository.GetByTelegramUserIdAsync(userId, cancellationToken);
-            if (maybeUser.HasValue)
+
+            var user = maybeUser.Value;
+            user.SetLanguage(selectedLanguage);
+            userRepository.Update(user);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
+            
+
+            var state = await stateService.GetStateAsync(userId);
+            var previousMenuTypeString = state?.Data.GetValueOrDefault("previousMenuType")?.ToString();
+            var menuType = MainMenuType.Default;
+            if (!string.IsNullOrEmpty(previousMenuTypeString) && Enum.TryParse<MainMenuType>(previousMenuTypeString, out var parsedMenuType))
             {
-                var user = maybeUser.Value;
-                user.SetLanguage(selectedLanguage);
-                userRepository.Update(user);
-                await unitOfWork.SaveChangesAsync(cancellationToken);
-                
-                var previousMenuTypeString = state?.Data.GetValueOrDefault("previousMenuType")?.ToString();
-                var menuType = MainMenuType.Default;
-                if (!string.IsNullOrEmpty(previousMenuTypeString) && Enum.TryParse<MainMenuType>(previousMenuTypeString, out var parsedMenuType))
-                {
-                    menuType = parsedMenuType;
-                }
-
-                await stateService.RemoveStateAsync(userId);
-                
-                // removing the keyboard and showing language confirmation
-                var confirmationMessage = localization.GetString(ResourceKeys.LanguageChanged, selectedLanguage);
-                await messageService.EditMessageTextAsync(
-                    chatId,
-                    messageId,
-                    confirmationMessage,
-                    replyMarkUp: null,
-                    cancellationToken: cancellationToken);
-                //---
-                
-                await messageService.ShowMainMenuAsync(
-                    chatId,
-                    selectedLanguage,
-                    menuType: menuType,
-                    cancellationToken: cancellationToken);
+                menuType = parsedMenuType;
             }
-            else
-            {
-                state.Language = selectedLanguage;
-                state.CurrentAction = UserAction.Registering;
-                state.Data["step"] = "phone";
-                await stateService.SetStateAsync(userId, state);
 
-                var keyboard = keyboardService.GetPhoneNumberOptionsKeyboard(selectedLanguage);
-                var registrationPrompt = localization.GetString(ResourceKeys.RegistrationPrompt, selectedLanguage);
-                var chooseHowtoShare = localization.GetString(ResourceKeys.ChooseHowToShare, selectedLanguage);
-                var message = $"{registrationPrompt}\n\n{chooseHowtoShare}";
 
-                await messageService.EditMessageTextAsync(
-                    chatId,
-                    messageId,
-                    message,
-                    replyMarkUp: null,
-                    cancellationToken: cancellationToken);
-                await messageService.SendTextMessageAsync(
-                    chatId, 
-                    "👇", 
-                    keyboard, 
-                    cancellationToken);
-            }
+            await stateService.RemoveStateAsync(userId);
+            
+
+            var confirmationMessage = localization.GetString(ResourceKeys.LanguageChanged, selectedLanguage);
+            await messageService.EditMessageTextAsync(
+                chatId,
+                messageId,
+                confirmationMessage,
+                replyMarkUp: null,
+                cancellationToken: cancellationToken);
+            
+            await messageService.ShowMainMenuAsync(
+                chatId,
+                selectedLanguage,
+                menuType: menuType,
+                cancellationToken: cancellationToken);
         }
         else
         {
-            state ??= new UserState();
-            state.Language = selectedLanguage;
-            state.CurrentAction = UserAction.Registering;
+            var state = new UserState
+            {
+                Language = selectedLanguage,
+                CurrentAction = UserAction.Registering
+            };
             state.Data["step"] = "phone";
             await stateService.SetStateAsync(userId, state);
 
-
-            var keyborad = keyboardService.GetPhoneNumberOptionsKeyboard(selectedLanguage);
-        
+            var keyboard = keyboardService.GetPhoneNumberOptionsKeyboard(selectedLanguage);
             var registrationPrompt = localization.GetString(ResourceKeys.RegistrationPrompt, selectedLanguage);
-            var chooseHowToShare = localization.GetString(ResourceKeys.ChooseHowToShare, selectedLanguage);
-        
-            var message = $"{registrationPrompt}\n\n{chooseHowToShare}";
-        
+            var chooseHowtoShare = localization.GetString(ResourceKeys.ChooseHowToShare, selectedLanguage);
+            var message = $"{registrationPrompt}\n\n{chooseHowtoShare}";
+
             await messageService.EditMessageTextAsync(
                 chatId,
                 messageId,
                 message,
                 replyMarkUp: null,
                 cancellationToken: cancellationToken);
-         
             await messageService.SendTextMessageAsync(
                 chatId, 
                 "👇", 
-                keyborad,
+                keyboard, 
                 cancellationToken);
         }
     }

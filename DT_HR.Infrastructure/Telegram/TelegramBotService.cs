@@ -56,6 +56,7 @@ public class TelegramBotService : ITelegramBotService
             serviceProvider.GetRequiredService<CheckInCommandHandler>(),
             serviceProvider.GetRequiredService<CheckOutCommandHandler>(),
             serviceProvider.GetRequiredService<ReportAbsenceCommandHandler>(),
+            serviceProvider.GetRequiredService<ManagerSettingsMessageHandler>(),
             serviceProvider.GetRequiredService<SettingsCommandHandler>(),
             serviceProvider.GetRequiredService<StateBasedMessageHandler>(),
             serviceProvider.GetRequiredService<AttendanceStatsCommandHandler>(),

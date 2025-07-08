@@ -14,19 +14,26 @@ public class UserBackgroundJobService(
 {
     public async Task InitializeBackgroundJobsForUserAsync(User user, CancellationToken cancellationToken = default)
     {
-        var utcHour = (user.WorkStartTime.Hour - 5 + 24) % 24;
-        
-        RecurringJob.AddOrUpdate<BackgroundTaskJobs>(
-            $"checkin-reminder-{user.TelegramUserId}",
-            j => j.SendCheckInReminderAsync(user.TelegramUserId, cancellationToken),
-            Cron.Daily(utcHour, user.WorkStartTime.Minute),
-            new RecurringJobOptions
-            {
-                TimeZone = TimeZoneInfo.Utc
-            });
-        
-        logger.LogInformation("Check-in reminder scheduled for newly registered user {UserId} at {LocalTime} (UTC: {UtcHour}:{Minute})", 
-            user.TelegramUserId, user.WorkStartTime, utcHour, user.WorkStartTime.Minute);
+        if (!user.IsManager())
+        {
+            var utcHour = (user.WorkStartTime.Hour - 5 + 24) % 24;
+            
+            RecurringJob.AddOrUpdate<BackgroundTaskJobs>(
+                $"checkin-reminder-{user.TelegramUserId}",
+                j => j.SendCheckInReminderAsync(user.TelegramUserId, cancellationToken),
+                Cron.Daily(utcHour, user.WorkStartTime.Minute),
+                new RecurringJobOptions
+                {
+                    TimeZone = TimeZoneInfo.Utc
+                });
+            
+            logger.LogInformation("Check-in reminder scheduled for newly registered employee {UserId} at {LocalTime} (UTC: {UtcHour}:{Minute})", 
+                user.TelegramUserId, user.WorkStartTime, utcHour, user.WorkStartTime.Minute);
+        }
+        else
+        {
+            logger.LogInformation("Skipping check-in reminder for newly registered manager {UserId}", user.TelegramUserId);
+        }
         
         await Task.CompletedTask;
     }
@@ -41,19 +48,29 @@ public class UserBackgroundJobService(
 
         foreach (var user in users)
         {
-            var utcHour = (user.WorkStartTime.Hour - 5 + 24) % 24;
 
-            RecurringJob.AddOrUpdate<BackgroundTaskJobs>(
-                $"checkin-reminder-{user.TelegramUserId}",
-                j => j.SendCheckInReminderAsync(user.TelegramUserId, cancellationToken),
-                Cron.Daily(utcHour, user.WorkStartTime.Minute),
-                new RecurringJobOptions
-                {
-                    TimeZone = TimeZoneInfo.Utc
-                });
-            
-            logger.LogInformation("Rescheduled check-in reminder scheduled for user {UserId} at {LocalTime} (UTC: {UtcHour}:{Minute})", 
-                user.TelegramUserId, user.WorkStartTime, utcHour, user.WorkStartTime.Minute);
+            if (!user.IsManager())
+            {
+                var utcHour = (user.WorkStartTime.Hour - 5 + 24) % 24;
+
+                RecurringJob.AddOrUpdate<BackgroundTaskJobs>(
+                    $"checkin-reminder-{user.TelegramUserId}",
+                    j => j.SendCheckInReminderAsync(user.TelegramUserId, cancellationToken),
+                    Cron.Daily(utcHour, user.WorkStartTime.Minute),
+                    new RecurringJobOptions
+                    {
+                        TimeZone = TimeZoneInfo.Utc
+                    });
+                
+                logger.LogInformation("Rescheduled check-in reminder for employee {UserId} at {LocalTime} (UTC: {UtcHour}:{Minute})", 
+                    user.TelegramUserId, user.WorkStartTime, utcHour, user.WorkStartTime.Minute);
+            }
+            else
+            {
+
+                RecurringJob.RemoveIfExists($"checkin-reminder-{user.TelegramUserId}");
+                logger.LogInformation("Removed check-in reminder for manager {UserId}", user.TelegramUserId);
+            }
         }
     }
 

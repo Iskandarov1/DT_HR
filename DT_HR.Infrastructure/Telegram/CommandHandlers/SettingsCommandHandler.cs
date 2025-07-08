@@ -37,10 +37,6 @@ public class SettingsCommandHandler(
 
         var state = await stateService.GetStateAsync(userId);
         var language = state?.Language ?? await localization.GetUserLanguage(userId);
-        state = new UserState { Language = language };
-        
-        state.CurrentAction = UserAction.SelectingLanguage;
-        state.Language = language;
         
 
         var menuType = MainMenuType.Default;
@@ -73,18 +69,20 @@ public class SettingsCommandHandler(
             }
         }
         
-        //storing the menu type for restoration after language selection
-        state.Data["previousMenuType"] = menuType.ToString();
-        await stateService.SetStateAsync(userId, state);
-
         if (maybeUser.HasValue && maybeUser.Value.IsManager())
         {
-            var keyboard = keyboardService.GetManagerSettingsKeyboard(language);
+            // For managers, store state for proper navigation
+            state = new UserState { Language = language };
+            state.Data["previousMenuType"] = menuType.ToString();
+            await stateService.SetStateAsync(userId, state);
+            
+            var keyboard = keyboardService.GetManagerSettingsReplyKeyboard(language);
             var prompt = localization.GetString(ResourceKeys.Settings, language);
             await messageService.SendTextMessageAsync(chatId, prompt, keyboard, cancellationToken);
         }
         else
         {
+            // For regular users, don't set any problematic state - just show language selection directly
             var keyboard = keyboardService.GetLanguageSelectionKeyboard();
             var prompt = localization.GetString(ResourceKeys.SelectLanguage, language);
             await messageService.SendTextMessageAsync(chatId, prompt, keyboard, cancellationToken);

@@ -4,6 +4,7 @@ using DT_HR.Persistence;
 using DT_HR.Infrastructure;
 using Hangfire;
 using Hangfire.MemoryStorage;
+using Hangfire.PostgreSql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,18 @@ builder.Services.AddDtHrLocalization();
 builder.Services.AddApplication();
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddServices(builder.Configuration);
-builder.Services.AddHangfire(config => config.UseMemoryStorage());
+builder.Services.AddHangfire(config => config
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UsePostgreSqlStorage(builder.Configuration.GetConnectionString("DefaultConnection"), new PostgreSqlStorageOptions
+    {
+        QueuePollInterval = TimeSpan.FromSeconds(1),
+        CountersAggregateInterval = TimeSpan.FromMinutes(5),
+        PrepareSchemaIfNecessary = true,
+        InvisibilityTimeout = TimeSpan.FromMinutes(30),
+        DistributedLockTimeout = TimeSpan.FromMinutes(10)
+    })
+);
 builder.Services.AddHangfireServer();
 
 builder.Services.AddCors(options =>

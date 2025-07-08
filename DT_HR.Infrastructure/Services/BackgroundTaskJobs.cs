@@ -49,7 +49,7 @@ public class BackgroundTaskJobs(
                     menuType: MainMenuType.CheckPrompt,
                     cancellationToken:cancellationToken);
                 logger.LogInformation("Check-in reminder sent to user {UserId}", telegramUserId);
-            }
+            }   
         }
         catch (Exception e)
         {

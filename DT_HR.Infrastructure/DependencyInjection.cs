@@ -62,6 +62,7 @@ public static class DependencyInjection
         services.AddScoped<ContactMessageHandler>();
         services.AddScoped<ExportDateInputHandler>();
         services.AddScoped<WorkTimeInputMessageHandler>();
+        services.AddScoped<ManagerSettingsMessageHandler>();
 
         services.AddScoped<LanguageSelectionCallbackHandler>();
         services.AddScoped<AbsenceTypeCallbackHandler>();
