@@ -113,7 +113,7 @@ public class MyEventsCommandHandler (
             
             foreach (var evt in events)
             {
-                var localEventTime = evt.EventTime;
+                var localEventTime = evt.EventTime.AddHours(5);
                 sb.AppendLine($"📝 {evt.Description}");
                 sb.AppendLine($"⏰ {localEventTime:dd-MM-yyyy HH:mm}");
                 sb.AppendLine();

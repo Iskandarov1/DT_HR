@@ -1,5 +1,6 @@
 using DT_HR.Application.Core.Abstractions.Data;
 using DT_HR.Application.Core.Abstractions.Messaging;
+using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Domain.Core.Errors;
 using DT_HR.Domain.Core.Primitives.Result;
 using DT_HR.Domain.Repositories;
@@ -9,7 +10,8 @@ namespace DT_HR.Application.Company.Commands.UpdateCompanyWorkHours;
 public class UpdateCompanyWorkHoursCommandHandler(
     ICompanyRepository companyRepository,
     IUserRepository userRepository,
-    IUnitOfWork unitOfWork) : ICommandHandler<UpdateCompanyWorkHoursCommand, Result> 
+    IUnitOfWork unitOfWork,
+    IUserBackgroundJobService userBackgroundJobService) : ICommandHandler<UpdateCompanyWorkHoursCommand, Result> 
 {
     public async Task<Result> Handle(UpdateCompanyWorkHoursCommand request, CancellationToken cancellationToken)
     {
@@ -32,6 +34,8 @@ public class UpdateCompanyWorkHoursCommandHandler(
         }
         
         await unitOfWork.SaveChangesAsync(cancellationToken);
+        await userBackgroundJobService.RescheduleAllUserJobsAsync(cancellationToken);
+        await userBackgroundJobService.RescheduleCompanyWideJobsAsync(cancellationToken);
         
         return Result.Success();
     }
