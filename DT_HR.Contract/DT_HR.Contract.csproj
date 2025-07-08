@@ -5,6 +5,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Telegram.CalendarKit" Version="1.0.2" />
+    </ItemGroup>
     
     
 </Project>

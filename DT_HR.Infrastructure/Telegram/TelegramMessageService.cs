@@ -77,6 +77,25 @@ public class TelegramMessageService(
         }
     }
 
+    public async Task EditMessageReplyMarkupAsync(long chatId, int messageId, InlineKeyboardMarkup? replyMarkup = null, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            await botClient.EditMessageReplyMarkup(
+                chatId: chatId,
+                messageId: messageId,
+                replyMarkup: replyMarkup,
+                cancellationToken: cancellationToken);
+            
+            logger.LogInformation("Message {MessageId} reply markup edited in the chat {ChatId}", messageId, chatId);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Error editing message {MessageId} reply markup in the chat {ChatId}", messageId, chatId);
+            throw;
+        }
+    }
+
     public async Task AnswerCallbackQueryAsync(string callbackQueryId, string? text = null,
         CancellationToken cancellationToken = default)
     {

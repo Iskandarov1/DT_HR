@@ -14,6 +14,7 @@
       <PackageReference Include="MediatR" Version="12.5.0" />
       <PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.6" />
       <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="9.0.6" />
+      <PackageReference Include="Telegram.CalendarKit" Version="1.0.2" />
     </ItemGroup>
 
     <ItemGroup>

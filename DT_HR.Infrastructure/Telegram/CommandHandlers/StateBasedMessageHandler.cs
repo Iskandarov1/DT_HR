@@ -20,6 +20,7 @@ public class StateBasedMessageHandler(
     IUserStateService  stateService,
     ITelegramMessageService messageService,
     ITelegramKeyboardService keyboardService,
+    ITelegramCalendarService calendarService,
     IMediator mediator,
     ILogger<StateBasedMessageHandler> logger,
     ILocalizationService localizationService,
@@ -190,60 +191,75 @@ public class StateBasedMessageHandler(
         if (step == "description")
         {
             state.Data["description"] = text;
-            state.Data["step"] = "time";
+            state.Data["step"] = "date";
             await stateService.SetStateAsync(userId, state);
+            
+            var calendarKeyboard = calendarService.GetCalendarKeyboard();
+            
             await messageService.SendTextMessageAsync(chatId,
-                localizationService.GetString(ResourceKeys.EnterEventTime, language),
-                keyboardService.GetCancelInlineKeyboard(language),
+                localizationService.GetString(ResourceKeys.SelectEventDate, language),
+                calendarKeyboard,
                 cancellationToken: cancellationToken);
             return;
         }
 
-        if (!DateTime.TryParseExact(text,"dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out var localTime))
+        if (step == "time")
         {
-            await messageService.SendTextMessageAsync(chatId,
-                localizationService.GetString(ResourceKeys.InvalidTimeFormat, language),
-                cancellationToken: cancellationToken);
-            return;
-        }
-        
-
-        var utcEventTime = localTime.AddHours(-5);
-        
-        var description = state.Data["description"]?.ToString() ?? string.Empty;
-        var result = await mediator.Send(new CreateEventCommand(description, utcEventTime), cancellationToken);
-        await stateService.RemoveStateAsync(userId);
-
-        if (result.IsSuccess)
-        {
-            var users = await userRepository.GetActiveUsersAsync(cancellationToken);
-            foreach (var u in users)
+            if (!TimeSpan.TryParseExact(text, @"hh\:mm", CultureInfo.InvariantCulture, out var timeSpan))
             {
-                var lang = await localizationService.GetUserLanguage(u.TelegramUserId);
-                var eventCreated = localizationService.GetString(ResourceKeys.EventCreated, language);
-                var date = localizationService.GetString(ResourceKeys.Date, language);
-                var eventTime = localizationService.GetString(ResourceKeys.Event, language);
-                // Display in local time (UTC+5)
-                var displayTime = utcEventTime.AddHours(5);
-                var msg = $"🔔 *{eventCreated}*\n\n" +
-                         $"📅 {eventTime}: {description}\n" +
-                         $"⏰ {date}: {displayTime:dd-MM-yyyy HH:mm}";
-                await messageService.SendTextMessageAsync(u.TelegramUserId, msg, cancellationToken: cancellationToken);
+                await messageService.SendTextMessageAsync(chatId,
+                    localizationService.GetString(ResourceKeys.InvalidTimeFormat, language),
+                    cancellationToken: cancellationToken);
+                return;
             }
 
-            await messageService.ShowMainMenuAsync(
-                chatId,
-                language,
-                menuType: MainMenuType.Default,
-                cancellationToken: cancellationToken);
-        }
-        else
-        {
-            await messageService.ShowMainMenuAsync(
-                chatId,
-                language,
-                menuType: MainMenuType.Default,
-                cancellationToken: cancellationToken);
+            var dateString = state.Data["selectedDate"]?.ToString();
+            if (string.IsNullOrEmpty(dateString) || !DateTime.TryParse(dateString, out var selectedDate))
+            {
+                await messageService.SendTextMessageAsync(chatId,
+                    "Error: Date not selected. Please start over.",
+                    cancellationToken: cancellationToken);
+                return;
+            }
+
+            var localTime = selectedDate.Date.Add(timeSpan);
+            var utcEventTime = localTime.AddHours(-5);
+            
+            var description = state.Data["description"]?.ToString() ?? string.Empty;
+            var result = await mediator.Send(new CreateEventCommand(description, utcEventTime), cancellationToken);
+            await stateService.RemoveStateAsync(userId);
+
+            if (result.IsSuccess)
+            {
+                var users = await userRepository.GetActiveUsersAsync(cancellationToken);
+                foreach (var u in users)
+                {
+                    var lang = await localizationService.GetUserLanguage(u.TelegramUserId);
+                    var eventCreated = localizationService.GetString(ResourceKeys.EventCreated, language);
+                    var date = localizationService.GetString(ResourceKeys.Date, language);
+                    var eventTime = localizationService.GetString(ResourceKeys.Event, language);
+                    // Display in local time (UTC+5)
+                    var displayTime = utcEventTime.AddHours(5);
+                    var msg = $"🔔 *{eventCreated}*\n\n" +
+                             $"📅 {eventTime}: {description}\n" +
+                             $"⏰ {date}: {displayTime:dd-MM-yyyy HH:mm}";
+                    await messageService.SendTextMessageAsync(u.TelegramUserId, msg, cancellationToken: cancellationToken);
+                }
+
+                await messageService.ShowMainMenuAsync(
+                    chatId,
+                    language,
+                    menuType: MainMenuType.Default,
+                    cancellationToken: cancellationToken);
+            }
+            else
+            {
+                await messageService.ShowMainMenuAsync(
+                    chatId,
+                    language,
+                    menuType: MainMenuType.Default,
+                    cancellationToken: cancellationToken);
+            }
         }
 
     }

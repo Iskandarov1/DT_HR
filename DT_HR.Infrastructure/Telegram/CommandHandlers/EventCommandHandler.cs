@@ -11,6 +11,7 @@ public class EventCommandHandler(
     IUserStateService stateService,
     ILocalizationService localization,
     ITelegramKeyboardService keyboardService,
+    ITelegramCalendarService calendarService,
     IUserRepository userRepository,
     ILogger<EventCommandHandler> logger) : ITelegramService
 {

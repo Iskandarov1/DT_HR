@@ -28,6 +28,7 @@ public static class DependencyInjection
         services.AddScoped<ITelegramBotService, TelegramBotService>();
         services.AddScoped<ITelegramMessageService, TelegramMessageService>();
         services.AddScoped<ITelegramKeyboardService, TelegramKeyboardService>();
+        services.AddScoped<ITelegramCalendarService, TelegramCalendarService>();
         services.AddScoped<ILocalizationService, LocalizationService>();
         services.AddScoped<ILocationService, LocationService>();
         services.AddScoped<IAttendanceReportService, AttendanceReportService>();
@@ -70,6 +71,7 @@ public static class DependencyInjection
         services.AddScoped<CancelCallbackHandler>();
         services.AddScoped<ExportDateRangeCallbackHandler>();
         services.AddScoped<WorkTimeSettingsCallbackHandler>();
+        services.AddScoped<CalendarCallbackHandler>();
         
         services.AddHostedService<WebhookConfigurationService>();
         services.AddHostedService<TelegramPollingService>();

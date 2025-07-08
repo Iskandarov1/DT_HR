@@ -106,6 +106,7 @@ public static class ResourceKeys
     public const string UpcomingEvents = "UpcomingEvents";
 
     public const string EnterEventDescription = "EnterEventDescription";
+    public const string SelectEventDate = "SelectEventDate";
     public const string EnterEventTime = "EnterEventTime";
     public const string EventCreated = "EventCreated";
     public const string EventReminder = "EventReminder";

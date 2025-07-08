@@ -9,6 +9,7 @@ public interface ITelegramMessageService
     Task SendTextMessageAsync(long chatId, string text, ReplyMarkup? replyMarkup=null, CancellationToken cancellationToken = default);
     Task SendPlainTextMessageAsync(long chatId, string text, CancellationToken cancellationToken = default);
     Task EditMessageTextAsync(long chatId, int messageId, string text, InlineKeyboardMarkup? replyMarkUp = null, CancellationToken cancellationToken = default);
+    Task EditMessageReplyMarkupAsync(long chatId, int messageId, InlineKeyboardMarkup? replyMarkUp = null, CancellationToken cancellationToken = default);
 
     Task AnswerCallbackQueryAsync(string callbackQueryId, string? text = null,
         CancellationToken cancellationToken = default);
