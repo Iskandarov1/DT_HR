@@ -204,15 +204,18 @@
   <data name="SessionExpired" xml:space="preserve">
     <value>❌ Sessiya tugadi. Iltimos, qaytadan boshlang.</value>
   </data>
+  <data name="OtherEtaPrompt" xml:space="preserve">
+    <value>⏰ Ofisga qachon kelishni rejalashtiryapsiz, yoki kun bo'yi yo'qmisiz?</value>
+  </data>
+  <data name="AbsentAllDay" xml:space="preserve">
+    <value>❌ Kun bo'yi yo'q</value>
+  </data>
   <data name="OversleptPrompt" xml:space="preserve">
     <value>😴 Qachon kelishni rejalashtiryapsiz?</value>
   </data>
   <data name="OtherReasonPrompt" xml:space="preserve">
     <value>
-        Iltimos, quyidagilarni ko'rsating:
-          1.Kelmaslik sababi.
-          2.Agar kelsangiz, kutilayotgan kelish vaqti (format: Daqiqa yoki kelmasangiz "kelmayman" deb yozing
-          Misol: "Shifokorga tashrif, 14:00" yoki "Oilaviy holat, kelmayman"
+Iltimos, Kechikish sababini kiriting
 </value>
   </data>
   <data name="InvalidTimeFormat" xml:space="preserve">

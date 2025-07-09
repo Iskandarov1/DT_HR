@@ -68,6 +68,7 @@ public static class DependencyInjection
         services.AddScoped<AbsenceTypeCallbackHandler>();
         services.AddScoped<OversleptETACallbackHandler>();
         services.AddScoped<OnTheWayEtaCallbackHandler>();
+        services.AddScoped<OtherEtaCallbackHandler>();
         services.AddScoped<CancelCallbackHandler>();
         services.AddScoped<ExportDateRangeCallbackHandler>();
         services.AddScoped<ExportCalendarCallbackHandler>();

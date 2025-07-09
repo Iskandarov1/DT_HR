@@ -211,11 +211,8 @@
     </value>
   </data>
   <data name="OtherReasonPrompt" xml:space="preserve">
-    <value> Please provide:
-        Your reason for absence.
-        Expected arrival time if you're coming (format: HH:MM) or type "absent" if not coming
-        Example: "Doctor appointment, 14:00" or "Family emergency, absent"
-    </value>
+    <value> Please provide your reason for absence.
+</value>
   </data>
   <data name="InvalidTimeFormat" xml:space="preserve">
     <value>❌ Please provide a valid time format (HH:MM).</value>
