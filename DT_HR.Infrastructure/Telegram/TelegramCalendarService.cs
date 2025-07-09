@@ -27,7 +27,7 @@ public class TelegramCalendarService(ILocalizationService localization) : ITeleg
 
     public DateTime? ParseDateFromCallback(string callbackData)
     {
-        // Try to parse date from callback data
+
         if (callbackData.StartsWith("date_"))
         {
             var dateStr = callbackData.Replace("date_", "");
@@ -39,8 +39,10 @@ public class TelegramCalendarService(ILocalizationService localization) : ITeleg
         
         // If using calendar library format, try to extract date
         var parts = callbackData.Split('_');
-        if (parts.Length >= 4 && int.TryParse(parts[1], out var year) && 
-            int.TryParse(parts[2], out var month) && int.TryParse(parts[3], out var day))
+        if (parts.Length >= 4 && 
+            int.TryParse(parts[1], out var year) && 
+            int.TryParse(parts[2], out var month) && 
+            int.TryParse(parts[3], out var day))
         {
             try
             {
@@ -58,7 +60,9 @@ public class TelegramCalendarService(ILocalizationService localization) : ITeleg
     public (int year, int month, bool isNext) ParseNavigationFromCallback(string callbackData)
     {
         var parts = callbackData.Split('_');
-        if (parts.Length >= 4 && int.TryParse(parts[2], out var year) && int.TryParse(parts[3], out var month))
+        if (parts.Length >= 4 &&
+            int.TryParse(parts[2], out var year) &&
+            int.TryParse(parts[3], out var month))
         {
             var isNext = callbackData.StartsWith("calendar_next_");
             return (year, month, isNext);

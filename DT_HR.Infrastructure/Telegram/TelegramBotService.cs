@@ -64,7 +64,6 @@ public class TelegramBotService : ITelegramBotService
             serviceProvider.GetRequiredService<EventCommandHandler>(),
             serviceProvider.GetRequiredService<MyEventsCommandHandler>(),
             serviceProvider.GetRequiredService<ExportAttendanceCommandHandler>(),
-            serviceProvider.GetRequiredService<ExportDateInputHandler>(),
             serviceProvider.GetRequiredService<WorkTimeInputMessageHandler>()
         };
         _callbackHandlers = new List<ITelegramCallbackQuery>
@@ -76,7 +75,8 @@ public class TelegramBotService : ITelegramBotService
             serviceProvider.GetRequiredService<CancelCallbackHandler>(),
             serviceProvider.GetRequiredService<ExportDateRangeCallbackHandler>(),
             serviceProvider.GetRequiredService<WorkTimeSettingsCallbackHandler>(),
-            serviceProvider.GetRequiredService<CalendarCallbackHandler>()
+            serviceProvider.GetRequiredService<CalendarCallbackHandler>(),
+            serviceProvider.GetRequiredService<ExportCalendarCallbackHandler>()
         };
 
     }
@@ -441,8 +441,7 @@ public class TelegramBotService : ITelegramBotService
     public async Task ProcessCallbackQueryAsync(CallbackQuery? callbackQuery, CancellationToken cancellationToken)
     {
         if(callbackQuery == null || callbackQuery.From == null || callbackQuery.Message == null) return;
-
-        // IGNORE callback queries in groups - bot should only respond in private chats
+        
         if (callbackQuery.Message.Chat.Type != ChatType.Private)
         {
             _logger.LogDebug("Ignoring callback query from group chat {ChatId} ({ChatTitle})", 

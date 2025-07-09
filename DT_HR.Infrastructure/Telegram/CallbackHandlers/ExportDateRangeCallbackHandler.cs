@@ -13,6 +13,7 @@ public class ExportDateRangeCallbackHandler(
     IUserStateService stateService,
     ILocalizationService localization,
     ITelegramKeyboardService keyboardService,
+    ITelegramCalendarService calendarService,
     IMediator mediator,
     ILogger<ExportDateRangeCallbackHandler> logger) : ITelegramCallbackQuery
 {
@@ -56,14 +57,17 @@ public class ExportDateRangeCallbackHandler(
                 await stateService.SetStateAsync(userId, new UserState
                 {
                     Language = language,
-                    CurrentAction = UserAction.ExportCustomStartDate,
+                    CurrentAction = UserAction.ExportSelectingStartDate,
                     Data = new Dictionary<string, object>()
                 });
+
+                var calendarKeyboards =  calendarService.GetCalendarKeyboard();
 
                 await messageService.EditMessageTextAsync(
                     chatId,
                     messageId,
-                    localization.GetString("EnterStartDate", language),
+                    localization.GetString("SelectStartDate", language),
+                    calendarKeyboards,
                     cancellationToken: cancellationToken);
                 return;
             }

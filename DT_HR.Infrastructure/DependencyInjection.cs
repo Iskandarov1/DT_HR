@@ -61,7 +61,6 @@ public static class DependencyInjection
         services.AddScoped<ExportAttendanceCommandHandler>();
         
         services.AddScoped<ContactMessageHandler>();
-        services.AddScoped<ExportDateInputHandler>();
         services.AddScoped<WorkTimeInputMessageHandler>();
         services.AddScoped<ManagerSettingsMessageHandler>();
 
@@ -70,6 +69,7 @@ public static class DependencyInjection
         services.AddScoped<OversleptETACallbackHandler>();
         services.AddScoped<CancelCallbackHandler>();
         services.AddScoped<ExportDateRangeCallbackHandler>();
+        services.AddScoped<ExportCalendarCallbackHandler>();
         services.AddScoped<WorkTimeSettingsCallbackHandler>();
         services.AddScoped<CalendarCallbackHandler>();
         

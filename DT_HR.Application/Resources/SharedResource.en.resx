@@ -314,7 +314,7 @@
     <value>Please enter the event description</value>
   </data>
   <data name="EnterEventTime" xml:space="preserve">
-    <value>Please enter the event time (dd-MM-yyyy HH:mm)</value>
+    <value>Please enter the event time (HH:mm)</value>
   </data>
   <data name="EventCreated" xml:space="preserve">
     <value>Event scheduled</value>
@@ -442,6 +442,18 @@ Safe travels! 🚗💨
   </data>
   <data name="StartDateMustBeBeforeEndDate" xml:space="preserve">
     <value>❌ Start date must be before end date</value>
+  </data>
+  <data name="SelectStartDate" xml:space="preserve">
+    <value>📅 Select start date</value>
+  </data>
+  <data name="SelectEndDate" xml:space="preserve">
+    <value>📅 Select end date</value>
+  </data>
+  <data name="StartDateSelected" xml:space="preserve">
+    <value>✅ Start date selected</value>
+  </data>
+  <data name="EndDateSelected" xml:space="preserve">
+    <value>✅ End date selected</value>
   </data>
   <data name="GeneratingReport" xml:space="preserve">
     <value>⏳ Generating attendance report...</value>

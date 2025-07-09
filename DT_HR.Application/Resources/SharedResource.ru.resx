@@ -313,8 +313,8 @@
   <data name="EnterEventDescription" xml:space="preserve">
     <value>Описание события</value>
   </data>
-    <data name="EnterEventTime" xml:space="preserve">
-    <value>Введите время события (dd-MM-yyyy HH:mm)</value>
+  <data name="EnterEventTime" xml:space="preserve">
+    <value>Введите время события ( HH:mm)</value>
   </data>
   <data name="EventCreated" xml:space="preserve">
     <value>Событие создано</value>
@@ -436,6 +436,18 @@
   </data>
   <data name="StartDateMustBeBeforeEndDate" xml:space="preserve">
     <value>❌ Дата начала должна быть раньше даты окончания</value>
+  </data>
+  <data name="SelectStartDate" xml:space="preserve">
+    <value>📅 Выберите дату начала</value>
+  </data>
+  <data name="SelectEndDate" xml:space="preserve">
+    <value>📅 Выберите дату окончания</value>
+  </data>
+  <data name="StartDateSelected" xml:space="preserve">
+    <value>✅ Дата начала выбрана</value>
+  </data>
+  <data name="EndDateSelected" xml:space="preserve">
+    <value>✅ Дата окончания выбрана</value>
   </data>
   <data name="GeneratingReport" xml:space="preserve">
     <value>⏳ Генерируется отчет посещаемости...</value>
