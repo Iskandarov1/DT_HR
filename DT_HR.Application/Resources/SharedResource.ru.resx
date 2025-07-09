@@ -191,6 +191,21 @@
         Пример: "Пробка, 10:30"
     </value>
   </data>
+  <data name="OnTheWayReasonPrompt" xml:space="preserve">
+    <value>🚗 Вы в пути! Пожалуйста, укажите причину опоздания:</value>
+  </data>
+  <data name="OnTheWayEtaPrompt" xml:space="preserve">
+    <value>⏰ Когда вы планируете прибыть в офис?</value>
+  </data>
+  <data name="OnTheWayCustomEtaPrompt" xml:space="preserve">
+    <value>⏰ Пожалуйста, введите ожидаемое время прибытия в формате ЧЧ:ММ (например, 09:30):</value>
+  </data>
+  <data name="EtaSelected" xml:space="preserve">
+    <value>✅ Время прибытия выбрано успешно</value>
+  </data>
+  <data name="SessionExpired" xml:space="preserve">
+    <value>❌ Сессия истекла. Пожалуйста, начните заново.</value>
+  </data>
   <data name="OversleptPrompt" xml:space="preserve">
     <value>😴 **Проспал**
         Когда вы планируете прибыть?  

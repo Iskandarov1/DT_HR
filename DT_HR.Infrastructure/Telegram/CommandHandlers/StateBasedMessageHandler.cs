@@ -34,6 +34,8 @@ public class StateBasedMessageHandler(
 
         var state = await stateService.GetStateAsync(message.From.Id);
         return state != null && (state.CurrentAction == UserAction.ReportingAbsence ||
+                                 state.CurrentAction == UserAction.ReportingAbsenceReason ||
+                                 state.CurrentAction == UserAction.ReportingAbsenceEta ||
                                  state.CurrentAction == UserAction.Registering ||
                                  state.CurrentAction == UserAction.CreatingEvent);
     }
@@ -55,6 +57,12 @@ public class StateBasedMessageHandler(
         {
             case UserAction.ReportingAbsence:
                 await ProcessAbsenceReasonAsync(message, state, language,cancellationToken);
+                break;
+            case UserAction.ReportingAbsenceReason:
+                await ProcessAbsenceReasonStepAsync(message, state, language, cancellationToken);
+                break;
+            case UserAction.ReportingAbsenceEta:
+                await ProcessAbsenceEtaStepAsync(message, state, language, cancellationToken);
                 break;
             case UserAction.Registering:
                 await ProcessRegistrationAsync(message, state!, language, cancellationToken);
@@ -296,6 +304,7 @@ public class StateBasedMessageHandler(
     {
         var userId = message.From!.Id;
         var chatId = message.Chat.Id;
+        var messageId = message.MessageId;
         var text = message.Text?.Trim() ?? "";
         
         if (text.Equals(localizationService.GetString(ResourceKeys.Cancel, language), StringComparison.OrdinalIgnoreCase))
@@ -381,7 +390,7 @@ public class StateBasedMessageHandler(
         var command = new MarkAbsentCommand(
             userId,
             reason,
-            state.AbsenceType,
+            state.AbsenceType!,
             estimatedArrivalTime);
 
         var result = await mediator.Send(command, cancellationToken);
@@ -406,6 +415,126 @@ public class StateBasedMessageHandler(
         {
             await messageService.ShowMainMenuAsync(
                 chatId, 
+                language,
+                cancellationToken: cancellationToken);
+        }
+    }
+    private async Task ProcessAbsenceReasonStepAsync(Message message, UserState state, string language, CancellationToken cancellationToken)
+    {
+        var userId = message.From!.Id;
+        var chatId = message.Chat.Id;
+        var messageId = message.MessageId;
+        var text = message.Text?.Trim() ?? "";
+        
+        if (text.Equals(localizationService.GetString(ResourceKeys.Cancel, language), StringComparison.OrdinalIgnoreCase))
+        {
+            await stateService.RemoveStateAsync(userId);
+            await messageService.ShowMainMenuAsync(
+                chatId,
+                language,
+                menuType: MainMenuType.CheckPrompt,
+                cancellationToken: cancellationToken);
+            return;
+        }
+
+        state.Data["reason"] = text;
+        await stateService.SetStateAsync(userId, state);
+        
+        // Show appropriate ETA keyboard based on absence type
+        if (state.AbsenceType == AbsenceType.OnTheWay)
+        {
+            var keyboard = keyboardService.GetOnTheWayEtaKeyboard(language);
+            await messageService.SendTextMessageAsync(
+                chatId,
+                localizationService.GetString(ResourceKeys.OnTheWayEtaPrompt, language),
+                keyboard,
+                cancellationToken: cancellationToken);
+        }
+        else if (state.AbsenceType == AbsenceType.Custom)
+        {
+            var keyboard = keyboardService.GetOtherEtaKeyboard(language);
+            await messageService.SendTextMessageAsync(
+                chatId,
+                localizationService.GetString(ResourceKeys.OtherEtaPrompt, language),
+                keyboard,
+                cancellationToken: cancellationToken);
+        }
+    }
+    private async Task ProcessAbsenceEtaStepAsync(Message message, UserState state, string language, CancellationToken cancellationToken)
+    {
+        var userId = message.From!.Id;
+        var chatId = message.Chat.Id;
+        var text = message.Text?.Trim() ?? "";
+        
+        if (text.Equals(localizationService.GetString(ResourceKeys.Cancel, language), StringComparison.OrdinalIgnoreCase))
+        {
+            await stateService.RemoveStateAsync(userId);
+            await messageService.ShowMainMenuAsync(
+                chatId,
+                language,
+                menuType: MainMenuType.CheckPrompt,
+                cancellationToken: cancellationToken);
+            return;
+        }
+
+        DateTime? estimatedArrivalTime = null;
+        var timeMatch = Regex.Match(text, @"\b(\d{1,2}):(\d{2})\b");
+        
+        if (timeMatch.Success)
+        {
+            var hour = int.Parse(timeMatch.Groups[1].Value);
+            var minute = int.Parse(timeMatch.Groups[2].Value);
+
+            var localNow = TimeUtils.Now;
+            var todayLocal = localNow.Date;
+            var localEta = new DateTime(todayLocal.Year, todayLocal.Month, todayLocal.Day, hour, minute, 0, DateTimeKind.Utc);
+
+            if (localEta < localNow)
+            {
+                localEta = localEta.AddDays(1);
+            }
+
+            estimatedArrivalTime = DateTime.SpecifyKind(localEta, DateTimeKind.Utc);
+        }
+        else
+        {
+            await messageService.SendTextMessageAsync(chatId,
+                localizationService.GetString(ResourceKeys.TimeFormatExample, language),
+                cancellationToken: cancellationToken);
+            return;
+        }
+
+        var reason = state.Data.TryGetValue("reason", out var reasonObj) ? reasonObj?.ToString() : string.Empty;
+        
+        if (state.AbsenceType == null)
+        {
+            await messageService.SendTextMessageAsync(chatId,
+                localizationService.GetString(ResourceKeys.ErrorOccurred, language),
+                cancellationToken: cancellationToken);
+            return;
+        }
+        
+        var command = new MarkAbsentCommand(
+            userId,
+            reason,
+            state.AbsenceType,
+            estimatedArrivalTime);
+
+        var result = await mediator.Send(command, cancellationToken);
+        await stateService.RemoveStateAsync(userId);
+
+        if (result.IsSuccess)
+        {
+            await messageService.ShowMainMenuAsync(
+                chatId,
+                language,
+                menuType: MainMenuType.OnTheWay,
+                cancellationToken: cancellationToken);
+        }
+        else
+        {
+            await messageService.ShowMainMenuAsync(
+                chatId,
                 language,
                 cancellationToken: cancellationToken);
         }

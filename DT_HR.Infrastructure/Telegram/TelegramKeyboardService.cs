@@ -187,6 +187,27 @@ public class TelegramKeyboardService(ILocalizationService localization, IConfigu
             }
         });
     }
+
+    public InlineKeyboardMarkup GetOtherEtaKeyboard(string language)
+    {
+        return new InlineKeyboardMarkup(new[]
+        {
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData($"30 {localization.GetString(ResourceKeys.MinutesText,language)}", "absent_other_eta:30"),
+                InlineKeyboardButton.WithCallbackData($"1 {localization.GetString(ResourceKeys.HourText,language)}", "absent_other_eta:60"),
+            },
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData($"2 {localization.GetString(ResourceKeys.HourText,language)}", "absent_other_eta:120"),
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.CustomTimeText,language), "absent_other_eta:custom"),
+            },
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.AbsentAllDay,language), "absent_other_eta:absent"),
+            }
+        });
+    }
     public InlineKeyboardMarkup GetOversleptEtaKeyboard(string language)
     {
         return new InlineKeyboardMarkup(new[]

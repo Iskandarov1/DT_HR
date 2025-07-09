@@ -190,6 +190,21 @@
         Example: "Traffic jam, 10:30"
     </value>
   </data>
+  <data name="OnTheWayReasonPrompt" xml:space="preserve">
+    <value>🚗 You're on the way! Please provide the reason for being late:</value>
+  </data>
+  <data name="OnTheWayEtaPrompt" xml:space="preserve">
+    <value>⏰ When do you expect to arrive at the office?</value>
+  </data>
+  <data name="OnTheWayCustomEtaPrompt" xml:space="preserve">
+    <value>⏰ Please enter your expected arrival time in HH:MM format (e.g., 09:30):</value>
+  </data>
+  <data name="EtaSelected" xml:space="preserve">
+    <value>✅ ETA selected successfully</value>
+  </data>
+  <data name="SessionExpired" xml:space="preserve">
+    <value>❌ Session expired. Please start over.</value>
+  </data>
   <data name="OversleptPrompt" xml:space="preserve">
     <value>😴 **Overslept**
       When do you expect to arrive?

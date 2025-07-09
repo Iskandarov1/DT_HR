@@ -21,12 +21,22 @@ public class CancelCallbackHandler(
     {
         var userId = callbackQuery.From.Id;
         var chatId = callbackQuery.Message!.Chat.Id;
+        var messageId = callbackQuery.Message.MessageId;
         var language = await localization.GetUserLanguage(userId);
         
         logger.LogInformation("Cancel action received from user {UserId}", userId);
 
         await userState.RemoveStateAsync(userId);
         await messageService.AnswerCallbackQueryAsync(callbackQuery.Id, cancellationToken: cancellationToken);
+        
+        // Edit the message to remove the inline keyboard
+        await messageService.EditMessageTextAsync(
+            chatId,
+            messageId,
+            localization.GetString(ResourceKeys.Cancel, language),
+            replyMarkUp: null,
+            cancellationToken: cancellationToken);
+            
         await messageService.ShowMainMenuAsync(
             chatId,
             language,

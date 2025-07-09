@@ -189,6 +189,21 @@
               Kutilayotgan kelish vaqti (format: Soat:Daqiqa) 
               Misol: "Tirbandlik, 10:30"</value>
   </data>
+  <data name="OnTheWayReasonPrompt" xml:space="preserve">
+    <value>🚗 Siz yo'ldasiz! Iltimos, kechikish sababini ko'rsating:</value>
+  </data>
+  <data name="OnTheWayEtaPrompt" xml:space="preserve">
+    <value>⏰ Ofisga qachon kelishni kutmoqdasiz?</value>
+  </data>
+  <data name="OnTheWayCustomEtaPrompt" xml:space="preserve">
+    <value>⏰ Iltimos, kutilayotgan kelish vaqtini SS:DD formatida kiriting (masalan, 09:30):</value>
+  </data>
+  <data name="EtaSelected" xml:space="preserve">
+    <value>✅ Kelish vaqti muvaffaqiyatli tanlandi</value>
+  </data>
+  <data name="SessionExpired" xml:space="preserve">
+    <value>❌ Sessiya tugadi. Iltimos, qaytadan boshlang.</value>
+  </data>
   <data name="OversleptPrompt" xml:space="preserve">
     <value>😴 Qachon kelishni rejalashtiryapsiz?</value>
   </data>

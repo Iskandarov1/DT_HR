@@ -61,11 +61,18 @@ public static class ResourceKeys
     public const string AbsenceRecorded = "AbsenceRecorded";
     public const string AbsenceReasonPrompt = "AbsenceReasonPrompt";
     public const string OnTheWayPrompt = "OnTheWayPrompt";
+    public const string OnTheWayReasonPrompt = "OnTheWayReasonPrompt";
+    public const string OnTheWayEtaPrompt = "OnTheWayEtaPrompt";
+    public const string OnTheWayCustomEtaPrompt = "OnTheWayCustomEtaPrompt";
     public const string OversleptPrompt = "OversleptPrompt";
     public const string OtherReasonPrompt = "OtherReasonPrompt";
     public const string InvalidTimeFormat = "InvalidTimeFormat";
     public const string TimeFormatExample = "TimeFormatExample";
     public const string ETA = "ETA";
+    public const string EtaSelected = "EtaSelected";
+    public const string SessionExpired = "SessionExpired";
+    public const string OtherEtaPrompt = "OtherEtaPrompt";
+    public const string AbsentAllDay = "AbsentAllDay";
 
     
 
@@ -189,6 +196,6 @@ public static class ResourceKeys
     //absent eta option keys
     public const string MinutesText = "MinutesText";
     public const string HourText = "HourText";
-    public const string CustomTimeText = "HustomTimeText";
+    public const string CustomTimeText = "CustomTimeText";
 
 }

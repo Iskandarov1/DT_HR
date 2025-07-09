@@ -14,6 +14,8 @@ public interface ITelegramKeyboardService
     ReplyKeyboardMarkup GetContactRequestKeyboard(string language = "uz");
     InlineKeyboardMarkup GetAbsenceTypeKeyboard(string language = "uz");
     InlineKeyboardMarkup GetOversleptEtaKeyboard(string language = "uz");
+    InlineKeyboardMarkup GetOnTheWayEtaKeyboard(string language = "uz");
+    InlineKeyboardMarkup GetOtherEtaKeyboard(string language = "uz");
     ReplyKeyboardMarkup GetCancelKeyboard(string language = "uz");
     InlineKeyboardMarkup GetCancelInlineKeyboard(string language = "uz");
     InlineKeyboardMarkup GetCheckInOptionsKeyboard(string language = "uz");

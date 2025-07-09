@@ -49,11 +49,12 @@ public class AbsenceTypeCallbackHandler(
             
             case "ontheway":
                 state.AbsenceType = AbsenceType.OnTheWay;
+                state.CurrentAction = UserAction.ReportingAbsenceReason;
                 state.Data = new Dictionary<string, object> { ["type"] = "ontheway" };
                 await stateService.SetStateAsync(userId, state);
                 await messageService.SendTextMessageAsync(
                     chatId,
-                    localization.GetString(ResourceKeys.OnTheWayPrompt,language), 
+                    localization.GetString(ResourceKeys.OnTheWayReasonPrompt,language), 
                     cancellationToken: cancellationToken);
                 break;
             
@@ -69,6 +70,7 @@ public class AbsenceTypeCallbackHandler(
                 break;
             case "other":
                 state.AbsenceType = AbsenceType.Custom;
+                state.CurrentAction = UserAction.ReportingAbsenceReason;
                 state.Data = new Dictionary<string, object> { ["type"] = "other" };
                 await stateService.SetStateAsync(userId, state);
                 await messageService.SendTextMessageAsync(
