@@ -233,7 +233,9 @@
   <data name="PleaseSelectFromMenu" xml:space="preserve">
     <value>Please select an option from the menu:</value>
   </data>
-  
+  <data name="OtherEtaPrompt" xml:space="preserve">
+    <value>⏰ When do you plan to arrive at the office, or will you be out all day?</value>
+  </data>
   <data name="CheckInSuccessful" xml:space="preserve">
     <value>✅ **Check-in Successful!**</value>
   </data>

@@ -37,16 +37,6 @@ public class AbsenceTypeCallbackHandler(
 
         switch (type)
         {
-            case "sick":
-                state.AbsenceType = AbsenceType.Absent;
-                state.Data = new Dictionary<string, object> { ["type"] = "sick" };
-                await stateService.SetStateAsync(userId, state);
-                await messageService.SendTextMessageAsync(
-                    chatId,
-                    localization.GetString(ResourceKeys.AbsenceReasonPrompt,language),
-                    cancellationToken: cancellationToken);
-                break;
-            
             case "ontheway":
                 state.AbsenceType = AbsenceType.OnTheWay;
                 state.CurrentAction = UserAction.ReportingAbsenceReason;

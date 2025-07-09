@@ -151,10 +151,6 @@ public class TelegramKeyboardService(ILocalizationService localization, IConfigu
         {
             new[]
             {
-                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.Sick, language), "absent_type:sick"),
-            },
-            new[]
-            {
                 InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.OnTheWay,language), "absent_type:ontheway"),
             },
             new[]

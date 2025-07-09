@@ -1,9 +1,6 @@
 using System.Text.RegularExpressions;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
-using DT_HR.Application.Users.Commands;
-using DT_HR.Application.Users.Commands.RegisterUser;
-using MediatR;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -14,7 +11,6 @@ public class ContactMessageHandler(
     IUserStateService stateService,
     ILocalizationService localization,
     ITelegramMessageService messageService,
-    IMediator mediator, 
     ILogger<ContactMessageHandler> logger)
 {
     private static readonly Regex PhoneNumberRegex = new Regex(@"^(\+?998)?([3781]{2}|(9[013-57-9]))\d{7}$", RegexOptions.Compiled);
