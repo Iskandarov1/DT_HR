@@ -15,4 +15,5 @@ public sealed record EmployeeAttendanceResponse(
     [property: JsonPropertyName("absence_reason")]string? AbsenceReason,
     [property: JsonPropertyName("estimated_arrival")]DateTime? EstimatedArrival,
     [property: JsonPropertyName("is_with_in_radius")]bool IsWithInRadius,
-    [property:JsonPropertyName ("work_duration")] TimeSpan? WorkDuration );
+    [property:JsonPropertyName ("work_duration")] TimeSpan? WorkDuration,
+    [property: JsonPropertyName("date")]DateOnly Date );

@@ -544,4 +544,14 @@ Example: 18:00</value>
   <data name="InvalidWorkTimeRange" xml:space="preserve">
     <value>❌ Invalid time range! Start time must be earlier than end time.</value>
   </data>
+  
+  <data name="MinutesText" xml:space="preserve">
+    <value>minutes</value>
+  </data>
+  <data name="HourText" xml:space="preserve">
+    <value>hour</value>
+  </data>
+  <data name="CustomTimeText" xml:space="preserve">
+    <value>Custom time</value>
+  </data>
 </root>

@@ -164,54 +164,42 @@ public class TelegramKeyboardService(ILocalizationService localization, IConfigu
             new[]
             {
                 InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.OtherReason,language), "absent_type:other"),
+            },
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.Cancel, language), "action:cancel"),
             }
-            // new[]
-            // {
-            //     InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.Cancel, language), "action:cancel"),
-            // }
         });
     }
-
-    public InlineKeyboardMarkup GetOversleptEtaKeyboard(string language)
+    public InlineKeyboardMarkup GetOnTheWayEtaKeyboard(string language)
     {
-        var minutesText = language switch
-        {
-            "ru" => "минут",
-            "en" => "minutes",
-            _ => "daqiqa"
-        };
-        var hourText = language switch
-        {
-            "ru" => "час",
-            "en" => "hour",
-            _ => "soat"
-        };
-        var hoursText = language switch
-        {
-            "ru" => "часа",
-            "en" => "hours",
-            _ => "soat"
-        };
-        var customTimeText = language switch
-        {
-            "ru" => "Другое время",
-            "en" => "Custom time",
-            _ => "Boshqa vaqt"
-        };
-        
-        
-        
         return new InlineKeyboardMarkup(new[]
         {
             new[]
             {
-                InlineKeyboardButton.WithCallbackData($"30 {minutesText}", "absent_overslept_eta:30"),
-                InlineKeyboardButton.WithCallbackData($"1 {hourText}", "absent_overslept_eta:60"),
+                InlineKeyboardButton.WithCallbackData($"15 {localization.GetString(ResourceKeys.MinutesText,language)}", "absent_ontheway_eta:15"),
+                InlineKeyboardButton.WithCallbackData($"30 {localization.GetString(ResourceKeys.MinutesText,language)}", "absent_ontheway_eta:30"),
             },
             new[]
             {
-                InlineKeyboardButton.WithCallbackData($"2 {hoursText}", "absent_overslept_eta:120"),
-                InlineKeyboardButton.WithCallbackData(customTimeText, "absent_overslept_eta:custom"),
+                InlineKeyboardButton.WithCallbackData($"1 {localization.GetString(ResourceKeys.HourText,language)}", "absent_ontheway_eta:60"),
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.CustomTimeText,language), "absent_ontheway_eta:custom"),
+            }
+        });
+    }
+    public InlineKeyboardMarkup GetOversleptEtaKeyboard(string language)
+    {
+        return new InlineKeyboardMarkup(new[]
+        {
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData($"30 {localization.GetString(ResourceKeys.MinutesText,language)}", "absent_overslept_eta:30"),
+                InlineKeyboardButton.WithCallbackData($"1 {localization.GetString(ResourceKeys.HourText,language)}", "absent_overslept_eta:60"),
+            },
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData($"2 {localization.GetString(ResourceKeys.HourText,language)}", "absent_overslept_eta:120"),
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.CustomTimeText,language), "absent_overslept_eta:custom"),
             }
         });
     }

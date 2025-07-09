@@ -20,7 +20,6 @@ public sealed class ExportAttendanceQueryHandler(
     {
         try
         {
-            // Validate user exists and is manager
             var user = await dbContext.Set<User>()
                 .FirstOrDefaultAsync(u => u.TelegramUserId == request.TelegramUserId, cancellationToken);
 
@@ -33,47 +32,53 @@ public sealed class ExportAttendanceQueryHandler(
             {
                 return Result.Failure<byte[]>(new Error("User.NotAuthorized", "Only managers can export attendance data"));
             }
-
-            // Validate date range
+            
             if (request.StartDate > request.EndDate)
             {
                 return Result.Failure<byte[]>(new Error("DateRange.Invalid", "Start date must be before end date"));
             }
 
-            var query = from u in dbContext.Set<User>()
-                where u.IsActive && !u.IsDelete
-                join attendance in dbContext.Set<Domain.Entities.Attendance>() on u.Id equals attendance.UserId into attendances
-                from att in attendances.DefaultIfEmpty()
-                where att == null || (att.Date >= request.StartDate && att.Date <= request.EndDate)
-                select new { User = u, Attendance = att };
+            var users = await dbContext.Set<User>()
+                .Where(u => u.IsActive && !u.IsDelete)
+                .ToListAsync(cancellationToken);
 
-            var data = await query.ToListAsync(cancellationToken);
+            var attendanceRecords = await dbContext.Set<Domain.Entities.Attendance>()
+                .Where(att => att.Date >= request.StartDate && att.Date <= request.EndDate)
+                .ToListAsync(cancellationToken);
+            
             var attendanceData = new List<EmployeeAttendanceResponse>();
-
-            foreach (var item in data)
+            
+            for (var date = request.StartDate; date <= request.EndDate; date = date.AddDays(1))
             {
-                var att = item.Attendance;
-                bool isLate = att?.IsLateArrival(item.User.WorkStartTime) ?? false;
-                bool isEarly = att?.IsEarlyDeparture(item.User.WorkEndTime) ?? false;
-                TimeSpan? workDuration = att?.GetWorkDuration();
-                
-                attendanceData.Add(new EmployeeAttendanceResponse(
-                    item.User.Id,
-                    $"{item.User.FirstName} {item.User.LastName}",
-                    item.User.PhoneNumber,
-                    att == null ? "NoRecord" : AttendanceStatus.FromValue(att.Status).Value.Name,
-                    att?.CheckInTime,
-                    att?.CheckOutTime,
-                    isLate,
-                    isLate && att?.CheckInTime != null ? (TimeOnly.FromDateTime(att!.CheckInTime!.Value) - item.User.WorkStartTime).ToString(@"hh\:mm") : null,
-                    isEarly,
-                    att?.AbsenceReason,
-                    att?.EstimatedArrivalTime,
-                    att?.IsWithInOfficeRadius ?? false,
-                    workDuration));
-            }
+                foreach (var listUser in users)
+                {
+                    var att = attendanceRecords.FirstOrDefault(a => a.UserId == listUser.Id && a.Date == date);
+                        
+                    bool isLate = att?.IsLateArrival(listUser.WorkStartTime) ?? false;
+                    bool isEarly = att?.IsEarlyDeparture(listUser.WorkEndTime) ?? false;
+                    TimeSpan? workDuration = att?.GetWorkDuration();
 
-            // Export to Excel
+                    attendanceData.Add(new EmployeeAttendanceResponse(
+                        listUser.Id,
+                        $"{listUser.FirstName} {listUser.LastName}",
+                        listUser.PhoneNumber,
+                        att == null ? "NoRecord" : AttendanceStatus.FromValue(att.Status).Value.Name,
+                        att?.CheckInTime,
+                        att?.CheckOutTime,
+                        isLate,
+                        isLate && att?.CheckInTime != null
+                            ? (TimeOnly.FromDateTime(att!.CheckInTime!.Value) - listUser.WorkStartTime).ToString(
+                                @"hh\:mm")
+                            : null,
+                        isEarly,
+                        att?.AbsenceReason,
+                        att?.EstimatedArrivalTime,
+                        att?.IsWithInOfficeRadius ?? false,
+                        workDuration,
+                        date));
+                }
+            }
+            
             var excelData = await excelExportService.ExportAttendanceToExcelAsync(
                 attendanceData,
                 request.StartDate,

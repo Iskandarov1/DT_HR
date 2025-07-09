@@ -186,4 +186,9 @@ public static class ResourceKeys
     public const string WorkEndTimeSet = "WorkEndTimeSet";
     public const string InvalidWorkTimeRange = "InvalidWorkTimeRange";
 
+    //absent eta option keys
+    public const string MinutesText = "MinutesText";
+    public const string HourText = "HourText";
+    public const string CustomTimeText = "HustomTimeText";
+
 }

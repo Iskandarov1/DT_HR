@@ -103,7 +103,8 @@ public class AttendanceReportService(
                     att?.AbsenceReason,
                     att?.EstimatedArrivalTime,
                     att?.IsWithInOfficeRadius ?? false,
-                    workDuration));
+                    workDuration,
+                    date));
             }
         }
         var avgWork = worked > 0 ? TimeSpan.FromTicks(totalWork.Ticks / worked) : TimeSpan.Zero;
@@ -215,7 +216,8 @@ public class AttendanceReportService(
                     att?.AbsenceReason,
                     att?.EstimatedArrivalTime,
                     att?.IsWithInOfficeRadius ?? false,
-                    workDuration));
+                    workDuration,
+                    date));
             }
         }
 
@@ -273,7 +275,8 @@ public class AttendanceReportService(
                 att?.AbsenceReason,
                 att?.EstimatedArrivalTime,
                 att?.IsWithInOfficeRadius ?? false,
-                workDuration));
+                workDuration,
+                date));
         }
 
         return list;

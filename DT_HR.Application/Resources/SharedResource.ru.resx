@@ -537,4 +537,15 @@
   <data name="InvalidWorkTimeRange" xml:space="preserve">
     <value>❌ Неверный диапазон времени! Время начала должно быть раньше времени окончания.</value>
   </data>
+  
+  <data name="MinutesText" xml:space="preserve">
+    <value>минут</value>
+  </data>
+  <data name="HourText" xml:space="preserve">
+    <value>час</value>
+  </data>
+  <data name="CustomTimeText" xml:space="preserve">
+    <value>Другое врем</value>
+  </data>
+  
 </root>

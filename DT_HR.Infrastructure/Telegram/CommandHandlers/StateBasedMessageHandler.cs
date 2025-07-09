@@ -313,7 +313,8 @@ public class StateBasedMessageHandler(
         string reason = text;
 
         if (state.AbsenceType == AbsenceType.OnTheWay ||
-            (state.AbsenceType == AbsenceType.Custom && !text.ToLower().Contains("absent")))
+            (state.AbsenceType == AbsenceType.Custom && 
+             !text.ToLower().Contains("absent")))
         {
             var timeMatch = Regex.Match(text, @"\b(\d{1,2}):(\d{2})\b");
             if (timeMatch.Success)

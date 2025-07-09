@@ -538,4 +538,14 @@ Masalan: 18:00</value>
   <data name="InvalidWorkTimeRange" xml:space="preserve">
     <value>❌ Noto'g'ri vaqt oralig'i! Boshlanish vaqti tugash vaqtidan oldin bo'lishi kerak.</value>
   </data>
+  
+  <data name="MinutesText" xml:space="preserve">
+    <value>Daqiqa</value>
+  </data>
+  <data name="HourText" xml:space="preserve">
+    <value>Soat</value>
+  </data>
+  <data name="CustomTimeText" xml:space="preserve">
+    <value>Boshqa vaqt</value>
+  </data>
 </root>
