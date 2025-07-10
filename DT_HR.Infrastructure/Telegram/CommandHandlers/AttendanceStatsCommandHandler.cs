@@ -4,6 +4,7 @@ using DT_HR.Domain.Core;
 using DT_HR.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace DT_HR.Infrastructure.Telegram.CommandHandlers;
 
@@ -76,7 +77,13 @@ public class AttendanceStatsCommandHandler(
                    $"❓*{noRecord}* - {report.NotCheckedIn}\n\n " +
                    $"{rateEmoji} *Attendance Rate:* {attendanceRate:F1}%";
 
-        await messageService.SendTextMessageAsync(chatId, text, cancellationToken: cancellationToken);
+        var detailsButtonText = localization.GetString(ResourceKeys.AttendanceDetails, language);
+        var inlineKeyboard = new InlineKeyboardMarkup(new[]
+        {
+            InlineKeyboardButton.WithCallbackData(detailsButtonText, "attendance:details")
+        });
+
+        await messageService.SendTextMessageAsync(chatId, text, replyMarkup: inlineKeyboard, cancellationToken: cancellationToken);
 
         await messageService.ShowMainMenuAsync(
             chatId,

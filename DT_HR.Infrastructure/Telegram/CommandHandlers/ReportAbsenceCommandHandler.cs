@@ -31,6 +31,7 @@ public class ReportAbsenceCommandHandler(
     {
         var userId = message.From!.Id;
         var chatId = message.Chat.Id;
+        var userName = message.From.Username;
         var state = await stateService.GetStateAsync(userId);
         var language = state?.Language ?? await localization.GetUserLanguage(userId);
         
