@@ -52,6 +52,7 @@ public class AttendanceStatsCommandHandler(
         var lateText = localization.GetString(ResourceKeys.Late, language);
         var absentText = localization.GetString(ResourceKeys.Absent, language);
         var onTheWayText = localization.GetString(ResourceKeys.OnTheWay, language);
+        var noRecord = localization.GetString(ResourceKeys.NoRecord, language);
         
         var attendanceRate = report.TotalEmployees > 0 
             ? Math.Round((double)(report.Present + report.Late) / report.TotalEmployees * 100, 1) 
@@ -65,13 +66,14 @@ public class AttendanceStatsCommandHandler(
             _ => "🔴"
         };
 
-        var text = $"📊 *{title}*\n" +
+        var text = $" *{title}*\n" +
                    $"📅 {report.Date:dd MMMM yyyy}\n\n" +
                    $"👥 *{totalText}:* {report.TotalEmployees}\n\n" +
                    $"✅ *{presentText}* — {report.Present}\n" +
                    $"⏰ *{lateText}* — {report.Late}\n" +
-                   $"🚗 *{onTheWayText}* — {report.OnTheWay}\n" +
-                   $"❌ *{absentText}* — {report.Absent}\n\n" +
+                   $"*{onTheWayText}* — {report.OnTheWay}\n" +
+                   $"❌ *{absentText}* — {report.Absent}\n" +
+                   $"❓*{noRecord}* - {report.NotCheckedIn}\n\n " +
                    $"{rateEmoji} *Attendance Rate:* {attendanceRate:F1}%";
 
         await messageService.SendTextMessageAsync(chatId, text, cancellationToken: cancellationToken);

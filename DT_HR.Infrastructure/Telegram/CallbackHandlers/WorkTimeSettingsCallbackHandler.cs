@@ -130,7 +130,7 @@ public class WorkTimeSettingsCallbackHandler(
 
     private async Task HandleWorkTimeEndAsync(long chatId, int messageId, long userId, string language, CancellationToken cancellationToken)
     {
-        // Set user state to capture time input
+
         var state = new UserState
         {
             CurrentAction = UserAction.SettingWorkEndTime,

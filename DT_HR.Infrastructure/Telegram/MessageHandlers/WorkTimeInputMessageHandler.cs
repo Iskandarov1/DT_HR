@@ -42,7 +42,7 @@ public class WorkTimeInputMessageHandler(
 
         try
         {
-            // Validate user is manager
+
             var maybeUser = await userRepository.GetByTelegramUserIdAsync(userId, cancellationToken);
             if (maybeUser.HasNoValue || !maybeUser.Value.IsManager())
             {
@@ -61,7 +61,7 @@ public class WorkTimeInputMessageHandler(
 
             var company = companyMaybe.Value;
 
-            // Validate time format (HH:mm)
+
             if (!TimeOnly.TryParseExact(text, "HH:mm", CultureInfo.InvariantCulture,DateTimeStyles.None, out var newTime))
             {
                 await messageService.SendTextMessageAsync(
@@ -71,7 +71,7 @@ public class WorkTimeInputMessageHandler(
                 return;
             }
 
-            // Process based on current action
+
             if (state!.CurrentAction == UserAction.SettingWorkStartTime)
             {
                 await HandleWorkStartTimeInput(company, newTime, chatId, language, cancellationToken);
@@ -81,7 +81,7 @@ public class WorkTimeInputMessageHandler(
                 await HandleWorkEndTimeInput(company, newTime, chatId, language, cancellationToken);
             }
 
-            // Clear state after successful processing
+
             await stateService.RemoveStateAsync(userId);
         }
         catch (Exception ex)
@@ -105,7 +105,7 @@ public class WorkTimeInputMessageHandler(
 
         if (result.IsFailure)
         {
-            // Check if it's the specific validation error for invalid time range
+
             if (result.Error.Code == "invalid_work_time_range")
             {
                 await messageService.SendTextMessageAsync(
@@ -123,7 +123,7 @@ public class WorkTimeInputMessageHandler(
             return;
         }
 
-        // Success - show confirmation and return to work time settings
+
         var confirmationMessage = string.Format(
             localization.GetString(ResourceKeys.WorkStartTimeSet, language), 
             newStartTime.ToString("HH:mm"));

@@ -47,13 +47,7 @@ public class AttendanceDetailsCommandHandler(
         var list = await reportService.GetDetailedAttendance(DateOnly.FromDateTime(TimeUtils.Now), cancellationToken);
         var attendanceDetailsText =  localization.GetString(ResourceKeys.AttendanceRate, language);
         var totalEmployeesText = localization.GetString(ResourceKeys.TotalEmployees, language);
-        var present = localization.GetString(ResourceKeys.Present, language);
-        var lateText = localization.GetString(ResourceKeys.Late, language);
-        var onTheWayText = localization.GetString(ResourceKeys.OnTheWay, language);
-        var absentText = localization.GetString(ResourceKeys.Absent, language);
-
-
-
+        
         var sb = new StringBuilder();
 
         sb.AppendLine($"📊 *{attendanceDetailsText}*");
@@ -64,16 +58,16 @@ public class AttendanceDetailsCommandHandler(
         var groupedByStatus =
             list.GroupBy(x => x.Status)
                 .OrderBy(g => GetStatusOrder(g.Key));
-
+        
         foreach (var statusGroup in groupedByStatus)
         {
             var statusEmoji = GetStatusEmoji(statusGroup.Key);
             var statusTitle = statusGroup.Key.ToLower() switch
             {
                 "present" => localization.GetString(ResourceKeys.Present, language),
-                "late" => localization.GetString(ResourceKeys.Late, language),
-                "on the way" => localization.GetString(ResourceKeys.OnTheWay, language),
+                "ontheway" => localization.GetString(ResourceKeys.OnTheWay, language),
                 "absent" => localization.GetString(ResourceKeys.Absent, language),
+                "norecord" => localization.GetString(ResourceKeys.NoRecord, language),
                 _ => statusGroup.Key
             };
             
@@ -87,18 +81,20 @@ public class AttendanceDetailsCommandHandler(
                 var lateIndicator = item.IsLate == true ? " ⏰" : "";
                 
                 sb.AppendLine($"  👤 *{item.Name}*{lateIndicator}");
+                
                 sb.AppendLine($"  🕐 In: `{checkIn}` • Out: `{checkOut}`");
+                    
+                    if (!string.IsNullOrEmpty(item.AbsenceReason))
+                    {
+                        sb.AppendLine($"  📝 {item.AbsenceReason}");
+                    }
+                    
+                    if (item.EstimatedArrival.HasValue)
+                    {
+                        var eta = item.EstimatedArrival.Value.ToString("HH:mm");
+                        sb.AppendLine($"  🕒 {localization.GetString(ResourceKeys.Expected,language)}: `{eta}`");
+                    }
                 
-                if (!string.IsNullOrEmpty(item.AbsenceReason))
-                {
-                    sb.AppendLine($"  📝 {item.AbsenceReason}");
-                }
-                
-                if (item.EstimatedArrival.HasValue)
-                {
-                    var eta = item.EstimatedArrival.Value.ToString("HH:mm");
-                    sb.AppendLine($"  🕒 {localization.GetString(ResourceKeys.Expected,language)}: `{eta}`");
-                }
                 
                 sb.AppendLine();
             }
@@ -122,17 +118,17 @@ public class AttendanceDetailsCommandHandler(
     {
         "present" => "✅",
         "absent" => "❌",
-        "late" => "⏰",
-        "on the way" => "🚗",
+        "ontheway" => "",
+        "norecord" => "🔴",
         _ => "❓"
     };
 
     private static int GetStatusOrder(string status) => status.ToLower() switch
     {
         "present" => 1,
-        "late" => 2,
-        "on the way" => 3,
-        "absent" => 4,
+        "ontheway" => 2,
+        "absent" => 3,
+        "norecord" => 4,
         _ => 5
     };
 }

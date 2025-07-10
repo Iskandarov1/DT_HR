@@ -79,7 +79,7 @@ public class BackgroundTaskInitializer(
             RecurringJob.AddOrUpdate<BackgroundTaskJobs>(
                 "birthday-greetings",
                 j => j.SendBirthdayGreetingsAsync(cancellationToken),
-                Cron.Daily(15,05), tz);
+                Cron.Daily(13,25), tz);
             
         }
         logger.LogInformation("Background tasks configured with UTC timezone");
