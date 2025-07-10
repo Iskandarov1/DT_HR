@@ -12,7 +12,6 @@ namespace DT_HR.Infrastructure.Telegram.MessageHandlers;
 
 public class WorkTimeInputMessageHandler(
     ITelegramMessageService messageService,
-    ITelegramKeyboardService keyboardService,
     ICompanyRepository companyRepository,
     IUserStateService stateService,
     IUserRepository userRepository,
@@ -92,14 +91,13 @@ public class WorkTimeInputMessageHandler(
                 localization.GetString(ResourceKeys.ErrorOccurred, language),
                 cancellationToken: cancellationToken);
             
-            // Clear state on error
             await stateService.RemoveStateAsync(userId);
         }
     }
 
     private async Task HandleWorkStartTimeInput(Company company, TimeOnly newStartTime, long chatId, string language, CancellationToken cancellationToken)
     {
-        // Create command to update work hours
+
         var command = new UpdateCompanyWorkHoursCommand(newStartTime, company.DefaultWorkEndTime);
         var result = await mediator.Send(command, cancellationToken);
 
@@ -132,20 +130,17 @@ public class WorkTimeInputMessageHandler(
             chatId,
             confirmationMessage,
             cancellationToken: cancellationToken);
-
-        // Show updated work time settings
-       // await ShowWorkTimeSettings(chatId, user.Id, language, cancellationToken);
     }
 
     private async Task HandleWorkEndTimeInput(Company company, TimeOnly newEndTime, long chatId, string language, CancellationToken cancellationToken)
     {
-        // Create command to update work hours
+
         var command = new UpdateCompanyWorkHoursCommand(company.DefaultWorkStartTime, newEndTime);
         var result = await mediator.Send(command, cancellationToken);
 
         if (result.IsFailure)
         {
-            // Check if it's the specific validation error for invalid time range
+
             if (result.Error.Code == "invalid_work_time_range")
             {
                 await messageService.SendTextMessageAsync(
@@ -163,7 +158,7 @@ public class WorkTimeInputMessageHandler(
             return;
         }
 
-        // Success - show confirmation and return to work time settings
+        // Success - show confirmation
         var confirmationMessage = string.Format(
             localization.GetString(ResourceKeys.WorkEndTimeSet, language), 
             newEndTime.ToString("HH:mm"));
@@ -172,28 +167,6 @@ public class WorkTimeInputMessageHandler(
             chatId,
             confirmationMessage,
             cancellationToken: cancellationToken);
-
-        // Show updated work time settings
-       // await ShowWorkTimeSettings(chatId, user.Id, language, cancellationToken);
     }
-
-    private async Task ShowWorkTimeSettings(long chatId, Guid userId, string language, CancellationToken cancellationToken)
-    {
-        // Get updated user data
-        var maybeUser = await userRepository.GetByIdAsync(userId, cancellationToken);
-        if (maybeUser.HasNoValue) return;
-
-        var user = maybeUser.Value;
-        var keyboard = keyboardService.GetWorkTimeSettingsKeyboard(language);
-        var currentHoursText = localization.GetString(ResourceKeys.CurrentWorkHours, language);
-        var message = string.Format(currentHoursText, 
-            user.WorkStartTime.ToString("HH:mm"), 
-            user.WorkEndTime.ToString("HH:mm"));
-        
-        await messageService.SendTextMessageAsync(
-            chatId,
-            message,
-            keyboard,
-            cancellationToken: cancellationToken);
-    }
+    
 }

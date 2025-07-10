@@ -19,7 +19,7 @@ public class WorkTimeSettingsCallbackHandler(
     public Task<bool> CanHandleAsync(CallbackQuery callbackQuery, CancellationToken cancellationToken = default)
     {
         var data = callbackQuery.Data;
-        return Task.FromResult(data is "lang_select" or "work_time_settings" or "work_time_start" or "work_time_end" or "back_to_settings");
+        return Task.FromResult(data is "lang_select" or "work_time_settings" or "work_time_start" or "work_time_end" or "back_to_settings" or "action:cancel");
     }
 
     public async Task HandleAsync(CallbackQuery callbackQuery, CancellationToken cancellationToken = default)
@@ -73,6 +73,7 @@ public class WorkTimeSettingsCallbackHandler(
                 break;
                 
             case "back_to_settings":
+            case "action:cancel":
                 await HandleBackToSettingsAsync(chatId, messageId, language, cancellationToken);
                 break;
         }
@@ -91,13 +92,17 @@ public class WorkTimeSettingsCallbackHandler(
             cancellationToken);
     }
 
-    private async Task HandleWorkTimeSettingsAsync(long chatId, int messageId, Domain.Entities.Company company, string language, CancellationToken cancellationToken)
+    private async Task HandleWorkTimeSettingsAsync(long chatId, int messageId, Company company, string language, CancellationToken cancellationToken)
     {
+        logger.LogInformation("Handling work time settings for chat {ChatId}", chatId);
+        
         var keyboard = keyboardService.GetWorkTimeSettingsKeyboard(language);
         var currentHoursText = localization.GetString(ResourceKeys.CurrentWorkHours, language);
         var message = string.Format(currentHoursText, 
             company.DefaultWorkStartTime.ToString("HH:mm"), 
             company.DefaultWorkEndTime.ToString("HH:mm"));
+        
+        logger.LogInformation("Sending work time settings message: {Message}", message);
         
         await messageService.EditMessageTextAsync(
             chatId, 
@@ -118,14 +123,13 @@ public class WorkTimeSettingsCallbackHandler(
         await stateService.SetStateAsync(userId, state);
         
         var prompt = localization.GetString(ResourceKeys.EnterWorkStartTime, language);
-        var cancelKeyboard = keyboardService.GetCancelInlineKeyboard(language);
+       // var cancelKeyboard = keyboardService.GetCancelInlineKeyboard(language);
         
         await messageService.EditMessageTextAsync(
             chatId, 
             messageId, 
-            prompt, 
-            cancelKeyboard, 
-            cancellationToken);
+            prompt,
+            cancellationToken:cancellationToken);
     }
 
     private async Task HandleWorkTimeEndAsync(long chatId, int messageId, long userId, string language, CancellationToken cancellationToken)
@@ -139,14 +143,13 @@ public class WorkTimeSettingsCallbackHandler(
         await stateService.SetStateAsync(userId, state);
         
         var prompt = localization.GetString(ResourceKeys.EnterWorkEndTime, language);
-        var cancelKeyboard = keyboardService.GetCancelInlineKeyboard(language);
+      // var cancelKeyboard = keyboardService.GetCancelInlineKeyboard(language);
         
         await messageService.EditMessageTextAsync(
             chatId, 
             messageId, 
             prompt, 
-            cancelKeyboard, 
-            cancellationToken);
+            cancellationToken:cancellationToken);
     }
 
     private async Task HandleBackToSettingsAsync(long chatId, int messageId, string language, CancellationToken cancellationToken)

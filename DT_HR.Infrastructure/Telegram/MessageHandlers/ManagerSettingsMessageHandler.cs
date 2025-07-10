@@ -12,6 +12,7 @@ public class ManagerSettingsMessageHandler(
     ITelegramKeyboardService keyboardService,
     IUserStateService stateService,
     IUserRepository userRepository,
+    ICompanyRepository companyRepository,
     ILocalizationService localization,
     ILogger<ManagerSettingsMessageHandler> logger) : ITelegramService
 {
@@ -82,9 +83,26 @@ public class ManagerSettingsMessageHandler(
 
     private async Task HandleWorkTimeSettings(long chatId, string language, CancellationToken cancellationToken)
     {
+        logger.LogInformation("Displaying work time settings for chat {ChatId}", chatId);
+        
+        var companyMaybe = await companyRepository.GetAsync(cancellationToken);
+        if (companyMaybe.HasNoValue)
+        {
+            var errorMessage = localization.GetString(ResourceKeys.ErrorOccurred, language);
+            await messageService.SendTextMessageAsync(chatId, errorMessage, cancellationToken: cancellationToken);
+            return;
+        }
+
+        var company = companyMaybe.Value;
         var keyboard = keyboardService.GetWorkTimeSettingsKeyboard(language);
-        var prompt = localization.GetString(ResourceKeys.WorkTimeSettings, language);
-        await messageService.SendTextMessageAsync(chatId, prompt, keyboard, cancellationToken);
+        var currentHoursText = localization.GetString(ResourceKeys.CurrentWorkHours, language);
+        var message = string.Format(currentHoursText, 
+            company.DefaultWorkStartTime.ToString("HH:mm"), 
+            company.DefaultWorkEndTime.ToString("HH:mm"));
+        
+        logger.LogInformation("Sending work time settings message: {Message}", message);
+        
+        await messageService.SendTextMessageAsync(chatId, message, keyboard, cancellationToken);
     }
 
     private async Task HandleBackToMenu(long userId, long chatId, string language, CancellationToken cancellationToken)

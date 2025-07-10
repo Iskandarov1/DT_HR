@@ -535,8 +535,7 @@ Safe travels! 🚗💨
   <data name="CurrentWorkHours" xml:space="preserve">
     <value>📅 Current Work Hours:
 Start: {0}
-End: {1}
-</value>
+End: {1}</value>
   </data>
   <data name="WorkHoursUpdated" xml:space="preserve">
     <value>✅ Work hours updated successfully!</value>
