@@ -29,7 +29,6 @@ public class CancelCallbackHandler(
         await userState.RemoveStateAsync(userId);
         await messageService.AnswerCallbackQueryAsync(callbackQuery.Id, cancellationToken: cancellationToken);
         
-        // Edit the message to remove the inline keyboard
         await messageService.EditMessageTextAsync(
             chatId,
             messageId,

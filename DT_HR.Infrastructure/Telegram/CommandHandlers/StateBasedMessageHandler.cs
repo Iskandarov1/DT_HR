@@ -133,8 +133,6 @@ public class StateBasedMessageHandler(
         }
         else
         {
-            // Phone number input should be handled by ContactMessageHandler
-            // This handler only processes birthday step
             await messageService.SendTextMessageAsync(chatId,
                 localizationService.GetString(ResourceKeys.InvalidPhoneFormat, language),
                 cancellationToken: cancellationToken);

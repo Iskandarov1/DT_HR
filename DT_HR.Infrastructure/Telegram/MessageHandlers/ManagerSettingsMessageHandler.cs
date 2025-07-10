@@ -98,11 +98,8 @@ public class ManagerSettingsMessageHandler(
         {
             menuType = parsedMenuType;
         }
-
-        // Clear the state
+        
         await stateService.RemoveStateAsync(userId);
-
-        // Show the appropriate main menu
         await messageService.ShowMainMenuAsync(chatId, language, menuType: menuType, cancellationToken: cancellationToken);
     }
 }

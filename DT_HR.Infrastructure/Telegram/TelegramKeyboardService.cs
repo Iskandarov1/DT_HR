@@ -287,7 +287,7 @@ public class TelegramKeyboardService(ILocalizationService localization, IConfigu
             },
             new[]
             {
-                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.Cancel, language), "cancel")
+                InlineKeyboardButton.WithCallbackData(localization.GetString(ResourceKeys.Cancel, language), "action:cancel")
             }
         });
     }

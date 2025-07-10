@@ -57,8 +57,7 @@ public class AttendanceDetailsCommandHandler(
         var sb = new StringBuilder();
 
         sb.AppendLine($"📊 *{attendanceDetailsText}*");
-        sb.AppendLine($"📅 *{TimeUtils.Now:dd-MM-yyyy}*");
-        sb.AppendLine($"━━━━━━━━━━━━━━━━━━━━━━━━");
+        sb.AppendLine($"📅 {TimeUtils.Now:dd MMMM yyyy}");
         sb.AppendLine();
 
 
@@ -79,7 +78,7 @@ public class AttendanceDetailsCommandHandler(
             };
             
             sb.AppendLine($"{statusEmoji} *{statusTitle}* ({statusGroup.Count()})");
-            sb.AppendLine($"┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈");
+            sb.AppendLine();
             
             foreach (var item in statusGroup.OrderBy(x => x.Name))
             {
@@ -87,15 +86,26 @@ public class AttendanceDetailsCommandHandler(
                 var checkOut = item.CheckOutTime?.ToString("HH:mm") ?? "──:──";
                 var lateIndicator = item.IsLate == true ? " ⏰" : "";
                 
-                sb.AppendLine($"👤 `{item.Name}`{lateIndicator}");
-                sb.AppendLine($"🕐 In: `{checkIn}` | Out: `{checkOut}`");
+                sb.AppendLine($"  👤 *{item.Name}*{lateIndicator}");
+                sb.AppendLine($"  🕐 In: `{checkIn}` • Out: `{checkOut}`");
+                
+                if (!string.IsNullOrEmpty(item.AbsenceReason))
+                {
+                    sb.AppendLine($"  📝 {item.AbsenceReason}");
+                }
+                
+                if (item.EstimatedArrival.HasValue)
+                {
+                    var eta = item.EstimatedArrival.Value.ToString("HH:mm");
+                    sb.AppendLine($"  🕒 {localization.GetString(ResourceKeys.Expected,language)}: `{eta}`");
+                }
+                
                 sb.AppendLine();
             }
         }
 
-
-        sb.AppendLine($"━━━━━━━━━━━━━━━━━━━━━━━━");
-        sb.AppendLine($"📋 {totalEmployeesText}: *{list.Count}*");
+        sb.AppendLine();
+        sb.AppendLine($"📋 *{totalEmployeesText}:* {list.Count}");
 
         await messageService.SendTextMessageAsync(
             chatId,

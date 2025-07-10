@@ -53,18 +53,28 @@ public class AttendanceStatsCommandHandler(
         var absentText = localization.GetString(ResourceKeys.Absent, language);
         var onTheWayText = localization.GetString(ResourceKeys.OnTheWay, language);
         
-        var text = $"*{title}*\n" +
-                   $"📅 *{report.Date.ToString("dd-MM-yyyy")}*\n" +
-                   $"━━━━━━━━━━━━━━━━━━━━━━━━\n" +
-                   $"👥 *{totalText}:* `{report.TotalEmployees}`\n\n" +
-                   $"✅ *{presentText}:* `{report.Present}`\n" +
-                   $"⏰ *{lateText}:* `{report.Late}`\n" +
-                   $"❌ *{absentText}:* `{report.Absent}`\n" +
-                   $"🚗 *{onTheWayText}:* `{report.OnTheWay}`\n\n" +
-                   $"━━━━━━━━━━━━━━━━━━━━━━━━\n";
+        var attendanceRate = report.TotalEmployees > 0 
+            ? Math.Round((double)(report.Present + report.Late) / report.TotalEmployees * 100, 1) 
+            : 0;
+
+        var rateEmoji = attendanceRate switch
+        {
+            >= 95 => "🟢",
+            >= 85 => "🟡", 
+            >= 70 => "🟠",
+            _ => "🔴"
+        };
+
+        var text = $"📊 *{title}*\n" +
+                   $"📅 {report.Date:dd MMMM yyyy}\n\n" +
+                   $"👥 *{totalText}:* {report.TotalEmployees}\n\n" +
+                   $"✅ *{presentText}* — {report.Present}\n" +
+                   $"⏰ *{lateText}* — {report.Late}\n" +
+                   $"🚗 *{onTheWayText}* — {report.OnTheWay}\n" +
+                   $"❌ *{absentText}* — {report.Absent}\n\n" +
+                   $"{rateEmoji} *Attendance Rate:* {attendanceRate:F1}%";
 
         await messageService.SendTextMessageAsync(chatId, text, cancellationToken: cancellationToken);
-//                   $"📈 *Attendance Rate:* `{(report.TotalEmployees > 0 ? Math.Round((double)(report.Present + report.Late) / report.TotalEmployees * 100, 1) : 0)}%`";
 
         await messageService.ShowMainMenuAsync(
             chatId,
