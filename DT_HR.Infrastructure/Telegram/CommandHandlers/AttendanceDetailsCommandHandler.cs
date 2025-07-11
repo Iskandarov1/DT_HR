@@ -1,7 +1,5 @@
-using System.Text;
 using DT_HR.Application.Core.Abstractions.Services;
 using DT_HR.Application.Resources;
-using DT_HR.Domain.Core;
 using DT_HR.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
@@ -13,7 +11,7 @@ public class AttendanceDetailsCommandHandler(
     IUserStateService stateService,
     ILocalizationService localization,
     IUserRepository repository,
-    IAttendanceReportService reportService, 
+    ITelegramCalendarService calendarService,
     ILogger<AttendanceDetailsCommandHandler> logger) : ITelegramService
 {
     public async Task<bool> CanHandleAsync(Message message, CancellationToken cancellationToken = default)
@@ -44,91 +42,23 @@ public class AttendanceDetailsCommandHandler(
             return;
         }
 
-        var list = await reportService.GetDetailedAttendance(DateOnly.FromDateTime(TimeUtils.Now), cancellationToken);
-        var attendanceDetailsText =  localization.GetString(ResourceKeys.AttendanceRate, language);
-        var totalEmployeesText = localization.GetString(ResourceKeys.TotalEmployees, language);
-        
-        var sb = new StringBuilder();
 
-        sb.AppendLine($"📊 *{attendanceDetailsText}*");
-        sb.AppendLine($"📅 {TimeUtils.Now:dd MMMM yyyy}");
-        sb.AppendLine();
-
-
-        var groupedByStatus =
-            list.GroupBy(x => x.Status)
-                .OrderBy(g => GetStatusOrder(g.Key));
-        
-        foreach (var statusGroup in groupedByStatus)
+        var newState = new UserState
         {
-            var statusEmoji = GetStatusEmoji(statusGroup.Key);
-            var statusTitle = statusGroup.Key.ToLower() switch
-            {
-                "present" => localization.GetString(ResourceKeys.Present, language),
-                "ontheway" => localization.GetString(ResourceKeys.OnTheWay, language),
-                "absent" => localization.GetString(ResourceKeys.Absent, language),
-                "norecord" => localization.GetString(ResourceKeys.NoRecord, language),
-                _ => statusGroup.Key
-            };
-            
-            sb.AppendLine($"{statusEmoji} *{statusTitle}* ({statusGroup.Count()})");
-            sb.AppendLine();
-            
-            foreach (var item in statusGroup.OrderBy(x => x.Name))
-            {
-                var checkIn = item.CheckInTime?.ToString("HH:mm") ?? "──:──";
-                var checkOut = item.CheckOutTime?.ToString("HH:mm") ?? "──:──";
-                var lateIndicator = item.IsLate == true ? " ⏰" : "";
-                
-                sb.AppendLine($"  👤 *{item.Name}*{lateIndicator}");
-                
-                sb.AppendLine($"  🕐 In: `{checkIn}` • Out: `{checkOut}`");
-                    
-                    if (!string.IsNullOrEmpty(item.AbsenceReason))
-                    {
-                        sb.AppendLine($"  📝 {item.AbsenceReason}");
-                    }
-                    
-                    if (item.EstimatedArrival.HasValue)
-                    {
-                        var eta = item.EstimatedArrival.Value.ToString("HH:mm");
-                        sb.AppendLine($"  🕒 {localization.GetString(ResourceKeys.Expected,language)}: `{eta}`");
-                    }
-                
-                
-                sb.AppendLine();
-            }
-        }
+            CurrentAction = UserAction.SelectingAttendanceDate,
+            Language = language,
+            Data = []
+        };
+        await stateService.SetStateAsync(userId, newState);
 
-        sb.AppendLine();
-        sb.AppendLine($"📋 *{totalEmployeesText}:* {list.Count}");
+        var selectDateText = localization.GetString(ResourceKeys.SelectDate, language);
+        var calendar = calendarService.GetCalendarKeyboard();
 
         await messageService.SendTextMessageAsync(
             chatId,
-            sb.ToString(),
+            $"📅 *{selectDateText}*",
+            replyMarkup: calendar,
             cancellationToken: cancellationToken);
-        await messageService.ShowMainMenuAsync(
-            chatId, 
-            language, 
-            isManager:true,
-            cancellationToken:cancellationToken);
     }
 
-    private static string GetStatusEmoji(string status) => status.ToLower() switch
-    {
-        "present" => "✅",
-        "absent" => "❌",
-        "ontheway" => "",
-        "norecord" => "🔴",
-        _ => "❓"
-    };
-
-    private static int GetStatusOrder(string status) => status.ToLower() switch
-    {
-        "present" => 1,
-        "ontheway" => 2,
-        "absent" => 3,
-        "norecord" => 4,
-        _ => 5
-    };
 }

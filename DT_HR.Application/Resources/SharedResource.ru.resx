@@ -319,7 +319,7 @@
     <value>📊 Статистика </value>
   </data>
   <data name="AttendanceDetails" xml:space="preserve">
-    <value>📋 Подробная посещаемость</value>
+    <value>📊 информация по дате</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>⚙️Настройки</value>
@@ -481,6 +481,12 @@
   <data name="AttendanceReport" xml:space="preserve">
     <value>Отчет посещаемости</value>
   </data>
+  <data name="Performance" xml:space="preserve">
+    <value>Производительность</value>
+  </data>
+  <data name="PerformanceBar" xml:space="preserve">
+    <value>Шкала производительности</value>
+  </data>
   <data name="EmployeeName" xml:space="preserve">
     <value>Имя сотрудника</value>
   </data>
@@ -566,6 +572,9 @@
   </data>
   <data name="CustomTimeText" xml:space="preserve">
     <value>Другое врем</value>
+  </data>
+  <data name="SelectDate" xml:space="preserve">
+    <value>Выберите дату</value>
   </data>
   
 </root>

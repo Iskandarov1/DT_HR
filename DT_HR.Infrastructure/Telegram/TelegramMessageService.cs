@@ -154,13 +154,8 @@ public class TelegramMessageService(
         }
         
         var keyboard = keyboardService.GetMainMenuKeyboard(language, finalMenuType, managerFlag);
-        var menuText = language switch
-        {
-            "ru" => "меню:",
-            "en" => "Menu:",
-            _ => "menyu:"
-        };
-        await SendTextMessageAsync(chatId,menuText,replyMarkup: keyboard,cancellationToken: cancellationToken);
+        var text = "|";
+        await SendTextMessageAsync(chatId, text, replyMarkup: keyboard, cancellationToken: cancellationToken);
     }
 
     public async Task SendDocumentAsync(long chatId, InputFile document, string? caption = null, CancellationToken cancellationToken = default)

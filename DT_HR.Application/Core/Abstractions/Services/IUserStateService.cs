@@ -36,5 +36,6 @@ public enum UserAction
     ExportSelectingStartDate,
     ExportSelectingEndDate,
     SettingWorkStartTime,
-    SettingWorkEndTime
+    SettingWorkEndTime,
+    SelectingAttendanceDate
 }

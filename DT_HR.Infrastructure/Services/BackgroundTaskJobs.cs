@@ -107,19 +107,21 @@ public class BackgroundTaskJobs(
         {
             var lang = manager.Language;
             var title = localization.GetString(ResourceKeys.AttendanceStats, lang);
-            var total = localization.GetString(ResourceKeys.TotalEmployees, lang);
-            var present = localization.GetString(ResourceKeys.Present, lang);
-            var late = localization.GetString(ResourceKeys.Late, lang);
-            var absent = localization.GetString(ResourceKeys.Absent, lang);
-            var onTheWay = localization.GetString(ResourceKeys.OnTheWay, lang);
+            var totalText = localization.GetString(ResourceKeys.TotalEmployees, lang);
+            var presentText = localization.GetString(ResourceKeys.Present, lang);
+            var lateText = localization.GetString(ResourceKeys.Late, lang);
+            var absentText = localization.GetString(ResourceKeys.Absent, lang);
+            var onTheWayText = localization.GetString(ResourceKeys.OnTheWay, lang);
+            var noRecord = localization.GetString(ResourceKeys.NoRecord, lang);
             
-            var text = $"*{title}*\n" +
-                       $"📅 *{report.Date:dd-MM-yyyy}*\n" +
-                       $"{total}: {report.TotalEmployees}\n" +
-                       $"{present}: {report.Present}\n" +
-                       $"{late}: {report.Late}\n" +
-                       $"{absent}: {report.Absent}\n" +
-                       $"{onTheWay}: {report.OnTheWay}";
+            var text = $" *{title}*\n" +
+                       $"📅 {report.Date:dd MMMM yyyy}\n\n" +
+                       $"👥 *{totalText}:* {report.TotalEmployees}\n\n" +
+                       $"✅ *{presentText}* — {report.Present}\n" +
+                       $"⏰ *{lateText}* — {report.Late}\n" +
+                       $"*{onTheWayText}* — {report.OnTheWay}\n" +
+                       $"❌ *{absentText}* — {report.Absent}\n" +
+                       $"❓*{noRecord}* - {report.NotCheckedIn}\n\n ";
             
             await messageService.SendTextMessageAsync(manager.TelegramUserId, text,
                 cancellationToken: cancellationToken);
@@ -134,19 +136,21 @@ public class BackgroundTaskJobs(
 
                 var lang = "uz";
                 var title = localization.GetString(ResourceKeys.AttendanceStats, lang);
-                var total = localization.GetString(ResourceKeys.TotalEmployees, lang);
-                var present = localization.GetString(ResourceKeys.Present, lang);
-                var late = localization.GetString(ResourceKeys.Late, lang);
-                var absent = localization.GetString(ResourceKeys.Absent, lang);
-                var onTheWay = localization.GetString(ResourceKeys.OnTheWay, lang);
-                
-                var text = $"{title} - {group.Title}\n" +
-                           $"📅 {report.Date:dd-MM-yyyy}\n" +
-                           $"{total}: {report.TotalEmployees}\n" +
-                           $"{present}: {report.Present}\n" +
-                           $"{late}: {report.Late}\n" +
-                           $"{absent}: {report.Absent}\n" +
-                           $"{onTheWay}: {report.OnTheWay}";
+                var totalText = localization.GetString(ResourceKeys.TotalEmployees, lang);
+                var presentText = localization.GetString(ResourceKeys.Present, lang);
+                var lateText = localization.GetString(ResourceKeys.Late, lang);
+                var absentText = localization.GetString(ResourceKeys.Absent, lang);
+                var onTheWayText = localization.GetString(ResourceKeys.OnTheWay, lang);
+                var noRecord = localization.GetString(ResourceKeys.NoRecord, lang);
+
+                var text = $" *{title}*\n" +
+                           $"📅 {report.Date:dd MMMM yyyy}\n\n" +
+                           $"👥 *{totalText}:* {report.TotalEmployees}\n\n" +
+                           $"✅ *{presentText}* — {report.Present}\n" +
+                           $"⏰ *{lateText}* — {report.Late}\n" +
+                           $"*{onTheWayText}* — {report.OnTheWay}\n" +
+                           $"❌ *{absentText}* — {report.Absent}\n" +
+                           $"❓*{noRecord}* - {report.NotCheckedIn}\n\n ";
                 
                 await messageService.SendPlainTextMessageAsync(group.ChatId, text, cancellationToken);
                 

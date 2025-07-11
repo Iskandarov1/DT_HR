@@ -79,7 +79,8 @@ public class TelegramBotService : ITelegramBotService
             serviceProvider.GetRequiredService<ExportCalendarCallbackHandler>(),
             serviceProvider.GetRequiredService<OnTheWayEtaCallbackHandler>(),
             serviceProvider.GetRequiredService<OtherEtaCallbackHandler>(),
-            serviceProvider.GetRequiredService<AttendanceToggleCallbackHandler>()
+            serviceProvider.GetRequiredService<AttendanceToggleCallbackHandler>(),
+            serviceProvider.GetRequiredService<AttendanceDateSelectionCallbackHandler>()
         };
 
     }

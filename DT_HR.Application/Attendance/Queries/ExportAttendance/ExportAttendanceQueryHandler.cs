@@ -84,6 +84,7 @@ public sealed class ExportAttendanceQueryHandler(
                 request.StartDate,
                 request.EndDate,
                 request.Language,
+                request.Progress,
                 cancellationToken);
 
             return Result.Success(excelData);

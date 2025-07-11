@@ -199,4 +199,8 @@ public static class ResourceKeys
     public const string HourText = "HourText";
     public const string CustomTimeText = "CustomTimeText";
 
+    public const string SelectDate = "SelectDate";
+    public const string Performance = "Performance";
+    public const string PerformanceBar = "PerformanceBar";
+
 }

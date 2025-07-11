@@ -75,6 +75,7 @@ public static class DependencyInjection
         services.AddScoped<WorkTimeSettingsCallbackHandler>();
         services.AddScoped<CalendarCallbackHandler>();
         services.AddScoped<AttendanceToggleCallbackHandler>();
+        services.AddScoped<AttendanceDateSelectionCallbackHandler>();
         
         services.AddHostedService<WebhookConfigurationService>();
         services.AddHostedService<TelegramPollingService>();

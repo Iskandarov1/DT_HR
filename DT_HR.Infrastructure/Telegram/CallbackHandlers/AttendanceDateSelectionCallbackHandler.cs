@@ -5,21 +5,27 @@ using DT_HR.Domain.Core;
 using DT_HR.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace DT_HR.Infrastructure.Telegram.CallbackHandlers;
 
-public class AttendanceToggleCallbackHandler(
+public class AttendanceDateSelectionCallbackHandler(
     ITelegramMessageService messageService,
+    ITelegramCalendarService calendarService,
     IUserStateService stateService,
     ILocalizationService localization,
     IUserRepository userRepository,
     IAttendanceReportService reportService,
-    ILogger<AttendanceToggleCallbackHandler> logger) : ITelegramCallbackQuery
+    ILogger<AttendanceDateSelectionCallbackHandler> logger) : ITelegramCallbackQuery
 {
-    public Task<bool> CanHandleAsync(CallbackQuery callbackQuery, CancellationToken cancellationToken = default)
+    public async Task<bool> CanHandleAsync(CallbackQuery callbackQuery, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(callbackQuery.Data == "attendance:details" || callbackQuery.Data == "attendance:stats" || callbackQuery.Data == "action:cancel");
+        if (callbackQuery.Data == null) return false;
+        
+        var state = await stateService.GetStateAsync(callbackQuery.From.Id);
+        if (state?.CurrentAction != UserAction.SelectingAttendanceDate) return false;
+
+        return calendarService.IsDateCallback(callbackQuery.Data) || 
+               calendarService.IsNavigationCallback(callbackQuery.Data);
     }
 
     public async Task HandleAsync(CallbackQuery callbackQuery, CancellationToken cancellationToken = default)
@@ -27,9 +33,12 @@ public class AttendanceToggleCallbackHandler(
         var userId = callbackQuery.From.Id;
         var chatId = callbackQuery.Message!.Chat.Id;
         var messageId = callbackQuery.Message.MessageId;
-        var state = await stateService.GetStateAsync(userId);
-        var language = state?.Language ?? await localization.GetUserLanguage(userId);
+        var callbackData = callbackQuery.Data!;
 
+        var state = await stateService.GetStateAsync(userId);
+        if (state == null) return;
+
+        var language = state.Language;
         var user = await userRepository.GetByTelegramUserIdAsync(userId, cancellationToken);
 
         if (user.HasNoValue || !user.Value.IsManager())
@@ -40,29 +49,49 @@ public class AttendanceToggleCallbackHandler(
             return;
         }
 
+        logger.LogInformation("Processing attendance date selection callback for user {UserId}: {CallbackData}", userId, callbackData);
+
         await messageService.AnswerCallbackQueryAsync(callbackQuery.Id, cancellationToken: cancellationToken);
 
-        if (callbackQuery.Data == "attendance:details")
+
+        if (calendarService.IsDateCallback(callbackData))
         {
-            await ShowAttendanceDetails(chatId, messageId, language, cancellationToken);
+            logger.LogInformation("Detected date callback for attendance: {CallbackData}", callbackData);
+            var selectedDate = calendarService.ParseDateFromCallback(callbackData);
+            if (selectedDate.HasValue)
+            {
+                await stateService.RemoveStateAsync(userId);
+                await ShowAttendanceDetailsForDate(chatId, messageId, selectedDate.Value, language, cancellationToken);
+            }
         }
-        else if (callbackQuery.Data == "attendance:stats")
+
+        else if (calendarService.IsNavigationCallback(callbackData))
         {
-            await ShowAttendanceStats(chatId, messageId, language, cancellationToken);
+            logger.LogInformation("Detected navigation callback for attendance: {CallbackData}", callbackData);
+            var updatedCalendar = await calendarService.HandleNavigationAsync(callbackData);
+            
+            await messageService.EditMessageReplyMarkupAsync(
+                chatId,
+                messageId,
+                updatedCalendar,
+                cancellationToken: cancellationToken);
+        }
+        else
+        {
+            logger.LogWarning("Unknown attendance calendar callback: {CallbackData}", callbackData);
         }
     }
 
-    private async Task ShowAttendanceDetails(long chatId, int messageId, string language, CancellationToken cancellationToken)
+    private async Task ShowAttendanceDetailsForDate(long chatId, int messageId, DateTime selectedDate, string language, CancellationToken cancellationToken)
     {
-        var list = await reportService.GetDetailedAttendance(DateOnly.FromDateTime(TimeUtils.Now), cancellationToken);
+        var list = await reportService.GetDetailedAttendance(DateOnly.FromDateTime(selectedDate), cancellationToken);
         var attendanceDetailsText = localization.GetString(ResourceKeys.AttendanceRate, language);
         var totalEmployeesText = localization.GetString(ResourceKeys.TotalEmployees, language);
-        var statsButtonText = localization.GetString(ResourceKeys.AttendanceStats, language);
-        var cancel = localization.GetString(ResourceKeys.Cancel, language);
+        
         var sb = new StringBuilder();
 
         sb.AppendLine($"📊 *{attendanceDetailsText}*");
-        sb.AppendLine($"📅 {TimeUtils.Now:dd MMMM yyyy}");
+        sb.AppendLine($"📅 {selectedDate:dd MMMM yyyy}");
         sb.AppendLine();
 
         var groupedByStatus = list.GroupBy(x => x.Status).OrderBy(g => GetStatusOrder(g.Key));
@@ -117,55 +146,13 @@ public class AttendanceToggleCallbackHandler(
         sb.AppendLine();
         sb.AppendLine($"📋 *{totalEmployeesText}:* {list.Count}");
 
-        var inlineKeyboard = new InlineKeyboardMarkup(new[]
-        {
-            InlineKeyboardButton.WithCallbackData(statsButtonText, "attendance:stats"),
-            InlineKeyboardButton.WithCallbackData(cancel, "action:cancel")
-        });
+        await messageService.EditMessageTextAsync(chatId, messageId, sb.ToString(), replyMarkUp: null, cancellationToken: cancellationToken);
         
-        await messageService.EditMessageTextAsync(chatId, messageId, sb.ToString(), replyMarkUp: inlineKeyboard, cancellationToken: cancellationToken);
-    }
-
-    private async Task ShowAttendanceStats(long chatId, int messageId, string language, CancellationToken cancellationToken)
-    {
-        var report = await reportService.GetDailyAttendanceReport(DateOnly.FromDateTime(TimeUtils.Now), cancellationToken);
-        
-        var title = localization.GetString(ResourceKeys.AttendanceStats, language);
-        var totalText = localization.GetString(ResourceKeys.TotalEmployees, language);
-        var presentText = localization.GetString(ResourceKeys.Present, language);
-        var lateText = localization.GetString(ResourceKeys.Late, language);
-        var absentText = localization.GetString(ResourceKeys.Absent, language);
-        var onTheWayText = localization.GetString(ResourceKeys.OnTheWay, language);
-        var noRecord = localization.GetString(ResourceKeys.NoRecord, language);
-        var detailsButtonText = localization.GetString(ResourceKeys.AttendanceDetails, language);
-        
-        var attendanceRate = report.TotalEmployees > 0 
-            ? Math.Round((double)(report.Present + report.Late) / report.TotalEmployees * 100, 1) 
-            : 0;
-
-        var rateEmoji = attendanceRate switch
-        {
-            >= 95 => "🟢",
-            >= 85 => "🟡", 
-            >= 70 => "🟠",
-            _ => "🔴"
-        };
-
-        var text = $" *{title}*\n" +
-                   $"📅 {report.Date:dd MMMM yyyy}\n\n" +
-                   $"👥 *{totalText}:* {report.TotalEmployees}\n\n" +
-                   $"✅ *{presentText}* — {report.Present}\n" +
-                   $"⏰ *{lateText}* — {report.Late}\n" +
-                   $"*{onTheWayText}* — {report.OnTheWay}\n" +
-                   $"❌ *{absentText}* — {report.Absent}\n" +
-                   $"❓*{noRecord}* - {report.NotCheckedIn}\n\n ";
-
-        var inlineKeyboard = new InlineKeyboardMarkup(new[]
-        {
-            InlineKeyboardButton.WithCallbackData(detailsButtonText, "attendance:details")
-        });
-
-        await messageService.EditMessageTextAsync(chatId, messageId, text, replyMarkUp: inlineKeyboard, cancellationToken: cancellationToken);
+        await messageService.ShowMainMenuAsync(
+            chatId, 
+            language, 
+            isManager: true,
+            cancellationToken: cancellationToken);
     }
 
     private static string GetStatusEmoji(string status) => status.ToLower() switch

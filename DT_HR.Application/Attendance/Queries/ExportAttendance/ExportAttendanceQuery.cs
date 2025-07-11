@@ -8,4 +8,5 @@ public sealed record ExportAttendanceQuery(
     long TelegramUserId,
     DateOnly StartDate,
     DateOnly EndDate,
-    string Language) : IQuery<Result<byte[]>>;
+    string Language,
+    IProgress<int>? Progress = null) : IQuery<Result<byte[]>>;

@@ -9,5 +9,6 @@ public interface IExcelExportService
         DateOnly startDate,
         DateOnly endDate,
         string language,
+        IProgress<int>? progress = null,
         CancellationToken cancellationToken = default);
 }

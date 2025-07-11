@@ -74,8 +74,7 @@ public class AttendanceStatsCommandHandler(
                    $"⏰ *{lateText}* — {report.Late}\n" +
                    $"*{onTheWayText}* — {report.OnTheWay}\n" +
                    $"❌ *{absentText}* — {report.Absent}\n" +
-                   $"❓*{noRecord}* - {report.NotCheckedIn}\n\n " +
-                   $"{rateEmoji} *Attendance Rate:* {attendanceRate:F1}%";
+                   $"❓*{noRecord}* - {report.NotCheckedIn}\n\n ";
 
         var detailsButtonText = localization.GetString(ResourceKeys.AttendanceDetails, language);
         var inlineKeyboard = new InlineKeyboardMarkup(new[]
